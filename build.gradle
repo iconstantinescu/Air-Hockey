@@ -54,6 +54,8 @@ test {
 dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.8'
+
 
     /*implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
