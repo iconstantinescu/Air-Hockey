@@ -15,11 +15,11 @@ public class CollisionTracker {
      * @param puck puck object
      */
     public static void checkWallCollision(float screenWidth, float screenHeight, Puck puck) {
-        if (puck.getposX() + puck.getRadius() >= screenWidth) {
+        if (puck.getposX() + puck.getRadius() >= screenWidth || puck.getposX() - puck.getRadius() <= 0) {
             puck.setDeltaX(-puck.getDeltaX());
         }
 
-        if (puck.getposY() + puck.getRadius() >= screenHeight) {
+        if (puck.getposY() + puck.getRadius() >= screenHeight || puck.getposY() - puck.getRadius() <= 0) {
             puck.setDeltaY(-puck.getDeltaY());
         }
 

@@ -53,15 +53,21 @@ public class Render extends ApplicationAdapter {
 
 
         // Puck position update and rendering
-        if (puck.getposX() + puck.getRadius()
-                 >= Gdx.graphics.getWidth() || puck.getposX() - puck.getRadius() <= 0) {
-            puck.setDeltaX(-puck.getDeltaX());
-        }
+        //        if (puck.getposX() + puck.getRadius()
+        //                 >= Gdx.graphics.getWidth() || puck.getposX() - puck.getRadius() <= 0) {
+        //            puck.setDeltaX(-puck.getDeltaX());
+        //        }
+        //
+        //        if (puck.getposY() + puck.getRadius() >= Gdx.graphics.getHeight()
+        //                || puck.getposY() - puck.getRadius() <= 0) {
+        //            puck.setDeltaY(-puck.getDeltaY());
+        //        }
 
-        if (puck.getposY() + puck.getRadius() >= Gdx.graphics.getHeight()
-                || puck.getposY() - puck.getRadius() <= 0) {
-            puck.setDeltaY(-puck.getDeltaY());
-        }
+
+        // Check if Puck can enter gate, if yes then act
+
+
+        CollisionTracker.checkWallCollision(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), puck);
 
         // Collision between Pusher 1 and the puck
         if (MathUtils.euclideanDistance(pusher1.getposX(),
