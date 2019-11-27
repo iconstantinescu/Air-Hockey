@@ -8,6 +8,8 @@ public class Puck {
 
     private transient float posY;
 
+
+
     private float radius;
 
     private float deltaX;
@@ -28,6 +30,10 @@ public class Puck {
         this.radius = radius;
         this.deltaX = deltaX;
         this.deltaY = deltaY;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 
     public float getposX() {

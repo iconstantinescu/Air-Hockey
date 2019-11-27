@@ -1,11 +1,12 @@
 package utilities;
 
+import com.badlogic.gdx.Gdx;
 import objects.Puck;
 
 public class CollisionTracker {
 
-    private int screenWidth;
-    private int screenHeigth;
+    private transient int screenWidth;
+    private transient int screenHeigth;
 
     public CollisionTracker(int screenWidth, int screenHeigth) {
         this.screenHeigth = screenHeigth;
@@ -36,12 +37,10 @@ public class CollisionTracker {
      * @param xPos xPos of the Pusher
      * @param yPos yPos of the Pusher
      * @param radius Radius of the Pusher
-     * @param playerId The player controlling the Pusher
+     * @param playerId True for Player1, False for Player2
      * @return
      */
-    public boolean[] restrictMovementOnWall(float xPos, float yPos, float radius, int playerId) {
-        boolean[] restricts = new boolean[4];
-
+    public boolean[] restrictMovementOnWall(float xPos, float yPos, float radius, boolean playerId, boolean[] restricts) {
         for (int i = 0; i < 4; i++) {
             restricts[i] = false;
         }
@@ -54,7 +53,7 @@ public class CollisionTracker {
             restricts[0] = true;
         }
 
-        if (playerId == 1) {
+        if (playerId) {
             if (xPos - radius <= 0) {
                 restricts[1] = true;
             }

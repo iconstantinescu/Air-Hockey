@@ -74,9 +74,11 @@ public class Render extends ApplicationAdapter {
         shape.end();
 
         // Pusher position update and rendering
-        boolean[] restricts = collisionTracker
+        boolean[] restricts = new boolean[4];
+
+        collisionTracker
                 .restrictMovementOnWall(pusher1.getposX(),
-                        pusher1.getposY(), pusher1.getRadius(), 1);
+                        pusher1.getposY(), pusher1.getRadius(), true, restricts);
 
         if (Gdx.input.isKeyPressed(51) && !restricts[0]) {
             pusher1.setposY(pusher1.getposY() + 4);
@@ -91,9 +93,9 @@ public class Render extends ApplicationAdapter {
             pusher1.setposX(pusher1.getposX() + 4);
         }
 
-        restricts = collisionTracker
+        collisionTracker
                 .restrictMovementOnWall(pusher2.getposX(),
-                        pusher2.getposY(), pusher2.getRadius(), 2);
+                        pusher2.getposY(), pusher2.getRadius(), false, restricts);
 
         if (Gdx.input.isKeyPressed(37)  && !restricts[0]) {
             pusher2.setposY(pusher2.getposY() + 4);
