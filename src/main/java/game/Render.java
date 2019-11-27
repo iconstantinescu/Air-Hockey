@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import objects.*;
-import utilities.*;
+import objects.Puck;
+import objects.Pusher;
+import objects.ScoreBoard;
+import utilities.CollisionTracker;
 
 public class Render extends ApplicationAdapter {
     private static SpriteBatch batch;
@@ -25,24 +27,15 @@ public class Render extends ApplicationAdapter {
 
     @Override
     public void create() {
-
         pusher1 = new Pusher(300, 100, 40);
         pusher2 = new Pusher(1000, 100, 40);
-
         batch = new SpriteBatch();
         img = new Texture("field.png");
-
         sprite = new Sprite(img);
-
         sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-
         shape = new ShapeRenderer();
-
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0);
-
         collisionTracker = new CollisionTracker(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //sprite.setScale(1,2);
-
         scoreBoard = new ScoreBoard(0,0);
     }
 
@@ -59,62 +52,19 @@ public class Render extends ApplicationAdapter {
         batch.end();
 
 
-        // Puck position update and rendering
-        //        if (puck.getposX() + puck.getRadius()
-        //                 >= Gdx.graphics.getWidth() || puck.getposX() - puck.getRadius() <= 0) {
-        //            puck.setDeltaX(-puck.getDeltaX());
-        //        }
-        //
-        //        if (puck.getposY() + puck.getRadius() >= Gdx.graphics.getHeight()
-        //                || puck.getposY() - puck.getRadius() <= 0) {
-        //            puck.setDeltaY(-puck.getDeltaY());
-        //        }
-
-
         // Check if Puck can enter gate, if yes then act
-        if(puck.getposY() >= Gdx.graphics.getHeight()/3 && puck.getposY() <= (Gdx.graphics.getHeight()/3)*2) {
-            if(puck.getposX() + puck.getRadius() < 0) {
-                puck.setposX(Gdx.graphics.getWidth() / 2);
-                puck.setposY(Gdx.graphics.getHeight() / 2);
-                puck.setDeltaX(0);
-                puck.setDeltaY(0);
-                scoreBoard.pointP2();
-            }
-
-            if(puck.getposX() - puck.getRadius() >= Gdx.graphics.getWidth()) {
-                puck.setposX(Gdx.graphics.getWidth() / 2);
-                puck.setposY(Gdx.graphics.getHeight() / 2);
-                puck.setDeltaX(0);
-                puck.setDeltaY(0);
-                scoreBoard.pointP1();
-            }
+        if (puck.checkInGateRange(scoreBoard)) {
+            puck.gateBehaviour(scoreBoard);
+        } else {
+            CollisionTracker.checkWallCollision(Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight(), puck);
         }
-        else CollisionTracker.checkWallCollision(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), puck);
 
         // Collision between Pusher 1 and the puck
-        if (MathUtils.euclideanDistance(pusher1.getposX(),
-                pusher1.getposY(), puck.getposX(),
-                puck.getposY()) <= puck.getRadius() + pusher1.getRadius()) {
-            double[] deltas = MathUtils.reflect(pusher1.getposX(),
-                    pusher1.getposY(), puck.getposX(), puck.getposY());
-            //puck.setDeltaX(-puck.getDeltaX());
-            //puck.setDeltaY(-puck.getDeltaY());
-            puck.setDeltaX((float) deltas[0] * 6f);
-            puck.setDeltaY((float) deltas[1] * 6f);
-        }
+        pusher1.checkAndExecuteCollision(puck);
 
-        if (MathUtils.euclideanDistance(pusher2.getposX(),
-                pusher2.getposY(), puck.getposX(),
-                puck.getposY()) <= puck.getRadius() + pusher2.getRadius()) {
-            double[] deltas = MathUtils.reflect(pusher2.getposX(),
-                    pusher2.getposY(), puck.getposX(), puck.getposY());
-            //puck.setDeltaX(-puck.getDeltaX());
-            //puck.setDeltaY(-puck.getDeltaY());
-            puck.setDeltaX((float) deltas[0] * 6f);
-            puck.setDeltaY((float) deltas[1] * 6f);
-        }
-
-        //System.out.println(puck.getposX() + puck.getRadius());
+        // Check and execute collision between Pusher 2 and Puck
+        pusher2.checkAndExecuteCollision(puck);
 
         puck.translate();
 
@@ -124,29 +74,26 @@ public class Render extends ApplicationAdapter {
         shape.end();
 
         // Pusher position update and rendering
-
-         boolean restricts[] = collisionTracker.restrictMovementOnWall(pusher1.getposX(), pusher1.getposY(), pusher1.getRadius(), 1);
-
-
-
-//        System.out.println(pusher1.getposX() + " " +  pusher1.getposY());
-//
-//        System.out.println(restricts[2]);
+        boolean[] restricts = collisionTracker
+                .restrictMovementOnWall(pusher1.getposX(),
+                        pusher1.getposY(), pusher1.getRadius(), 1);
 
         if (Gdx.input.isKeyPressed(51) && !restricts[0]) {
-                pusher1.setposY(pusher1.getposY() + 4);
+            pusher1.setposY(pusher1.getposY() + 4);
         }
         if (Gdx.input.isKeyPressed(47) && !restricts[2]) {
             pusher1.setposY(pusher1.getposY() - 4);
         }
         if (Gdx.input.isKeyPressed(29) && !restricts[1]) {
-                pusher1.setposX(pusher1.getposX() - 4);
+            pusher1.setposX(pusher1.getposX() - 4);
         }
         if (Gdx.input.isKeyPressed(32) && !restricts[3]) {
             pusher1.setposX(pusher1.getposX() + 4);
         }
 
-        restricts = collisionTracker.restrictMovementOnWall(pusher2.getposX(), pusher2.getposY(), pusher2.getRadius(), 2);
+        restricts = collisionTracker
+                .restrictMovementOnWall(pusher2.getposX(),
+                        pusher2.getposY(), pusher2.getRadius(), 2);
 
         if (Gdx.input.isKeyPressed(37)  && !restricts[0]) {
             pusher2.setposY(pusher2.getposY() + 4);
