@@ -1,30 +1,18 @@
-public class ScoreBoard {
+package objects;
+
+ public class ScoreBoard {
 
     private transient int player1Score;
     private transient int player2Score;
-
-
-    private Puck puck;
 
     /**
      * Score board constructor.
      * @param player1Score score of player 1
      * @param player2Score score of player 2
-     * @param puck puck position
      */
-    public ScoreBoard(int player1Score, int player2Score, Puck puck) {
+    public ScoreBoard(int player1Score, int player2Score) {
         this.player1Score = player1Score;
         this.player2Score = player2Score;
-        this.puck = puck;
-    }
-
-
-    public Puck getPuck() {
-        return puck;
-    }
-
-    public void setPuck(Puck puck) {
-        this.puck = puck;
     }
 
     public int getPlayer1Score() {
@@ -41,5 +29,13 @@ public class ScoreBoard {
 
     public void setPlayer2Score(int player2Score) {
         this.player2Score = player2Score;
+    }
+
+    public void pointP1() {
+        player1Score++;
+    }
+
+    public void pointP2() {
+        player2Score++;
     }
 }

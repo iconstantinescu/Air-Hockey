@@ -1,3 +1,7 @@
+package utilities;
+
+import objects.Puck;
+
 public class CollisionTracker {
 
     private int screenWidth;

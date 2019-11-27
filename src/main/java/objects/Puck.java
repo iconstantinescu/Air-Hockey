@@ -1,3 +1,5 @@
+package objects;
+
 public class Puck {
 
     private transient float posX;

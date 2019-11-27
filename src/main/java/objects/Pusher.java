@@ -1,3 +1,5 @@
+package objects;
+
 public class Pusher {
 
     private transient float posX;

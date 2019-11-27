@@ -1,3 +1,5 @@
+package game;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -6,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import objects.*;
+import utilities.*;
 
 public class Render extends ApplicationAdapter {
     private static SpriteBatch batch;
@@ -17,6 +21,7 @@ public class Render extends ApplicationAdapter {
     private static Puck puck;
     private static CollisionTracker collisionTracker;
     private static boolean[] restricts1;
+    private static ScoreBoard scoreBoard;
 
     @Override
     public void create() {
@@ -37,6 +42,8 @@ public class Render extends ApplicationAdapter {
 
         collisionTracker = new CollisionTracker(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //sprite.setScale(1,2);
+
+        scoreBoard = new ScoreBoard(0,0);
     }
 
     @Override
@@ -65,9 +72,24 @@ public class Render extends ApplicationAdapter {
 
 
         // Check if Puck can enter gate, if yes then act
+        if(puck.getposY() >= Gdx.graphics.getHeight()/3 && puck.getposY() <= (Gdx.graphics.getHeight()/3)*2) {
+            if(puck.getposX() + puck.getRadius() < 0) {
+                puck.setposX(Gdx.graphics.getWidth() / 2);
+                puck.setposY(Gdx.graphics.getHeight() / 2);
+                puck.setDeltaX(0);
+                puck.setDeltaY(0);
+                scoreBoard.pointP2();
+            }
 
-
-        CollisionTracker.checkWallCollision(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), puck);
+            if(puck.getposX() - puck.getRadius() >= Gdx.graphics.getWidth()) {
+                puck.setposX(Gdx.graphics.getWidth() / 2);
+                puck.setposY(Gdx.graphics.getHeight() / 2);
+                puck.setDeltaX(0);
+                puck.setDeltaY(0);
+                scoreBoard.pointP1();
+            }
+        }
+        else CollisionTracker.checkWallCollision(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), puck);
 
         // Collision between Pusher 1 and the puck
         if (MathUtils.euclideanDistance(pusher1.getposX(),
