@@ -7,7 +7,7 @@ public class Student {
     /**
      * Create a new Student object.
      *
-     * @param name Name of the Student
+     * @param name          Name of the Student
      * @param studentNumber Student number used to identify student in central administration
      */
     public Student(String name, int studentNumber) {

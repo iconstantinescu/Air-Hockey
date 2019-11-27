@@ -6,6 +6,7 @@ public class Game {
 
     /**
      * Main function of the game, where the window is being created.
+     *
      * @param args Args that can be passed from the console
      */
     public static void main(String[] args) {

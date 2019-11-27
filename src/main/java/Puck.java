@@ -12,8 +12,9 @@ public class Puck {
 
     /**
      * Constructor for the puck object.
-     * @param posX x position
-     * @param posY y position
+     *
+     * @param posX   x position
+     * @param posY   y position
      * @param radius radius of puck
      * @param deltaX x movement
      * @param deltaY y movement

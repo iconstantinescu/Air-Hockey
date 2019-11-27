@@ -8,6 +8,7 @@ public class MathUtils {
      * Computes the direction of the reflection and returns and array containing the
      * deltaX and deltaY following the collision.
      * NOTE: x1 and y1 are the coordinates of the pusher
+     *
      * @param x1 x coordinate of the first element
      * @param y1 y coordinate of the first element
      * @param x2 x coordinate of the second element
