@@ -93,7 +93,7 @@ public class Puck {
             deltaX = -deltaX;
         }
 
-        if(futureY + radius > Gdx.graphics.getHeight() || futureY - radius < 0) {
+        if (futureY + radius > Gdx.graphics.getHeight() || futureY - radius < 0) {
             deltaY = -deltaY;
         }
     }

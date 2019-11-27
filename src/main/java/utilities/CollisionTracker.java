@@ -34,37 +34,38 @@ public class CollisionTracker {
 
     /**
      * Method that restricts the movement of the Pusher when touching a Wall.
-     * @param xPos xPos of the Pusher
-     * @param yPos yPos of the Pusher
+     * @param posX xPos of the Pusher
+     * @param posY posY of the Pusher
      * @param radius Radius of the Pusher
      * @param playerId True for Player1, False for Player2
      * @return
      */
-    public boolean[] restrictMovementOnWall(float xPos, float yPos, float radius, boolean playerId, boolean[] restricts) {
+    public boolean[] restrictMovementOnWall(float posX, float posY,
+                                            float radius, boolean playerId, boolean[] restricts) {
         for (int i = 0; i < 4; i++) {
             restricts[i] = false;
         }
 
-        if (yPos - radius < 0) {
+        if (posY - radius < 0) {
             restricts[2] = true;
         }
 
-        if (yPos + radius >= screenHeigth) {
+        if (posY + radius >= screenHeigth) {
             restricts[0] = true;
         }
 
         if (playerId) {
-            if (xPos - radius <= 0) {
+            if (posX - radius <= 0) {
                 restricts[1] = true;
             }
-            if (xPos + radius >= screenWidth / 2) {
+            if (posX + radius >= screenWidth / 2) {
                 restricts[3] = true;
             }
         } else {
-            if (xPos - radius <= screenWidth / 2) {
+            if (posX - radius <= screenWidth / 2) {
                 restricts[1] = true;
             }
-            if (xPos + radius >= screenWidth) {
+            if (posX + radius >= screenWidth) {
                 restricts[3] = true;
             }
         }
