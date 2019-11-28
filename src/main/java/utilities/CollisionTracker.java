@@ -32,46 +32,46 @@ public class CollisionTracker {
 
     }
 
-    /**
-     * Method that restricts the movement of the Pusher when touching a Wall.
-     * @param posX xPos of the Pusher
-     * @param posY posY of the Pusher
-     * @param radius Radius of the Pusher
-     * @param playerId True for Player1, False for Player2
-     * @return
-     */
-    public boolean[] restrictMovementOnWall(float posX, float posY,
-                                            float radius, boolean playerId, boolean[] restricts) {
-        for (int i = 0; i < 4; i++) {
-            restricts[i] = false;
-        }
-
-        if (posY - radius < 0) {
-            restricts[2] = true;
-        }
-
-        if (posY + radius >= screenHeigth) {
-            restricts[0] = true;
-        }
-
-        if (playerId) {
-            if (posX - radius <= 0) {
-                restricts[1] = true;
-            }
-            if (posX + radius >= screenWidth / 2) {
-                restricts[3] = true;
-            }
-        } else {
-            if (posX - radius <= screenWidth / 2) {
-                restricts[1] = true;
-            }
-            if (posX + radius >= screenWidth) {
-                restricts[3] = true;
-            }
-        }
-
-
-        return restricts;
-    }
+//    /**
+//     * Method that restricts the movement of the Pusher when touching a Wall.
+//     * @param posX xPos of the Pusher
+//     * @param posY posY of the Pusher
+//     * @param radius Radius of the Pusher
+//     * @param playerId True for Player1, False for Player2
+//     * @return
+//     */
+//    public boolean[] restrictMovementOnWall(float posX, float posY,
+//                                            float radius, boolean playerId, boolean[] restricts) {
+//        for (int i = 0; i < 4; i++) {
+//            restricts[i] = false;
+//        }
+//
+//        if (posY - radius < 0) {
+//            restricts[2] = true;
+//        }
+//
+//        if (posY + radius >= screenHeigth) {
+//            restricts[0] = true;
+//        }
+//
+//        if (playerId) {
+//            if (posX - radius <= 0) {
+//                restricts[1] = true;
+//            }
+//            if (posX + radius >= screenWidth / 2) {
+//                restricts[3] = true;
+//            }
+//        } else {
+//            if (posX - radius <= screenWidth / 2) {
+//                restricts[1] = true;
+//            }
+//            if (posX + radius >= screenWidth) {
+//                restricts[3] = true;
+//            }
+//        }
+//
+//
+//        return restricts;
+//    }
 
 }

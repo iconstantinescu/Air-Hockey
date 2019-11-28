@@ -66,4 +66,37 @@ public class Pusher {
         }
         return false;
     }
+
+    public boolean[] restrictMovementOnWall(boolean playerId, boolean[] restricts, int screenWidth, int screenHeigth) {
+        for (int i = 0; i < 4; i++) {
+            restricts[i] = false;
+        }
+
+        if (posY - radius < 0) {
+            restricts[2] = true;
+        }
+
+        if (posY + radius >= screenHeigth) {
+            restricts[0] = true;
+        }
+
+        if (playerId) {
+            if (posX - radius <= 0) {
+                restricts[1] = true;
+            }
+            if (posX + radius >= screenWidth / 2) {
+                restricts[3] = true;
+            }
+        } else {
+            if (posX - radius <= screenWidth / 2) {
+                restricts[1] = true;
+            }
+            if (posX + radius >= screenWidth) {
+                restricts[3] = true;
+            }
+        }
+
+
+        return restricts;
+    }
 }
