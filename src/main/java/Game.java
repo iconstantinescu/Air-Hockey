@@ -15,9 +15,6 @@ public class Game {
         config.title = "Air Hockey";
 
         new LwjglApplication(new Render(), config);
-        DatabaseController a = new DatabaseController();
-        a.updatePoints(1,10);
-        System.out.println(a.getPoints(1));
 
     }
 
