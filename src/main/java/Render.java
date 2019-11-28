@@ -1,3 +1,5 @@
+import static java.lang.System.exit;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -204,6 +206,16 @@ public class Render extends ApplicationAdapter {
             quitBatch.setColor(Color.WHITE);
         }
 
+        if (Gdx.input.justTouched() && Gdx.input.getX()
+                > (quitSprite.getX() - quitSprite.getWidth() / 2)
+                && Gdx.input.getX() < (quitSprite.getX() + quitSprite.getWidth() / 2)
+                && Gdx.graphics.getHeight() - Gdx.input.getY()
+                > (quitSprite.getY() - quitSprite.getHeight() * 3 / 2)
+                && Gdx.graphics.getHeight() - Gdx.input.getY()
+                < (quitSprite.getY() - quitSprite.getHeight() / 2)) {
+            exit(0);
+        }
+
         quitBatch.end();
 
         //            playSprite.scale(2f);
@@ -215,8 +227,6 @@ public class Render extends ApplicationAdapter {
         //        else
         //            playSprite.setPosition(Gdx.graphics.getWidth() / 2,
         //            Gdx.graphics.getHeight() / 2);
-        //        Gdx.input.isTouched();
-
 
     }
 
