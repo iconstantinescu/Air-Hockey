@@ -1,5 +1,3 @@
-import static java.lang.System.exit;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -28,7 +26,11 @@ public class Render extends ApplicationAdapter {
     private static ShapeRenderer shape;
     private static Pusher pusher;
     private static Puck puck;
-    private static Sound sound;
+    private static Sound backSound;
+    private static Sound hitSound;
+
+    private static RenderMenu renderMenu = new RenderMenu();
+    private static SoundEffects soundEffects = new SoundEffects();
 
     @Override
     public void create() {
@@ -69,8 +71,7 @@ public class Render extends ApplicationAdapter {
 
         puck = new Puck(30, 30, 15, 3, 3);
 
-        sound = Gdx.audio.newSound(Gdx.files.internal("song.wav"));
-        sound.loop();
+        soundEffects.backgroundSound(backSound);
 
         //sprite.setScale(1,2);
     }
@@ -80,19 +81,15 @@ public class Render extends ApplicationAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        batch.draw(homeSprite, homeSprite.getX() - homeSprite.getWidth() / 2,
-                homeSprite.getY() - homeSprite.getHeight() / 3, homeSprite.getWidth(),
-                homeSprite.getHeight(), homeSprite.getWidth(),
-                homeSprite.getHeight(), homeSprite.getScaleX(),
-                homeSprite.getScaleY(), homeSprite.getRotation() / 2);
+        renderMenu.setHome(homeSprite, batch);
 
+        //        batch.begin();
         //        batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
         //                sprite.getY() - sprite.getHeight() / 2, sprite.getWidth(),
         //                sprite.getHeight(), sprite.getWidth(),
         //                sprite.getHeight(), sprite.getScaleX(),
         //                sprite.getScaleY(), sprite.getRotation());
-        batch.end();
+        //        batch.end();
 
         // Puck position update and rendering
         if (puck.getposX() + puck.getRadius()
@@ -145,89 +142,9 @@ public class Render extends ApplicationAdapter {
         shape.circle(pusher.getposX(), pusher.getposY(), pusher.getRadius());
         shape.end();
 
-        //        System.out.println(playSprite.getX() + " " + playSprite.getY());
-        //
-        //        System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
-
-        playBatch.begin();
-
-        playBatch.draw(playSprite, playSprite.getX() - playSprite.getWidth() / 2,
-                playSprite.getY() + playSprite.getHeight() / 2);
-
-        if (Gdx.input.getX() > (playSprite.getX() - playSprite.getWidth() / 2)
-                && Gdx.input.getX() < (playSprite.getX()
-                + playSprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (playSprite.getY() + playSprite.getHeight() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (playSprite.getY() + playSprite.getHeight() * 3 / 2)
-        ) {
-            playBatch.setColor(Color.SKY);
-        } else {
-            playBatch.setColor(Color.WHITE);
-        }
-
-        playBatch.end();
-
-
-        scoresBatch.begin();
-
-        scoresBatch.draw(scoresSprite, scoresSprite.getX() - scoresSprite.getWidth() / 2,
-                scoresSprite.getY() - scoresSprite.getHeight() / 2);
-
-        if (Gdx.input.getX() > (scoresSprite.getX() - scoresSprite.getWidth() / 2)
-                && Gdx.input.getX() < (scoresSprite.getX() + scoresSprite.getWidth() / 2)
-                && Gdx.input.getY() > (scoresSprite.getY() - scoresSprite.getHeight() / 2)
-                && Gdx.input.getY() < (scoresSprite.getY() + scoresSprite.getHeight() / 2)
-        ) {
-            scoresBatch.setColor(Color.SKY);
-        } else {
-            scoresBatch.setColor(Color.WHITE);
-        }
-
-        scoresBatch.end();
-
-
-        quitBatch.begin();
-
-        quitBatch.draw(quitSprite, quitSprite.getX() - quitSprite.getWidth() / 2,
-                quitSprite.getY() - quitSprite.getHeight() * 2);
-
-        if (Gdx.input.getX()
-                > (quitSprite.getX() - quitSprite.getWidth() / 2)
-                && Gdx.input.getX() < (quitSprite.getX() + quitSprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (quitSprite.getY() - quitSprite.getHeight() * 3 / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (quitSprite.getY() - quitSprite.getHeight() / 2)
-        ) {
-            quitBatch.setColor(Color.SKY);
-        } else {
-            quitBatch.setColor(Color.WHITE);
-        }
-
-        if (Gdx.input.justTouched() && Gdx.input.getX()
-                > (quitSprite.getX() - quitSprite.getWidth() / 2)
-                && Gdx.input.getX() < (quitSprite.getX() + quitSprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (quitSprite.getY() - quitSprite.getHeight() * 3 / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (quitSprite.getY() - quitSprite.getHeight() / 2)) {
-            exit(0);
-        }
-
-        quitBatch.end();
-
-        //            playSprite.scale(2f);
-        //            playSprite.setSize(playSprite.getWidth() * 11/10,
-        //            playSprite.getHeight() * 11/10);
-        //            playSprite.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        //            playSprite.setPosition(Gdx.graphics.getWidth() / 2,
-        //            Gdx.graphics.getHeight() / 2 + playSprite.getHeight() / 3);
-        //        else
-        //            playSprite.setPosition(Gdx.graphics.getWidth() / 2,
-        //            Gdx.graphics.getHeight() / 2);
-
+        renderMenu.setPlay(playSprite, playBatch);
+        renderMenu.setScores(scoresSprite, scoresBatch);
+        renderMenu.setQuit(quitSprite, quitBatch);
     }
 
     @Override
@@ -235,6 +152,6 @@ public class Render extends ApplicationAdapter {
         batch.dispose();
         img.dispose();
         shape.dispose();
-        sound.dispose();
+        backSound.dispose();
     }
 }
