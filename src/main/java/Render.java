@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import java.awt.event.MouseEvent;
-
 public class Render extends ApplicationAdapter {
     private static SpriteBatch batch;
+    private static SpriteBatch playBatch;
+    private static SpriteBatch scoresBatch;
+    private static SpriteBatch quitBatch;
     private static Texture img;
     private static Texture home;
     private static Texture play;
@@ -26,17 +27,16 @@ public class Render extends ApplicationAdapter {
     private static Pusher pusher;
     private static Puck puck;
     private static Sound sound;
-    private static MouseEvent e;
-
-
-    //    private static Graphics2D g2 = new Graphics2D();
-    private static Mouse mouse = new Mouse();
 
     @Override
     public void create() {
         pusher = new Pusher(300, 100, 40);
 
         batch = new SpriteBatch();
+        playBatch = new SpriteBatch();
+        scoresBatch = new SpriteBatch();
+        quitBatch = new SpriteBatch();
+
         img = new Texture("field.png");
 
         home = new Texture("home.png");
@@ -46,6 +46,8 @@ public class Render extends ApplicationAdapter {
         play = new Texture("play.png");
         playSprite = new Sprite(play);
         playSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        playSprite.setPosition(playSprite.getX(),
+                playSprite.getY() + playSprite.getHeight() / 2);
 
         scores = new Texture("scores.png");
         scoresSprite = new Sprite(scores);
@@ -54,6 +56,8 @@ public class Render extends ApplicationAdapter {
         quit = new Texture("quit.png");
         quitSprite = new Sprite(quit);
         quitSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        quitSprite.setPosition(quitSprite.getX(),
+                quitSprite.getY() - quitSprite.getHeight() / 2);
 
         sprite = new Sprite(img);
 
@@ -71,28 +75,22 @@ public class Render extends ApplicationAdapter {
 
     @Override
     public void render() {
-//        mouse.render();
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
         batch.draw(homeSprite, homeSprite.getX() - homeSprite.getWidth() / 2,
                 homeSprite.getY() - homeSprite.getHeight() / 3, homeSprite.getWidth(),
-                homeSprite.getHeight(), homeSprite.getWidth(), homeSprite.getHeight(), homeSprite.getScaleX(),
-                homeSprite.getScaleY(), homeSprite.getRotation());
-        batch.draw(playSprite, playSprite.getX() - playSprite.getWidth() / 2,
-                playSprite.getY() + playSprite.getHeight() / 2);
-        batch.draw(scoresSprite, scoresSprite.getX() - scoresSprite.getWidth() / 2,
-                scoresSprite.getY() - scoresSprite.getHeight() / 2);
-        batch.draw(quitSprite, quitSprite.getX() - quitSprite.getWidth() / 2,
-                quitSprite.getY() - quitSprite.getHeight() * 2);
+                homeSprite.getHeight(), homeSprite.getWidth(),
+                homeSprite.getHeight(), homeSprite.getScaleX(),
+                homeSprite.getScaleY(), homeSprite.getRotation() / 2);
 
-//        batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
-//                sprite.getY() - sprite.getHeight() / 2, sprite.getWidth(),
-//                sprite.getHeight(), sprite.getWidth(), sprite.getHeight(), sprite.getScaleX(),
-//                sprite.getScaleY(), sprite.getRotation());
+        //        batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
+        //                sprite.getY() - sprite.getHeight() / 2, sprite.getWidth(),
+        //                sprite.getHeight(), sprite.getWidth(),
+        //                sprite.getHeight(), sprite.getScaleX(),
+        //                sprite.getScaleY(), sprite.getRotation());
         batch.end();
-
 
         // Puck position update and rendering
         if (puck.getposX() + puck.getRadius()
@@ -145,17 +143,79 @@ public class Render extends ApplicationAdapter {
         shape.circle(pusher.getposX(), pusher.getposY(), pusher.getRadius());
         shape.end();
 
+        //        System.out.println(playSprite.getX() + " " + playSprite.getY());
+        //
+        //        System.out.println(Gdx.input.getX() + " " + Gdx.input.getY());
 
-        // Working on making the images scale when hovering over it
-//        if (Gdx.input.getX() > (playSprite.getX() - playSprite.getWidth() / 2)
-//                && Gdx.input.getX() < (playSprite.getX() + playSprite.getWidth() / 2)
-//                && Gdx.input.getY() > (playSprite.getY() - playSprite.getHeight() / 2)
-//        playSprite.setSize(playSprite.getWidth() * 11 / 10, playSprite.getHeight() * 11 / 10);
-//            playSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 + playSprite.getHeight() / 3);
-//        else
-//            playSprite.setSize(playSprite.getWidth() * 10 / 11, playSprite.getHeight() * 10 / 11);
-//            playSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//        Gdx.input.isTouched();
+        playBatch.begin();
+
+        playBatch.draw(playSprite, playSprite.getX() - playSprite.getWidth() / 2,
+                playSprite.getY() + playSprite.getHeight() / 2);
+
+        if (Gdx.input.getX() > (playSprite.getX() - playSprite.getWidth() / 2)
+                && Gdx.input.getX() < (playSprite.getX()
+                + playSprite.getWidth() / 2)
+                && Gdx.graphics.getHeight() - Gdx.input.getY()
+                > (playSprite.getY() + playSprite.getHeight() / 2)
+                && Gdx.graphics.getHeight() - Gdx.input.getY()
+                < (playSprite.getY() + playSprite.getHeight() * 3 / 2)
+        ) {
+            playBatch.setColor(Color.SKY);
+        } else {
+            playBatch.setColor(Color.WHITE);
+        }
+
+        playBatch.end();
+
+
+        scoresBatch.begin();
+
+        scoresBatch.draw(scoresSprite, scoresSprite.getX() - scoresSprite.getWidth() / 2,
+                scoresSprite.getY() - scoresSprite.getHeight() / 2);
+
+        if (Gdx.input.getX() > (scoresSprite.getX() - scoresSprite.getWidth() / 2)
+                && Gdx.input.getX() < (scoresSprite.getX() + scoresSprite.getWidth() / 2)
+                && Gdx.input.getY() > (scoresSprite.getY() - scoresSprite.getHeight() / 2)
+                && Gdx.input.getY() < (scoresSprite.getY() + scoresSprite.getHeight() / 2)
+        ) {
+            scoresBatch.setColor(Color.SKY);
+        } else {
+            scoresBatch.setColor(Color.WHITE);
+        }
+
+        scoresBatch.end();
+
+
+        quitBatch.begin();
+
+        quitBatch.draw(quitSprite, quitSprite.getX() - quitSprite.getWidth() / 2,
+                quitSprite.getY() - quitSprite.getHeight() * 2);
+
+        if (Gdx.input.getX()
+                > (quitSprite.getX() - quitSprite.getWidth() / 2)
+                && Gdx.input.getX() < (quitSprite.getX() + quitSprite.getWidth() / 2)
+                && Gdx.graphics.getHeight() - Gdx.input.getY()
+                > (quitSprite.getY() - quitSprite.getHeight() * 3 / 2)
+                && Gdx.graphics.getHeight() - Gdx.input.getY()
+                < (quitSprite.getY() - quitSprite.getHeight() / 2)
+        ) {
+            quitBatch.setColor(Color.SKY);
+        } else {
+            quitBatch.setColor(Color.WHITE);
+        }
+
+        quitBatch.end();
+
+        //            playSprite.scale(2f);
+        //            playSprite.setSize(playSprite.getWidth() * 11/10,
+        //            playSprite.getHeight() * 11/10);
+        //            playSprite.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        //            playSprite.setPosition(Gdx.graphics.getWidth() / 2,
+        //            Gdx.graphics.getHeight() / 2 + playSprite.getHeight() / 3);
+        //        else
+        //            playSprite.setPosition(Gdx.graphics.getWidth() / 2,
+        //            Gdx.graphics.getHeight() / 2);
+        //        Gdx.input.isTouched();
 
 
     }

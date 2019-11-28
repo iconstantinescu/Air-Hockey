@@ -48,8 +48,10 @@ public class Mouse {
 //        }
 //        g.setColor(Color.WHITE);
 //        g.setFont(font);
-////        g.drawString(text, clickBox.x + clickBox.width / 2 - DrawUtils.getMessageWidth(text, font, g) / 2,
-////                clickBox.y + clickBox.height / 2 + DrawUtils.getMessageHeight(text, font, g) / 2);
+////        g.drawString(text, clickBox.x + clickBox.width /
+//              2 - DrawUtils.getMessageWidth(text, font, g) / 2,
+////                clickBox.y + clickBox.height /
+//                      2 + DrawUtils.getMessageHeight(text, font, g) / 2);
 //    }
 //
 //    public void addActionListener(ActionListener listener) {
