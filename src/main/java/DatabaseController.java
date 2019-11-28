@@ -1,33 +1,86 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseController {
 
-    private static final String URL = "jdbc:postgresql://"
-            + "ec2-54-247-92-167.eu-west-1.compute.amazonaws.com/"
-            + "d5d8vck9rbk2st"
+    private transient Connection conn;
+    private transient PreparedStatement ps;
+    private transient ResultSet rs;
+
+    private static final String URL = "jdbc:mysql://"
+            + "projects-db.ewi.tudelft.nl/"
+            + "projects_sem-project-42"
             + "?sslmode=require"
-            + "&user=oogthbenpdpynf"
-            + "&password=3d8cc31cbcff76c86090f97607c3dcb3c66e2a0978fc5251c23a7e184488cef0";
+            + "&user=pu_f1X2r36H3wklF"
+            + "&password=ZL3Al54DKc66"
+            + "&serverTimezone=UCT";
 
-
-    private static void testSetScore(int userId, int points) {
+    private void closeConnections() {
         try {
-            Connection connection = DriverManager.getConnection(URL);
+            rs.close();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        try {
+            ps.close();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        try {
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e.toString());
 
-            String query = "update user_data set points = points + ? where id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-            preparedStatement.setInt(1, points);
-            preparedStatement.setInt(2, userId);
+        }
+    }
 
 
-            preparedStatement.execute();
+    public void updatePoints(int userId, int points) {
+
+        try {
+
+            conn = DriverManager.getConnection(URL);
+            String query = "update user_data set points = points + ? where user_id = ?";
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, points);
+            ps.setInt(2, userId);
+
+
+            ps.execute();
+            ps.close();
 
         } catch (SQLException e) {
-            System.out.println("SQL error: " + e.toString());
+            System.out.println(e.toString());
+        } finally {
+            closeConnections();
         }
+    }
+
+    public int getPoints(int userId) {
+
+        try {
+
+            conn = DriverManager.getConnection(URL);
+            String query = "select points from user_data where user_id = ?";
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, userId);
+
+
+            int points = 0;
+            rs = ps.executeQuery();
+
+
+            while (rs.next())
+                points += rs.getInt(1);
+
+            return points;
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            closeConnections();
+        }
+        return 0;
     }
 }
