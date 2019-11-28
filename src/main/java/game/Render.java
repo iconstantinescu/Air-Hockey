@@ -53,11 +53,11 @@ public class Render extends ApplicationAdapter {
 
 
         // Check if Puck can enter gate, if yes then act
-        if (puck.checkInGateRange(scoreBoard)) {
-            puck.gateBehaviour(scoreBoard);
+        if (puck.checkInGateRange(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) {
+            puck.gateBehaviour(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         } else {
-            CollisionTracker.checkWallCollision(Gdx.graphics.getWidth(),
-                    Gdx.graphics.getHeight(), puck);
+            puck.checkWallCollision(Gdx.graphics.getWidth(),
+                    Gdx.graphics.getHeight());
         }
 
         // Collision between Pusher 1 and the puck
@@ -66,7 +66,7 @@ public class Render extends ApplicationAdapter {
         // Check and execute collision between Pusher 2 and Puck
         pusher2.checkAndExecuteCollision(puck);
 
-        puck.translate();
+        puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.RED);
@@ -76,11 +76,8 @@ public class Render extends ApplicationAdapter {
         // Pusher position update and rendering
         boolean[] restricts = new boolean[4];
 
-//        collisionTracker
-//                .restrictMovementOnWall(pusher1.getposX(),
-//                        pusher1.getposY(), pusher1.getRadius(), true, restricts);
-
-        pusher1.restrictMovementOnWall(true, restricts, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        pusher1.restrictMovementOnWall(true, restricts,
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.input.isKeyPressed(51) && !restricts[0]) {
             pusher1.setposY(pusher1.getposY() + 4);
@@ -97,7 +94,8 @@ public class Render extends ApplicationAdapter {
 
 
 
-        pusher2.restrictMovementOnWall(false, restricts, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        pusher2.restrictMovementOnWall(false, restricts,
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.input.isKeyPressed(37)  && !restricts[0]) {
             pusher2.setposY(pusher2.getposY() + 4);

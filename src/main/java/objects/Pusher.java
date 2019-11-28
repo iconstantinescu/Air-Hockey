@@ -67,7 +67,17 @@ public class Pusher {
         return false;
     }
 
-    public boolean[] restrictMovementOnWall(boolean playerId, boolean[] restricts, int screenWidth, int screenHeigth) {
+    /**
+     * Method that restricts the movement of the Pusher when touching a Wall.
+     * @param playerId True for Player1, False for Player2
+     * @param restricts Array of resticts according UP, LEFT, DOWN and RIGHT
+     * @param screenWidth Width of the screen
+     * @param screenHeigth Height of the screen
+     * @return
+     */
+    public boolean[] restrictMovementOnWall(boolean playerId,
+                                            boolean[] restricts,
+                                            int screenWidth, int screenHeigth) {
         for (int i = 0; i < 4; i++) {
             restricts[i] = false;
         }

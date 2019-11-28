@@ -13,24 +13,24 @@ public class CollisionTracker {
         this.screenWidth = screenWidth;
     }
 
-    /**
-     * Checking for wall collision.
-     * @param screenWidth width of the screen
-     * @param screenHeight height of the scree
-     * @param puck puck object
-     */
-    public static void checkWallCollision(float screenWidth, float screenHeight, Puck puck) {
-        if (puck.getposX() + puck.getRadius()
-                >= screenWidth || puck.getposX() - puck.getRadius() <= 0) {
-            puck.setDeltaX(-puck.getDeltaX());
-        }
-
-        if (puck.getposY() + puck.getRadius()
-                >= screenHeight || puck.getposY() - puck.getRadius() <= 0) {
-            puck.setDeltaY(-puck.getDeltaY());
-        }
-
-    }
+//    /**
+//     * Checking for wall collision.
+//     * @param screenWidth width of the screen
+//     * @param screenHeight height of the scree
+//     * @param puck puck object
+//     */
+//    public static void checkWallCollision(float screenWidth, float screenHeight, Puck puck) {
+//        if (puck.getposX() + puck.getRadius()
+//                >= screenWidth || puck.getposX() - puck.getRadius() <= 0) {
+//            puck.setDeltaX(-puck.getDeltaX());
+//        }
+//
+//        if (puck.getposY() + puck.getRadius()
+//                >= screenHeight || puck.getposY() - puck.getRadius() <= 0) {
+//            puck.setDeltaY(-puck.getDeltaY());
+//        }
+//
+//    }
 
 //    /**
 //     * Method that restricts the movement of the Pusher when touching a Wall.

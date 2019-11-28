@@ -57,4 +57,36 @@ class PusherTest {
     }
 
 
+    @Test
+    void restrictMovementOnWallCornerLeft() {
+        Pusher pusher = new Pusher(-1, -1, 0);
+
+        boolean[] some = new boolean[4];
+        pusher.restrictMovementOnWall(true, some, 1280, 720);
+
+        assertTrue(some[2]);
+        assertTrue(some[1]);
+    }
+
+    @Test
+    void restrictMovementOnWallCornerRight() {
+        Pusher pusher = new Pusher(1281, 721, 0);
+
+        boolean[] some = new boolean[4];
+        pusher.restrictMovementOnWall(true, some, 1280, 720);
+
+        assertTrue(some[0]);
+        assertTrue(some[3]);
+    }
+
+    @Test
+    void restrictMovementOnWall() {
+        Pusher pusher = new Pusher(-1, -1, 0);
+
+        boolean[] some = new boolean[4];
+        pusher.restrictMovementOnWall(true, some, 1280, 720);
+
+        assertTrue(some[2]);
+        assertTrue(some[1]);
+    }
 }

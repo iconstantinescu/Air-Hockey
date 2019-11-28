@@ -75,9 +75,9 @@ public class Puck {
     /**
      * Method used to move the Puck according to its speed.
      */
-    public void translate() {
-        if (!checkInGateRange(new ScoreBoard(0,0))) {
-            preventOut(deltaX + getposX(), deltaY + getposY());
+    public void translate(int screenWidth, int screenHeight) {
+        if (!checkInGateRange(new ScoreBoard(0,0), screenWidth, screenHeight)) {
+            preventOut(deltaX + getposX(), deltaY + getposY(), screenWidth, screenHeight);
         }
         setposX(deltaX + getposX());
         setposY(deltaY + getposY());
@@ -88,41 +88,59 @@ public class Puck {
      * @param futureX The future X position
      * @param futureY The future Y position
      */
-    public void preventOut(float futureX, float futureY) {
-        if (futureX + radius > Gdx.graphics.getWidth() || futureX - radius < 0) {
+    public void preventOut(float futureX, float futureY, int screenWidth, int screenHeight) {
+        if (futureX + radius > screenWidth || futureX - radius < 0) {
             deltaX = -deltaX;
         }
 
-        if (futureY + radius > Gdx.graphics.getHeight() || futureY - radius < 0) {
+        if (futureY + radius > screenHeight || futureY - radius < 0) {
             deltaY = -deltaY;
         }
     }
 
-    public boolean checkInGateRange(ScoreBoard scoreBoard) {
-        return getposY() >= Gdx.graphics.getHeight() / 3
-                && getposY() <= (Gdx.graphics.getHeight() / 3) * 2;
+    public boolean checkInGateRange(ScoreBoard scoreBoard, int screenWidth, int screenHeight) {
+        return getposY() >= screenHeight / 3
+                && getposY() <= (screenHeight / 3) * 2;
     }
 
     /**
      * Update the Puck and the score according to the behaviour when in line with gate.
      * @param scoreBoard The scoreBoard to be updated
      */
-    public void gateBehaviour(ScoreBoard scoreBoard) {
+    public void gateBehaviour(ScoreBoard scoreBoard, int screenWidth, int screenHeight) {
         if (getposX() + getRadius() < 0) {
-            setposX(Gdx.graphics.getWidth() / 2);
-            setposY(Gdx.graphics.getHeight() / 2);
+            setposX(screenWidth / 2);
+            setposY(screenHeight / 2);
             setDeltaX(0);
             setDeltaY(0);
             scoreBoard.pointP2();
         }
 
-        if (getposX() - getRadius() >= Gdx.graphics.getWidth()) {
-            setposX(Gdx.graphics.getWidth() / 2);
-            setposY(Gdx.graphics.getHeight() / 2);
+        if (getposX() - getRadius() >= screenWidth) {
+            setposX(screenWidth / 2);
+            setposY(screenHeight / 2);
             setDeltaX(0);
             setDeltaY(0);
             scoreBoard.pointP1();
         }
+    }
+
+    /**
+     * Checking for wall collision.
+     * @param screenWidth width of the screen
+     * @param screenHeight height of the scree
+     */
+    public void checkWallCollision(float screenWidth, float screenHeight) {
+        if (getposX() + getRadius()
+                >= screenWidth || getposX() - getRadius() <= 0) {
+            setDeltaX(-getDeltaX());
+        }
+
+        if (getposY() + getRadius()
+                >= screenHeight || getposY() - getRadius() <= 0) {
+            setDeltaY(-getDeltaY());
+        }
+
     }
 
 
