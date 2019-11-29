@@ -54,6 +54,14 @@ public class User {
         this.gamesWon ++;
     }
 
+    public int getNumOfLostGames() {
+        return  this.gamesLost;
+    }
+
+    public int getNumOfWonGames() {
+        return  this.gamesWon;
+    }
+
     public int getNumOfGamesPlayed() {
         return  this.gamesLost + this.gamesWon;
     }
