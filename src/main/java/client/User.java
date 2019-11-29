@@ -1,3 +1,5 @@
+package client;
+
 import java.util.ArrayList;
 
 public class User {
@@ -10,7 +12,7 @@ public class User {
     private transient ArrayList<GameDetails> gameHistory;
 
     /**
-     * Constructor for User class.
+     * Constructor for client.User class.
      * @param userID id of the user (as stored in database)
      * @param username the name of the user that appears in game
      * @param points number of points the user has

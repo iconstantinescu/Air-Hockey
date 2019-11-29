@@ -1,3 +1,5 @@
+package client;
+
 import java.sql.Timestamp;
 
 public class GameDetails {
@@ -9,7 +11,7 @@ public class GameDetails {
     private transient Timestamp timestamp;
 
     /**
-     * Constructor for GameDetails class.
+     * Constructor for client.GameDetails class.
      * @param username1 username of first player
      * @param username2 username of second player
      * @param scoreUser1 score of the first player

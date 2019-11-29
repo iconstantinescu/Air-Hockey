@@ -1,10 +1,9 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import client.GameDetails;
+import java.sql.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.sql.Timestamp;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameDetailsTest {
 
