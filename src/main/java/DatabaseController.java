@@ -38,6 +38,7 @@ public class DatabaseController {
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(URL);
             String query = "update user_data set points = points + ? where user_id = ?";
             ps = conn.prepareStatement(query);
@@ -47,7 +48,7 @@ public class DatabaseController {
 
             ps.execute();
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -58,6 +59,7 @@ public class DatabaseController {
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(URL);
             String query = "insert into game (user_id_1, user_id_2, score_user_1, score_user_2, game_timestamp)"
                      + " values (?,?,?,?,?)";
@@ -71,7 +73,7 @@ public class DatabaseController {
 
             ps.execute();
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e ) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -82,6 +84,7 @@ public class DatabaseController {
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(URL);
             String query = "select points from user_data where user_id = ?";
             ps = conn.prepareStatement(query);
@@ -95,7 +98,7 @@ public class DatabaseController {
 
             return points;
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -107,6 +110,7 @@ public class DatabaseController {
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(URL);
             String query = "select count(game_id) from game" +
                     " where user_id_1 = ? or user_id_2 = ?";
@@ -122,7 +126,7 @@ public class DatabaseController {
 
             return gamesPlayed;
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
