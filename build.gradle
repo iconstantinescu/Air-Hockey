@@ -166,6 +166,18 @@ jacocoTestCoverageVerification {
     }
 }
 
+final def excludedClasses = ['game.Render', 'game.Game']
+
+jacocoTestReport{
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, excludes: excludedClasses.collect {
+                it.replace('.', '/') + '.class'
+            })
+        })
+    }
+}
+
 checkstyle {
     toolVersion "8.25"
 	configFile = rootProject.file('config/checkstyle/checkstyle.xml')
