@@ -1,5 +1,8 @@
 package utilities;
 
+import objects.Puck;
+import objects.Pusher;
+
 public class MathUtils {
 
     /**
@@ -12,6 +15,18 @@ public class MathUtils {
      */
     public static double euclideanDistance(float x1, float y1, float x2, float y2) {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    /**
+     * Function that checks if the radius between Pusher and Puck is overlapping.
+     * @param pusher The pusher to be considered.
+     * @param puck The puck ot be considered
+     * @return Whether the 2 objects overlap
+     */
+    public static boolean checkRadius(Pusher pusher, Puck puck) {
+        return MathUtils.euclideanDistance(pusher.getposX(),
+                pusher.getposY(), puck.getposX(),
+                puck.getposY()) <= puck.getRadius() + pusher.getRadius();
     }
 
     /**

@@ -46,6 +46,8 @@ public class Pusher {
         this.radius = radius;
     }
 
+
+
     /**
      * Function first checks if a collision occurs between the Puck and the Pusher,
      * and if it does then it simulates the collision between the objects.
@@ -53,9 +55,7 @@ public class Pusher {
      * @return Boolean showing whether a collision happened or not
      */
     public boolean checkAndExecuteCollision(Puck puck) {
-        if (MathUtils.euclideanDistance(getposX(),
-                getposY(), puck.getposX(),
-                puck.getposY()) <= puck.getRadius() + getRadius()) {
+        if (MathUtils.checkRadius(this, puck)) {
             double[] deltas = MathUtils.reflect(getposX(),
                     getposY(), puck.getposX(), puck.getposY());
             //puck.setDeltaX(-puck.getDeltaX());
