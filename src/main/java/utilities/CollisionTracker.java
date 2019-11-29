@@ -1,8 +1,5 @@
 package utilities;
 
-import com.badlogic.gdx.Gdx;
-import objects.Puck;
-
 public class CollisionTracker {
 
     private transient int screenWidth;
@@ -74,4 +71,19 @@ public class CollisionTracker {
 //        return restricts;
 //    }
 
+//    /**
+//     * This method will return true when the puck goes out of the field.
+//     *
+//     * @param screenWidth  The width of the playing screen.
+//     * @param screenHeight The height of the playing screen.
+//     * @param puck         The Puck.
+//     * @return true when the puck hits the wall, else returns false.
+//     */
+//    public static boolean goalCollision(float screenWidth, float screenHeight, Puck puck) {
+//        if (puck.getposX() + puck.getRadius() >= screenWidth
+//                || puck.getposY() + puck.getRadius() >= screenHeight) {
+//            return true;
+//        }
+//        return false;
+//    }
 }
