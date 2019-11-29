@@ -1,8 +1,8 @@
-import org.junit.Assert;
-import org.junit.Before;
+
+import org.junit.jupiter.api.BeforeEach;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -16,13 +16,13 @@ public class DatabaseControllerTest {
     @InjectMocks
     private DatabaseController dbController;
     @Mock
-    private Connection mockConnection;
+    private transient Connection mockConnection;
     @Mock
-    private PreparedStatement mockPS;
+    private transient PreparedStatement mockPS;
     @Mock
-    private ResultSet mockResultSet;
+    private transient ResultSet mockResultSet;
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.initMocks(this);
 

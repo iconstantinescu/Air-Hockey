@@ -2,13 +2,21 @@ import java.util.ArrayList;
 
 public class User {
 
-    private int userID;
-    private String username;
-    private long points;
-    private int gamesLost;
-    private int gamesWon;
-    private ArrayList<GameDetails> gameHistory;
+    private transient int userID;
+    private transient  String username;
+    private transient long points;
+    private transient int gamesLost;
+    private transient int gamesWon;
+    private transient ArrayList<GameDetails> gameHistory;
 
+    /**
+     * Constructor for User class.
+     * @param userID id of the user (as stored in database)
+     * @param username the name of the user that appears in game
+     * @param points number of points the user has
+     * @param gamesLost number of games lost
+     * @param gamesWon number of games won
+     */
     public User(int userID, String username, long points, int gamesLost, int gamesWon) {
         this.userID = userID;
         this.points = points;
@@ -47,11 +55,11 @@ public class User {
     }
 
     public void addLostGame() {
-        this.gamesLost ++;
+        this.gamesLost++;
     }
 
     public void addWonGame() {
-        this.gamesWon ++;
+        this.gamesWon++;
     }
 
     public int getNumOfLostGames() {

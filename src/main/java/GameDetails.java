@@ -2,12 +2,20 @@ import java.sql.Timestamp;
 
 public class GameDetails {
 
-    private String username1;
-    private String username2;
-    private int scoreUser1;
-    private int scoreUser2;
-    private Timestamp timestamp;
+    private transient String username1;
+    private transient String username2;
+    private transient int scoreUser1;
+    private transient int scoreUser2;
+    private transient Timestamp timestamp;
 
+    /**
+     * Constructor for GameDetails class.
+     * @param username1 username of first player
+     * @param username2 username of second player
+     * @param scoreUser1 score of the first player
+     * @param scoreUser2 score of the second player
+     * @param timestamp timestamp of the game
+     */
     public GameDetails(String username1, String username2,
                        int scoreUser1, int scoreUser2,
                        Timestamp timestamp) {

@@ -1,4 +1,4 @@
-import org.junit.Assert;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameDetailsTest {
 
-    private GameDetails testGame;
-    private Timestamp timestamp;
+    private transient GameDetails testGame;
+    private transient Timestamp timestamp;
 
     @BeforeEach
     void setUp() {
@@ -21,22 +21,22 @@ class GameDetailsTest {
 
     @Test
     void getUsername() {
-        Assert.assertEquals("john", testGame.getUsername1());
-        Assert.assertEquals("robert", testGame.getUsername2());
+        assertEquals("john", testGame.getUsername1());
+        assertEquals("robert", testGame.getUsername2());
     }
 
     @Test
     void getScoreUser1() {
-        Assert.assertEquals(5, testGame.getScoreUser1());
+        assertEquals(5, testGame.getScoreUser1());
     }
 
     @Test
     void getScoreUser2() {
-        Assert.assertEquals(2, testGame.getScoreUser2());
+        assertEquals(2, testGame.getScoreUser2());
     }
 
     @Test
     void getTimestamp() {
-        Assert.assertEquals(timestamp, testGame.getTimestamp());
+        assertEquals(timestamp, testGame.getTimestamp());
     }
 }
