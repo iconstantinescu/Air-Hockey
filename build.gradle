@@ -53,7 +53,11 @@ test {
 
 dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+    //compile group: 'org.postgresql', name: 'postgresql', version: '42.2.8'
+
 
     /*implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
