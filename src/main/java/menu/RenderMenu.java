@@ -1,3 +1,5 @@
+package menu;
+
 import static java.lang.System.exit;
 
 import com.badlogic.gdx.Gdx;
