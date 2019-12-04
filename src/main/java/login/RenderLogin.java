@@ -1,36 +1,38 @@
 package login;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+
+import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 
 public class RenderLogin extends ApplicationAdapter {
-    private TextField username;
-    private TextField password;
-    private Stage stage;
-    private Table table;
-    private TextButton loginButton;
-    private Skin skin;
+    transient TextField username;
+    transient TextField password;
+    transient Stage stage;
+    transient TextButton loginButton;
+    transient Skin skin;
 
-    private String nameInput;
-    private String passInput;
+    transient String nameInput;
+    transient String passInput;
 
     /**
-     * creates the items to be rendered on stage
+     * Creates the items to be rendered on stage.
      */
     @Override
-    public void create () {
+    public void create() {
 
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
@@ -47,13 +49,12 @@ public class RenderLogin extends ApplicationAdapter {
         password = new TextField("password", skin);
         password.setPosition(300, 200);
         password.setSize(300,40);
-        final Dialog dialog = new Dialog("Click Message",skin);
 
-        loginButton.addListener(new ClickListener(){
+
+        loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 loginClicked();
-
             }
         });
 
@@ -65,10 +66,10 @@ public class RenderLogin extends ApplicationAdapter {
     }
 
     /**
-     * renders the scene
+     * Renders the scene.
      */
     @Override
-    public void render () {
+    public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
@@ -76,8 +77,8 @@ public class RenderLogin extends ApplicationAdapter {
     }
 
     /**
-     * sets the variables of password and username
-     * when login button clicked and prints to console
+     * Sets the variables of password and username
+     * when login button clicked and prints to console.
      */
     public void loginClicked() {
         passInput = password.getText();
@@ -87,15 +88,16 @@ public class RenderLogin extends ApplicationAdapter {
     }
 
     /**
-     * @return inputted password
+     * Getter for password.
+     * @return inputted password.
      */
     public String getPassword() {
         return passInput;
     }
 
     /**
-     * r
-     * @return inputted username
+     * Getter for username.
+     * @return inputted username.
      */
     public String getUsername() {
         return nameInput;
