@@ -1,6 +1,6 @@
 import static org.mockito.Matchers.anyString;
 
-import client.DatabaseController;
+import client.ScoreController;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,9 +16,9 @@ import org.mockito.MockitoAnnotations;
 
 
 
-public class DatabaseControllerTest {
+public class ScoreControllerTest {
     @InjectMocks
-    private DatabaseController dbController;
+    private ScoreController dbController;
     @Mock
     private transient Connection mockConnection;
     @Mock
