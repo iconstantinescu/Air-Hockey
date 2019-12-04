@@ -2,6 +2,7 @@ package game;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import login.RenderLogin;
 
 
 public class Game {
@@ -17,7 +18,7 @@ public class Game {
         config.height = 720;
         config.title = "Air Hockey";
 
-        new LwjglApplication(new Render(), config);
+        new LwjglApplication(new RenderLogin(), config);
 
     }
 
