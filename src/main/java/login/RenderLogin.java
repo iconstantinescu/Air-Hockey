@@ -1,5 +1,7 @@
 package login;
 
+import client.AuthenticationController;
+import client.ConnectionFactory;
 import com.badlogic.gdx.ApplicationAdapter;
 
 import com.badlogic.gdx.Gdx;
@@ -55,6 +57,7 @@ public class RenderLogin extends ApplicationAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 loginClicked();
+                authenticate();
             }
         });
 
@@ -103,6 +106,19 @@ public class RenderLogin extends ApplicationAdapter {
         return nameInput;
     }
 
+    /**
+     * Authenticates the username and password throught database
+     * connection.
+     */
+    public void authenticate() {
+        AuthenticationController authenticationController =
+                new AuthenticationController(new ConnectionFactory());
+        String salt = authenticationController.getSalt(passInput);
+        Boolean authenticated = authenticationController.authenticate(nameInput, passInput, salt);
+        if (authenticated) {
+            System.out.println("user " + nameInput + " authenticated");
+        }
+    }
 }
 
 

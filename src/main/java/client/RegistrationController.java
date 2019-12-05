@@ -47,6 +47,7 @@ public class RegistrationController extends DatabaseController {
             closeConnections();
         }
 
+
         return created;
     }
 
