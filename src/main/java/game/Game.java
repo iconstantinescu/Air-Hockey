@@ -1,7 +1,9 @@
 package game;
 
+import client.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import login.RenderLogin;
 
 
 public class Game {
@@ -17,7 +19,15 @@ public class Game {
         config.height = 720;
         config.title = "Air Hockey";
 
-        new LwjglApplication(new Render(), config);
+        new LwjglApplication(new RenderLogin(), config);
+
+        //RegistrationController registrationController = new RegistrationController(new ConnectionFactory());
+        //registrationController.createNewUser("test", "test", "john");
+
+        AuthenticationController authenticationController = new AuthenticationController(new ConnectionFactory());
+        String salt = authenticationController.getSalt("test");
+        System.out.println(authenticationController.authenticate("test", "test", salt));
+
 
     }
 
