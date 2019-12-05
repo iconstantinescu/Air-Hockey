@@ -24,16 +24,18 @@ public class RegistrationController extends DatabaseController {
 
             conn = connectionFactory.createConnection(URL);
 
-            String query = "insert into user_data (username, password, nickname)"
-                    + "values (?,?,?)";
+            String query = "insert into user_data (username, password, salt, nickname)"
+                    + "values (?,?,?,?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
 
             String hashedPwd = BcryptHashing.hashPassword(password);
+            String salt = BcryptHashing.getSalt();
 
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, hashedPwd);
-            preparedStatement.setString(3, nickname);
+            preparedStatement.setString(3, salt);
+            preparedStatement.setString(4, nickname);
 
             preparedStatement.execute();
 

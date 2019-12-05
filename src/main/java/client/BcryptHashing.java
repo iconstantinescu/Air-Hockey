@@ -17,6 +17,10 @@ public class BcryptHashing {
         return BCrypt.hashpw(passwordPlaintext, salt);
     }
 
+    public static String hashPasswordWithSalt(String passwordPlaintext, String salt) {
+        return BCrypt.hashpw(passwordPlaintext, salt);
+    }
+
     public static String getSalt() {
         return salt;
     }

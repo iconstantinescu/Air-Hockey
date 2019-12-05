@@ -8,6 +8,30 @@ public class AuthenticationController extends DatabaseController {
         super(connectionFactory);
     }
 
+    public String getSalt(String username) {
+        try {
+
+            conn = connectionFactory.createConnection(URL);
+            String query = "select salt from user_data"
+                    + " where username = ?";
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, username);
+
+            rs = ps.executeQuery();
+            rs.next();
+
+            return rs.getString(1);
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.toString());
+        } finally {
+            closeConnections();
+        }
+        return "";
+    }
+
     /**
      * Methods that checks if the username and password match with the ones in the database.
      * @param username username provided via login form
@@ -15,7 +39,7 @@ public class AuthenticationController extends DatabaseController {
      * @return true if the user and password match and false otherwise
      */
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password, String salt) {
 
         boolean valid = false;
         final int EXPECTED_COUNT = 1;
@@ -27,13 +51,14 @@ public class AuthenticationController extends DatabaseController {
                     + " where username = ? and password = ?";
             ps = conn.prepareStatement(query);
 
-            String hashedPwd = BcryptHashing.hashPassword(password);
+            String hashedPwd = BcryptHashing.hashPasswordWithSalt(password, salt);
+            System.out.println(hashedPwd);
 
             ps.setString(1, username);
             ps.setString(2, hashedPwd);
 
             rs = ps.executeQuery();
-            rs.next();
+            rs.next() ;
 
             if (rs.getInt(1) == EXPECTED_COUNT) {
                 valid = true;
