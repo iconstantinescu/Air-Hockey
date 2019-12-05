@@ -170,7 +170,7 @@ jacocoTestCoverageVerification {
     }
 }
 
-final def excludedClasses = ['game.Render', 'game.Game']
+final def excludedClasses = ['game.Render', 'game.Game', 'game.RenderGame', 'menu.RenderMenu']
 
 jacocoTestReport{
     afterEvaluate {
