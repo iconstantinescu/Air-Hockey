@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class DatabaseController {
+public abstract class DatabaseController {
 
     protected transient ConnectionFactory connectionFactory;
     protected transient Connection conn;
     protected transient PreparedStatement ps;
     protected transient ResultSet rs;
-    protected static final String driver = "com.mysql.jdbc.Driver";
 
     protected static final String URL = "jdbc:mysql://"
             + "projects-db.ewi.tudelft.nl/"

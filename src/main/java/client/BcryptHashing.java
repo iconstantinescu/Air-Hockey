@@ -21,22 +21,5 @@ public class BcryptHashing {
         return salt;
     }
 
-    /**
-     * Check if the hashed password is valid.
-     * @param passwordPlaintext password in plain text
-     * @param passwordHashed the same password hashed
-     * @return true if it is a valid hash or false if not
-     */
-    public static boolean checkPassword(String passwordPlaintext, String passwordHashed) {
-        boolean passwordVerified;
-
-        if (passwordHashed == null || !passwordHashed.startsWith("$2a$")) {
-            throw new IllegalArgumentException("Invalid hash!");
-        }
-
-        passwordVerified = BCrypt.checkpw(passwordPlaintext, passwordHashed);
-
-        return passwordVerified;
-    }
 
 }
