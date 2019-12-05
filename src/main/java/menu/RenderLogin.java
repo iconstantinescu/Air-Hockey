@@ -1,5 +1,6 @@
 package menu;
 
+import client.Authenticate;
 import client.AuthenticationController;
 import client.ConnectionFactory;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -59,7 +60,8 @@ public class RenderLogin implements Renderer {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 loginClicked();
-                authenticate();
+
+
             }
         });
 
@@ -83,7 +85,7 @@ public class RenderLogin implements Renderer {
     /**
      * Disposes of render items.
      */
-    public void dispose(){
+    public void dispose() {
         stage.dispose();
         skin.dispose();
     }
@@ -91,12 +93,18 @@ public class RenderLogin implements Renderer {
     /**
      * Sets the variables of password and username
      * when login button clicked and prints to console.
+     * Logs in if authentication success.
      */
     public void loginClicked() {
         passInput = password.getText();
         nameInput = username.getText();
+        Authenticate auth = new Authenticate();
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
+        if (auth.authenticate(passInput, nameInput)) {
+            Render.changeGameState(Render.GameState.MENU);
+            System.out.println("user " + nameInput + " authenticated");
+        }
     }
 
 
@@ -116,20 +124,7 @@ public class RenderLogin implements Renderer {
         return nameInput;
     }
 
-    /**
-     * Authenticates the username and password throught database
-     * connection.
-     */
-    public void authenticate() {
-        AuthenticationController authenticationController =
-                new AuthenticationController(new ConnectionFactory());
-        String salt = authenticationController.getSalt(passInput);
-        Boolean authenticated = authenticationController.authenticate(nameInput, passInput, salt);
-        if (authenticated) {
-            Render.changeGameState(Render.GameState.MENU);
-            System.out.println("user " + nameInput + " authenticated");
-        }
-    }
+
 }
 
 
