@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import menu.RenderLogin;
 import menu.RenderMenu;
 
 public class Render extends ApplicationAdapter {
@@ -25,7 +26,7 @@ public class Render extends ApplicationAdapter {
 
         gameState = GameState.GAME;
 
-        renderer = new RenderMenu();
+        renderer = new RenderLogin();
 
     }
 
@@ -42,6 +43,7 @@ public class Render extends ApplicationAdapter {
         gameState = newGameState;
         switch (gameState) {
             case LOGIN:
+                renderer = new RenderLogin();
                 break;
             case MENU:
                 renderer = new RenderMenu();

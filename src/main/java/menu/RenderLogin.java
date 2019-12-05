@@ -1,4 +1,4 @@
-package login;
+package menu;
 
 import client.AuthenticationController;
 import client.ConnectionFactory;
@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import game.Render;
+import game.Renderer;
 
 
-public class RenderLogin extends ApplicationAdapter {
+public class RenderLogin implements Renderer {
     transient TextField username;
     transient TextField password;
     transient Stage stage;
@@ -33,8 +35,8 @@ public class RenderLogin extends ApplicationAdapter {
     /**
      * Creates the items to be rendered on stage.
      */
-    @Override
-    public void create() {
+
+    public RenderLogin() {
 
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
@@ -71,12 +73,19 @@ public class RenderLogin extends ApplicationAdapter {
     /**
      * Renders the scene.
      */
-    @Override
-    public void render() {
+    public void run() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    /**
+     * Disposes of render items.
+     */
+    public void dispose(){
+        stage.dispose();
+        skin.dispose();
     }
 
     /**
@@ -89,6 +98,7 @@ public class RenderLogin extends ApplicationAdapter {
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
     }
+
 
     /**
      * Getter for password.
@@ -116,7 +126,7 @@ public class RenderLogin extends ApplicationAdapter {
         String salt = authenticationController.getSalt(passInput);
         Boolean authenticated = authenticationController.authenticate(nameInput, passInput, salt);
         if (authenticated) {
-            // switch to menu page for user
+            Render.changeGameState(Render.GameState.MENU);
             System.out.println("user " + nameInput + " authenticated");
         }
     }

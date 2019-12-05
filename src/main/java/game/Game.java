@@ -3,7 +3,7 @@ package game;
 import client.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import login.RenderLogin;
+import menu.RenderLogin;
 
 
 public class Game {
@@ -19,7 +19,7 @@ public class Game {
         config.height = 720;
         config.title = "Air Hockey";
 
-        new LwjglApplication(new RenderLogin(), config);
+        new LwjglApplication(new Render(), config);
 
         //RegistrationController registrationController = new RegistrationController(new ConnectionFactory());
         //registrationController.createNewUser("test", "test", "john");
