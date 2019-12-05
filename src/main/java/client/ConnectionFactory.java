@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    Connection createConnection(String URL) throws SQLException, ClassNotFoundException {
+    Connection createConnection(String url) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection(URL);
+        return DriverManager.getConnection(url);
     }
 
 }

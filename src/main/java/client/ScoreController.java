@@ -1,12 +1,8 @@
 package client;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ScoreController extends DatabaseController{
+public class ScoreController extends DatabaseController {
 
     public ScoreController(ConnectionFactory connectionFactory) {
         super(connectionFactory);

@@ -1,7 +1,5 @@
 package client;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -11,6 +9,14 @@ public class RegistrationController extends DatabaseController {
         super(connectionFactory);
     }
 
+    /**
+     * Method to insert a new user into database.
+     * @param username username used for login
+     * @param password password used for login
+     * @param nickname name dispalyed in game
+     * @return true if the new user was created successfully or false otherwise
+     */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public boolean createNewUser(String username, String password, String nickname) {
 
         boolean created = false;
@@ -23,9 +29,11 @@ public class RegistrationController extends DatabaseController {
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
 
+            String hashedPwd = BcryptHashing.hashPassword(password);
+
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-            preparedStatement.setString(3,nickname);
+            preparedStatement.setString(2, hashedPwd);
+            preparedStatement.setString(3, nickname);
 
             preparedStatement.execute();
 
