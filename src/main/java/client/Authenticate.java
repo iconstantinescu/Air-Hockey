@@ -17,5 +17,17 @@ public class Authenticate {
         return authenticationController.authenticate(nameInput, passInput, salt);
     }
 
+    /**
+     * registers user in database.
+     * @param passInput inputted password.
+     * @param nameInput inputted name.
+     * @param nickname inputted nickname.
+     */
+    public void register(String nameInput, String passInput, String nickname){
+        RegistrationController registrationController = new RegistrationController(new ConnectionFactory());
+        registrationController.createNewUser(nameInput, passInput, nameInput);
+        System.out.println("registration called " + nameInput);
+    }
+
 
 }

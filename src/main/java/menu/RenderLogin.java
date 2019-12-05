@@ -3,6 +3,7 @@ package menu;
 import client.Authenticate;
 import client.AuthenticationController;
 import client.ConnectionFactory;
+import client.RegistrationController;
 import com.badlogic.gdx.ApplicationAdapter;
 
 import com.badlogic.gdx.Gdx;
@@ -28,6 +29,7 @@ public class RenderLogin implements Renderer {
     transient TextField password;
     transient Stage stage;
     transient TextButton loginButton;
+    transient TextButton registerButton;
     transient Skin skin;
 
     transient String nameInput;
@@ -47,6 +49,11 @@ public class RenderLogin implements Renderer {
         loginButton.setHeight(40);
         loginButton.setPosition(300,150);
 
+        registerButton = new TextButton("register", skin, "default");
+        registerButton.setWidth(200);
+        registerButton.setHeight(40);
+        registerButton.setPosition(510, 150);
+
         username = new TextField("username", skin);
         username.setPosition(300,250);
         username.setSize(300, 40);
@@ -65,7 +72,17 @@ public class RenderLogin implements Renderer {
             }
         });
 
+        registerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                registerClicked();
+
+
+            }
+        });
+
         stage.addActor(loginButton);
+        stage.addActor(registerButton);
         stage.addActor(username);
         stage.addActor(password);
 
@@ -107,6 +124,16 @@ public class RenderLogin implements Renderer {
         }
     }
 
+
+    /**
+     * calls to register user.
+     */
+    public void registerClicked() {
+        passInput = password.getText();
+        nameInput = username.getText();
+        Authenticate auth = new Authenticate();
+        auth.register(nameInput, passInput, nameInput);
+    }
 
     /**
      * Getter for password.
