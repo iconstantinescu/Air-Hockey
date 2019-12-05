@@ -116,6 +116,7 @@ public class RenderLogin extends ApplicationAdapter {
         String salt = authenticationController.getSalt(passInput);
         Boolean authenticated = authenticationController.authenticate(nameInput, passInput, salt);
         if (authenticated) {
+            // switch to menu page for user
             System.out.println("user " + nameInput + " authenticated");
         }
     }
