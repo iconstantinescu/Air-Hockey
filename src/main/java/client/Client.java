@@ -2,7 +2,7 @@ package client;
 
 import game.Render;
 
-public class Authenticate {
+public class Client {
 
     /**
      * Authenticates username and password.

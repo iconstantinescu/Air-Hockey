@@ -1,10 +1,6 @@
 package menu;
 
-import client.Authenticate;
-import client.AuthenticationController;
-import client.ConnectionFactory;
-import client.RegistrationController;
-import com.badlogic.gdx.ApplicationAdapter;
+import client.Client;
 
 import com.badlogic.gdx.Gdx;
 
@@ -128,7 +124,7 @@ public class RenderLogin implements Renderer {
     public void loginClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        Authenticate auth = new Authenticate();
+        Client auth = new Client();
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
         if (auth.authenticate(passInput, nameInput)) {
@@ -144,7 +140,7 @@ public class RenderLogin implements Renderer {
     public void registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        Authenticate auth = new Authenticate();
+        Client auth = new Client();
         auth.register(nameInput, passInput, nameInput);
     }
 
