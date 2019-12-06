@@ -2,8 +2,6 @@ package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import client.GameDetails;
-import client.User;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;

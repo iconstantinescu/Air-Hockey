@@ -3,8 +3,6 @@ package client;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.anyString;
 
-import client.ConnectionFactory;
-import client.ScoreController;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 public class ScoreControllerTest {
     @InjectMocks
-    private ScoreController scoreController;
+    private transient ScoreController scoreController;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -76,7 +74,7 @@ public class ScoreControllerTest {
     }
 
     @Test
-    public void testSQLException() throws SQLException, ClassNotFoundException {
+    public void testSqlException() throws SQLException, ClassNotFoundException {
 
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
