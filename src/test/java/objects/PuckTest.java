@@ -43,6 +43,13 @@ class PuckTest {
     }
 
     @Test
+    void setRadius() {
+        Puck puck = new Puck(10, 10, 10, 0, 0);
+        puck.setRadius(15);
+        assertEquals(15, puck.getRadius());
+    }
+
+    @Test
     void getDeltaX() {
         Puck puck = new Puck(10, 10, 10, 0, 0);
         assertEquals(0, puck.getDeltaX());
@@ -79,6 +86,15 @@ class PuckTest {
 
     }
 
+    @Test
+    void translateOutOfGateRange() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2);
+        puck.translate(1280, 720);
+        assertEquals(puck.getposX(), 1202);
+        assertEquals(puck.getposY(), 602);
+
+    }
+
 
 
     @Test
@@ -92,6 +108,14 @@ class PuckTest {
     @Test
     void checkInGateRangeFalse() {
         Puck puck = new Puck(5, 5, 5, 2, 2);
+        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
+
+        assertFalse(inRange);
+    }
+
+    @Test
+    void checkInGateRangeFalseAbove() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2);
         boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
 
         assertFalse(inRange);
@@ -122,7 +146,7 @@ class PuckTest {
     }
 
     @Test
-    void checkWallCollisionCheckWidth() {
+    void checkWallCollisionCheckWidthLeft() {
         Puck puck = new Puck(-1,10,10,-1, 1);
 
         puck.checkWallCollision(1280, 720);
@@ -132,8 +156,38 @@ class PuckTest {
     }
 
     @Test
-    void checkWallCollisionCheckHeight() {
+    void checkWallCollisionCheckWidthRight() {
+        Puck puck = new Puck(1281,10,10,-1, 1);
+
+        puck.checkWallCollision(1280, 720);
+
+        assertEquals(1, puck.getDeltaX());
+
+    }
+
+    @Test
+    void checkWallCollisionCheckHeightDown() {
         Puck puck = new Puck(10,-1,10,-1, 1);
+
+        puck.checkWallCollision(1280, 720);
+
+        assertEquals(-1, puck.getDeltaY());
+
+    }
+
+    @Test
+    void checkWallCollisionCheckNormal() {
+        Puck puck = new Puck(11,50,10,-1, 1);
+
+        puck.checkWallCollision(1280, 720);
+
+        assertEquals(1, puck.getDeltaY());
+        assertEquals(-1, puck.getDeltaX());
+    }
+
+    @Test
+    void checkWallCollisionCheckHeightUp() {
+        Puck puck = new Puck(10,721,10,-1, 1);
 
         puck.checkWallCollision(1280, 720);
 

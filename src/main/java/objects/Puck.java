@@ -132,13 +132,13 @@ public class Puck {
      * @param screenHeight height of the scree
      */
     public void checkWallCollision(float screenWidth, float screenHeight) {
-        if (getposX() + getRadius()
-                >= screenWidth || getposX() - getRadius() <= 0) {
+        if (getposX() + getRadius() >= screenWidth
+                || getposX() - getRadius() <= 0) {
             setDeltaX(-getDeltaX());
         }
 
-        if (getposY() + getRadius()
-                >= screenHeight || getposY() - getRadius() <= 0) {
+        if (getposY() + getRadius() >= screenHeight
+                || getposY() - getRadius() <= 0) {
             setDeltaY(-getDeltaY());
         }
 

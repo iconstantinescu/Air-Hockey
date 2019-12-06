@@ -1,6 +1,7 @@
 package objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -47,13 +48,23 @@ class PusherTest {
     }
 
     @Test
-    void checkAndExecuteCollision() {
+    void checkAndExecuteCollisionOverlap() {
         Pusher pusher = new Pusher(10, 10, 10);
         Puck puck = new Puck(10, 12, 2, 0, 0);
 
         assertTrue(pusher.checkAndExecuteCollision(puck));
         assertEquals(0, puck.getDeltaX());
         assertEquals(6, puck.getDeltaY());
+    }
+
+    @Test
+    void checkAndExecuteCollisionNoOverlap() {
+        Pusher pusher = new Pusher(300, 450, 10);
+        Puck puck = new Puck(10, 12, 2, 0, 0);
+
+        assertFalse(pusher.checkAndExecuteCollision(puck));
+        assertEquals(0, puck.getDeltaX());
+        assertEquals(0, puck.getDeltaY());
     }
 
 
@@ -66,6 +77,26 @@ class PusherTest {
 
         assertTrue(some[2]);
         assertTrue(some[1]);
+    }
+
+    @Test
+    void restrictMovementOnWallMiddleSecondPlayer() {
+        Pusher pusher = new Pusher(641, 1, 1);
+
+        boolean[] some = new boolean[4];
+        pusher.restrictMovementOnWall(false, some, 1280, 720);
+
+        assertTrue(some[1]);
+    }
+
+    @Test
+    void restrictMovementOnWallRightSecondPlayer() {
+        Pusher pusher = new Pusher(1279, 1, 1);
+
+        boolean[] some = new boolean[4];
+        pusher.restrictMovementOnWall(false, some, 1280, 720);
+
+        assertTrue(some[3]);
     }
 
     @Test
