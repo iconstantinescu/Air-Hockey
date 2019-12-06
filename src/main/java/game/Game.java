@@ -21,14 +21,6 @@ public class Game {
 
         new LwjglApplication(new Render(), config);
 
-        //RegistrationController registrationController = new RegistrationController(new ConnectionFactory());
-        //registrationController.createNewUser("test", "test", "john");
-
-        AuthenticationController authenticationController = new AuthenticationController(new ConnectionFactory());
-        String salt = authenticationController.getSalt("test");
-        System.out.println(authenticationController.authenticate("test", "test", salt));
-
-
     }
 
 

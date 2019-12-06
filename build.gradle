@@ -173,14 +173,13 @@ jacocoTestCoverageVerification {
 
 final def excludedClasses = ['game.Render', 'game.Game', 'game.RenderGame', 'menu.RenderMenu']
 
-jacocoTestReport{
-//    afterEvaluate {
-//        classDirectories = files(classDirectories.files.collect {
-//            fileTree(dir: it, excludes: excludedClasses.collect {
-//                it.replace('.', '/') + '.class'
-//            })
-//        })
-//    }
+jacocoTestReport {
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['game/**', 'menu/**'])
+        })
+    }
 }
 
 checkstyle {
