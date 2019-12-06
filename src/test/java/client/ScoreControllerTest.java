@@ -1,5 +1,9 @@
+package client;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.anyString;
 
+import client.ConnectionFactory;
 import client.ScoreController;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,13 +22,15 @@ import org.mockito.MockitoAnnotations;
 
 public class ScoreControllerTest {
     @InjectMocks
-    private ScoreController dbController;
+    private ScoreController scoreController;
     @Mock
     private transient Connection mockConnection;
     @Mock
     private transient PreparedStatement mockPS;
     @Mock
     private transient ResultSet mockResultSet;
+    @Mock
+    private transient ConnectionFactory connectionFactory;
 
     /**
      * Setup Method.
@@ -35,7 +41,7 @@ public class ScoreControllerTest {
     public void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.initMocks(this);
 
-        //Mockito.when(DriverManager.getConnection(anyString())).thenReturn(mockConnection);
+        Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
@@ -44,11 +50,34 @@ public class ScoreControllerTest {
     @Test
     public void testGetPoints() throws SQLException {
 
-        /*
         Mockito.when(mockResultSet.getInt(1)).thenReturn(1000);
-
-        Assert.assertEquals(1000, dbController.getPoints(1));
-        Mockito.verify(mockConnection.createStatement(), Mockito.times(1));
-        */
+        assertEquals(1000, scoreController.getPoints(1));
     }
+
+    @Test
+    public void testUpdatePoints() throws SQLException {
+
+        scoreController.updatePoints(1,100);
+       // Mockito.verify(mockConnection.prepareStatement(anyString()),
+              //  Mockito.times(1));
+        //assertEquals(mockPS.execute(), false);
+    }
+
+    @Test
+    public void testSaveGame() throws SQLException {
+
+        scoreController.saveGame(1,2,5,4);
+        //Mockito.verify(mockConnection.prepareStatement(anyString()),
+               // Mockito.times(1));
+    }
+
+    @Test
+    public void testGetGamesPlayed() throws SQLException {
+
+        Mockito.when(mockResultSet.getInt(1)).thenReturn(5);
+        assertEquals(5, scoreController.getGamesPlayed(1));
+    }
+
+
+
 }
