@@ -1,9 +1,7 @@
 package game;
 
-import client.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import menu.RenderLogin;
 
 
 public class Game {

@@ -8,6 +8,11 @@ public class AuthenticationController extends DatabaseController {
         super(connectionFactory);
     }
 
+    /**
+     * Get the salt used for the specific user.
+     * @param username The nickname of the user
+     * @return The salt
+     */
     public String getSalt(String username) {
         try {
 
@@ -42,7 +47,7 @@ public class AuthenticationController extends DatabaseController {
     public boolean authenticate(String username, String password, String salt) {
 
         boolean valid = false;
-        final int EXPECTED_COUNT = 1;
+        final int expectedCount = 1;
 
         try {
 
@@ -58,9 +63,9 @@ public class AuthenticationController extends DatabaseController {
             ps.setString(2, hashedPwd);
 
             rs = ps.executeQuery();
-            rs.next() ;
+            rs.next();
 
-            if (rs.getInt(1) == EXPECTED_COUNT) {
+            if (rs.getInt(1) == expectedCount) {
                 valid = true;
             }
 
