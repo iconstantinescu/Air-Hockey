@@ -13,7 +13,7 @@ public class ScoreController extends DatabaseController {
      * @param userId id of the user
      * @param points number of point to be added
      */
-    public void updatePoints(int userId, int points) {
+    public boolean updatePoints(int userId, int points) {
 
         try {
 
@@ -25,12 +25,15 @@ public class ScoreController extends DatabaseController {
             ps.setInt(2, userId);
 
             ps.execute();
+            return true;
 
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
         }
+
+        return false;
     }
 
     /**
@@ -40,7 +43,7 @@ public class ScoreController extends DatabaseController {
      * @param score1 score of the first player
      * @param score2 score of the second player
      */
-    public void saveGame(int userId1, int userId2, int score1, int score2) {
+    public boolean saveGame(int userId1, int userId2, int score1, int score2) {
 
         try {
 
@@ -57,12 +60,14 @@ public class ScoreController extends DatabaseController {
             ps.setLong(5, System.currentTimeMillis());
 
             ps.execute();
+            return true;
 
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
         }
+        return false;
     }
 
     /**

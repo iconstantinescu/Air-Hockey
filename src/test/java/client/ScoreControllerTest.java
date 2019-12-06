@@ -57,18 +57,15 @@ public class ScoreControllerTest {
     @Test
     public void testUpdatePoints() throws SQLException {
 
-        scoreController.updatePoints(1,100);
-       // Mockito.verify(mockConnection.prepareStatement(anyString()),
-              //  Mockito.times(1));
-        //assertEquals(mockPS.execute(), false);
+        assertEquals(true, scoreController.updatePoints(1,100));
+
     }
 
     @Test
-    public void testSaveGame() throws SQLException {
+    public void testSaveGame() {
 
-        scoreController.saveGame(1,2,5,4);
-        //Mockito.verify(mockConnection.prepareStatement(anyString()),
-               // Mockito.times(1));
+        assertEquals(true, scoreController.saveGame(1,2,5,4));
+
     }
 
     @Test
@@ -76,6 +73,19 @@ public class ScoreControllerTest {
 
         Mockito.when(mockResultSet.getInt(1)).thenReturn(5);
         assertEquals(5, scoreController.getGamesPlayed(1));
+    }
+
+    @Test
+    public void testSQLException() throws SQLException, ClassNotFoundException {
+
+        Mockito.when(connectionFactory.createConnection(anyString()))
+                .thenThrow(new SQLException());
+
+        assertEquals(false, scoreController.saveGame(1,2,5,4));
+        assertEquals(false, scoreController.updatePoints(1,100));
+        assertEquals(0, scoreController.getGamesPlayed(1));
+        assertEquals(0, scoreController.getPoints(1));
+
     }
 
 

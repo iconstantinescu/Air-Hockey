@@ -10,6 +10,8 @@ public class BcryptHashingTest {
 
     @Test
     public void testHashPassword() {
+
+        BcryptHashing bcryptHashing = new BcryptHashing();
         String hashedPassword = BcryptHashing.hashPassword("pwd");
         String salt = BcryptHashing.getSalt();
         assertEquals(hashedPassword, BcryptHashing.hashPasswordWithSalt("pwd", salt));

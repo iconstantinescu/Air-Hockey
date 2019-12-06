@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,9 +44,17 @@ class RegistrationControllerTest {
 
         boolean created = registrationController
                 .createNewUser("user", "pwd", "john");
-        Mockito.verify(mockConnection.prepareStatement(anyString()),
-                Mockito.times(1));
         assertEquals(true, created);
     }
+
+    @Test
+    public void testSQLException() throws SQLException, ClassNotFoundException {
+
+        Mockito.when(connectionFactory.createConnection(anyString()))
+                .thenThrow(new SQLException());
+
+        registrationController.createNewUser("user", "pwd", "john");
+    }
+
 
 }
