@@ -30,6 +30,8 @@ public class RenderLogin implements Renderer {
     transient Stage stage;
     transient TextButton loginButton;
     transient TextButton registerButton;
+    transient TextField passwordText;
+    transient TextField usernameText;
     transient Skin skin;
 
     transient String nameInput;
@@ -38,7 +40,6 @@ public class RenderLogin implements Renderer {
     /**
      * Creates the items to be rendered on stage.
      */
-
     public RenderLogin() {
 
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
@@ -54,14 +55,24 @@ public class RenderLogin implements Renderer {
         registerButton.setHeight(40);
         registerButton.setPosition(510, 150);
 
-        username = new TextField("username", skin);
+        username = new TextField("", skin);
         username.setPosition(300,250);
         username.setSize(300, 40);
 
-        password = new TextField("password", skin);
+        password = new TextField("", skin);
         password.setPosition(300, 200);
         password.setSize(300,40);
+        password.setPasswordMode(true);
+        password.setPasswordCharacter('*');
 
+        usernameText = new TextField("username:", skin);
+        usernameText.setSize(100, 40);
+        usernameText.setPosition(190, 250);
+
+
+        passwordText = new TextField("password:", skin);
+        passwordText.setSize(100, 40);
+        passwordText.setPosition(190, 200);
 
         loginButton.addListener(new ClickListener() {
             @Override
@@ -85,6 +96,8 @@ public class RenderLogin implements Renderer {
         stage.addActor(registerButton);
         stage.addActor(username);
         stage.addActor(password);
+        stage.addActor(usernameText);
+        stage.addActor(passwordText);
 
         Gdx.input.setInputProcessor(stage);
     }
