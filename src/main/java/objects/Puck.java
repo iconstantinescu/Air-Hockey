@@ -2,13 +2,14 @@ package objects;
 
 import com.badlogic.gdx.Gdx;
 
+/**
+ * Class implementing the behaviour of the Puck.
+ */
 public class Puck {
 
     private transient float posX;
 
     private transient float posY;
-
-
 
     private float radius;
 

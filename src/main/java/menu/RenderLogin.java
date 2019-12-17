@@ -19,7 +19,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.Render;
 import game.Renderer;
 
-
+/**
+ * The specific renderer of the Login.
+ */
 public class RenderLogin implements Renderer {
     transient TextField username;
     transient TextField password;

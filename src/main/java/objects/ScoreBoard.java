@@ -26,10 +26,16 @@ public class ScoreBoard {
         return player2Score;
     }
 
+    /**
+     * Method that increments the points of Player1.
+     */
     public void pointP1() {
         player1Score++;
     }
 
+    /**
+     * Method that increments the points of Player2.
+     */
     public void pointP2() {
         player2Score++;
     }
