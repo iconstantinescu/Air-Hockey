@@ -6,8 +6,7 @@ package game;
  * what to dispose of once the application is terminated.
  */
 public interface Renderer {
-
     void run();
-    void dispose();
 
+    void dispose();
 }
