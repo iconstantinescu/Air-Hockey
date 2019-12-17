@@ -33,7 +33,7 @@ public class AuthenticationController extends DatabaseController {
             return rs.getString(1);
 
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -73,7 +73,7 @@ public class AuthenticationController extends DatabaseController {
                 valid = true;
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();

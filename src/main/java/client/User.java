@@ -2,10 +2,13 @@ package client;
 
 import java.util.ArrayList;
 
+/**
+ * Class that encapsulates user details in a user object.
+ */
 public class User {
 
     private transient int userID;
-    private transient  String username;
+    private transient  String nickname;
     private transient long points;
     private transient int gamesLost;
     private transient int gamesWon;
@@ -14,15 +17,15 @@ public class User {
     /**
      * Constructor for client.User class.
      * @param userID id of the user (as stored in database)
-     * @param username the name of the user that appears in game
+     * @param nickname the name of the user that appears in game
      * @param points number of points the user has
      * @param gamesLost number of games lost
      * @param gamesWon number of games won
      */
-    public User(int userID, String username, long points, int gamesLost, int gamesWon) {
+    public User(int userID, String nickname, long points, int gamesLost, int gamesWon) {
         this.userID = userID;
         this.points = points;
-        this.username = username;
+        this.nickname = nickname;
         this.gamesLost = gamesLost;
         this.gamesWon = gamesWon;
         this.gameHistory = new ArrayList<>();
@@ -32,12 +35,12 @@ public class User {
         return userID;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public long getPoints() {
