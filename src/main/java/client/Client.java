@@ -13,7 +13,11 @@ public class Client {
     public boolean authenticate(String passInput, String nameInput) {
         AuthenticationController authenticationController =
                 new AuthenticationController(new ConnectionFactory());
-        String salt = authenticationController.getSalt(passInput);
+        if(passInput.equals("") || nameInput.equals("")){
+            System.out.println("empty field");
+            return false;
+        }
+        String salt = authenticationController.getSalt(nameInput);
         return authenticationController.authenticate(nameInput, passInput, salt);
     }
 
