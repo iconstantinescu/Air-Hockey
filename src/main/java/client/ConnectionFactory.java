@@ -4,10 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionFactory {
+/**
+ * Factory class used to create new jdbc connections given the url path to a database.
+ * The purpose of this class is to encapsulate the static DriverManager.getConnection method
+ * in order to improve testability (this allows us to mock this object and call the method)
+ *
+ */
+class ConnectionFactory {
 
-    public Connection createConnection(String url) throws SQLException, ClassNotFoundException {
-        //Class.forName("com.mysql.jdbc.Driver");
+    Connection createConnection(String url) throws SQLException {
         return DriverManager.getConnection(url);
     }
 

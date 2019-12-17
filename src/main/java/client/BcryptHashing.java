@@ -6,7 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * Class that is used to hash the plain text password using a salt.
  * The class uses BcryptHashing method for hashing the password.
  */
-public class BcryptHashing {
+class BcryptHashing {
 
     private static String salt;
 
@@ -17,7 +17,7 @@ public class BcryptHashing {
      * @param passwordPlaintext password in plain text
      * @return hashed password as a String
      */
-    public static String hashPassword(String passwordPlaintext) {
+    static String hashPassword(String passwordPlaintext) {
         int workload = 12;
         salt = BCrypt.gensalt(workload);
         return BCrypt.hashpw(passwordPlaintext, salt);
@@ -29,7 +29,7 @@ public class BcryptHashing {
      * @param salt the salt that will be used for hashing
      * @return hashed password as a String
      */
-    public static String hashPasswordWithSalt(String passwordPlaintext, String salt) {
+    static String hashPasswordWithSalt(String passwordPlaintext, String salt) {
         return BCrypt.hashpw(passwordPlaintext, salt);
     }
 
@@ -37,7 +37,7 @@ public class BcryptHashing {
      * Getter for the salt field.
      * @return the salt that was used for hashing the password within the same object instance
      */
-    public static String getSalt() {
+    static String getSalt() {
         return salt;
     }
 
