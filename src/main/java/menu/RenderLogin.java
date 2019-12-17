@@ -56,12 +56,12 @@ public class RenderLogin implements Renderer {
         loginButton = new TextButton("login",skin,"default");
         loginButton.setWidth(200);
         loginButton.setHeight(40);
-        loginButton.setPosition(usernameX,usernameY - username.getHeight() * 2 - 5);
+        loginButton.setPosition(usernameX,usernameY - username.getHeight() * 2 - 10);
 
         registerButton = new TextButton("register", skin, "default");
         registerButton.setWidth(200);
         registerButton.setHeight(40);
-        registerButton.setPosition(usernameX + 250, usernameY - username.getHeight() * 2 - 5);
+        registerButton.setPosition(usernameX + 200, usernameY - username.getHeight() * 2 - 10);
 
         usernameText = new Label("username:", skin);
         usernameText.setSize(100, 40);
