@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
 import game.Renderer;
 
+/**
+ * The specific renderer of the Game Menu.
+ */
 public class RenderMenu implements Renderer {
     private transient SpriteBatch homeBatch;
     private transient SpriteBatch playBatch;
@@ -33,19 +36,19 @@ public class RenderMenu implements Renderer {
         scoresBatch = new SpriteBatch();
         quitBatch = new SpriteBatch();
 
-        home = new Texture("home.png");
+        home = new Texture("media/home.png");
         homeSprite = new Sprite(home);
         homeSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         homeSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3);
-        play = new Texture("play.png");
+        play = new Texture("media/play.png");
         playSprite = new Sprite(play);
         playSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         playSprite.setPosition(playSprite.getX(),
                 playSprite.getY() + playSprite.getHeight() / 2);
-        scores = new Texture("scores.png");
+        scores = new Texture("media/scores.png");
         scoresSprite = new Sprite(scores);
         scoresSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        quit = new Texture("quit.png");
+        quit = new Texture("media/quit.png");
         quitSprite = new Sprite(quit);
         quitSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         quitSprite.setPosition(quitSprite.getX(),

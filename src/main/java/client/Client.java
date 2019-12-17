@@ -1,6 +1,5 @@
 package client;
 
-import game.Render;
 
 public class Client {
 

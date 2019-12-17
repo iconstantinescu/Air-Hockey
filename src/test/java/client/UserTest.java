@@ -26,14 +26,14 @@ class UserTest {
     }
 
     @Test
-    void getUsername() {
-        assertEquals("john", testUser.getUsername());
+    void getNickname() {
+        assertEquals("john", testUser.getNickname());
     }
 
     @Test
-    void setUsername() {
-        testUser.setUsername("robert");
-        assertEquals("robert", testUser.getUsername());
+    void setNickname() {
+        testUser.setNickname("robert");
+        assertEquals("robert", testUser.getNickname());
     }
 
     @Test

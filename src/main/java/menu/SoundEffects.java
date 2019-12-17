@@ -13,7 +13,7 @@ public class SoundEffects {
      * @param sound The sound that will be played
      */
     public static void backgroundSound(com.badlogic.gdx.audio.Sound sound) {
-        sound = Gdx.audio.newSound(Gdx.files.internal("song.wav"));
+        sound = Gdx.audio.newSound(Gdx.files.internal("media/song.wav"));
         sound.loop();
     }
 
@@ -27,7 +27,7 @@ public class SoundEffects {
     public static void hitSound(com.badlogic.gdx.audio.Sound sound, Puck puck, Pusher pusher,
                                 int screenWidth, int screenHeigth) {
         if (MathUtils.checkRadius(pusher, puck) || hitWall(screenWidth, screenHeigth, puck)) {
-            sound = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
+            sound = Gdx.audio.newSound(Gdx.files.internal("media/hit.wav"));
             sound.play();
         }
     }
