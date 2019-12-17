@@ -42,13 +42,13 @@ public class RenderLogin implements Renderer {
         float centerH = Gdx.graphics.getHeight() / 2;
 
         username = new TextField("", skin);
-        username.setSize(300, 40);
+        username.setSize(400, 40);
         float usernameX = centerW - username.getWidth() / 2;
         float usernameY = centerH + username.getHeight();
         username.setPosition(usernameX,usernameY);
 
         password = new TextField("", skin);
-        password.setSize(300,40);
+        password.setSize(400,40);
         password.setPosition(usernameX, usernameY - username.getHeight() - 5);
         password.setPasswordMode(true);
         password.setPasswordCharacter('*');
