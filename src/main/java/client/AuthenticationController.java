@@ -2,6 +2,9 @@ package client;
 
 import java.sql.SQLException;
 
+/**
+ * Class that contains the methods required to authenticate the user with the database.
+ */
 public class AuthenticationController extends DatabaseController {
 
     public AuthenticationController(ConnectionFactory connectionFactory) {
@@ -10,8 +13,9 @@ public class AuthenticationController extends DatabaseController {
 
     /**
      * Get the salt used for the specific user.
+     * The salt is a string added to the hash password to improve security.
      * @param username The nickname of the user
-     * @return The salt
+     * @return The salt stored in the database as a String
      */
     public String getSalt(String username) {
         try {
@@ -38,7 +42,7 @@ public class AuthenticationController extends DatabaseController {
     }
 
     /**
-     * Methods that checks if the username and password match with the ones in the database.
+     * Method that checks if the given username and password match with the ones in the database.
      * @param username username provided via login form
      * @param password password provided via login form
      * @return true if the user and password match and false otherwise
