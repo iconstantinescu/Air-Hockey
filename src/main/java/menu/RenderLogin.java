@@ -47,12 +47,16 @@ public class RenderLogin implements Renderer {
 
         username = new TextField("", skin);
         username.setSize(400, 40);
+
+        // set username field to center
         float usernameX = centerW - username.getWidth() / 2;
         float usernameY = centerH + username.getHeight();
         username.setPosition(usernameX,usernameY);
 
         password = new TextField("", skin);
         password.setSize(400,40);
+
+        // set password field to directly under username
         password.setPosition(usernameX, usernameY - username.getHeight() - 5);
         password.setPasswordMode(true);
         password.setPasswordCharacter('*');
@@ -60,18 +64,24 @@ public class RenderLogin implements Renderer {
         loginButton = new TextButton("login",skin,"default");
         loginButton.setWidth(200);
         loginButton.setHeight(40);
+
+        // login button position under password and username fields on left side
         loginButton.setPosition(usernameX,usernameY - username.getHeight() * 2 - 10);
 
         registerButton = new TextButton("register", skin, "default");
         registerButton.setWidth(200);
         registerButton.setHeight(40);
+
+        // register button position under password and username fields on right side
         registerButton.setPosition(usernameX + 200, usernameY - username.getHeight() * 2 - 10);
 
         usernameText = new Label("username:", skin);
+
+        // to left of username
         usernameText.setSize(100, 40);
         usernameText.setPosition(usernameX - 110, usernameY);
 
-
+        // to left of password
         passwordText = new Label("password:", skin);
         passwordText.setSize(100, 40);
         passwordText.setPosition(usernameX - 110, usernameY - username.getHeight() - 5);
