@@ -3,11 +3,14 @@ package game;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-
+/**
+ * The class containing the main which is calling the rendering methods.
+ */
 public class Game {
 
     /**
-     * Main function of the game, where the window is being created.
+     * Main function of the game, where the window is being created,
+     * and the method rendering the game is invoked..
      *
      * @param args Args that can be passed from the console
      */

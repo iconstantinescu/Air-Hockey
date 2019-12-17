@@ -5,4 +5,4 @@
 3. Open the project in your favourite IDE (Intellij if possible since it was developed in this IDE) by Going to File > Open.. and selecting the build.gradle file
 4. Set Java 11 as your Java version in File > Project Structure.. > Project
 5. The game can be started by running the main of the Game class
-6. To login use username: test and password: test
+6. To login use nickname: test and password: test

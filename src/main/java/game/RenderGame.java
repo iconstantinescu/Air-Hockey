@@ -35,7 +35,7 @@ public class RenderGame implements Renderer {
         pusher1 = new Pusher(300, 100, 40);
         pusher2 = new Pusher(800, 360, 40);
 
-        img = new Texture("field.png");
+        img = new Texture("media/field.png");
         sprite = new Sprite(img);
         sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         batch = new SpriteBatch();
@@ -51,8 +51,7 @@ public class RenderGame implements Renderer {
     }
 
     /**
-     * Method that runs the rendering of the specific part.
-     *
+     * Method that runs the rendering of the game.
      */
     public void run() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -65,9 +64,6 @@ public class RenderGame implements Renderer {
                 sprite.getScaleY(), sprite.getRotation());
 
         batch.end();
-
-
-
 
 
         // Check if Puck can enter gate, if yes then act

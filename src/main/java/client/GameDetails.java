@@ -2,12 +2,24 @@ package client;
 
 import java.sql.Timestamp;
 
+/**
+ * Class that contains the details of a single match between two players.
+ */
 public class GameDetails {
 
+    /**
+     * The username of the two players playing the game.
+     */
     private transient String username1;
     private transient String username2;
+
+    /**
+     * The scores of the two players playing the game.
+     */
     private transient int scoreUser1;
     private transient int scoreUser2;
+
+
     private transient Timestamp timestamp;
 
     /**

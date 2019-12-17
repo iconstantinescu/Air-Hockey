@@ -3,6 +3,9 @@ package client;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Class that contains the methods required to register a new user in the database.
+ */
 public class RegistrationController extends DatabaseController {
 
     public RegistrationController(ConnectionFactory connectionFactory) {
@@ -10,10 +13,10 @@ public class RegistrationController extends DatabaseController {
     }
 
     /**
-     * Method to insert a new user into database.
+     * Method to insert a new user details into database.
      * @param username username used for login
      * @param password password used for login
-     * @param nickname name dispalyed in game
+     * @param nickname name displayed in game
      * @return true if the new user was created successfully or false otherwise
      */
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
@@ -41,7 +44,7 @@ public class RegistrationController extends DatabaseController {
 
             created = true;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
