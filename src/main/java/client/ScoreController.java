@@ -2,8 +2,17 @@ package client;
 
 import java.sql.SQLException;
 
+/**
+ * Class that contains the methods required to save and retrieve
+ * user points and match details to/from the database.
+ */
 public class ScoreController extends DatabaseController {
 
+    /**
+     * Constructor of the class.
+     * @param connectionFactory the connectionFactory object that facilitates
+     *                          the creation of a new database connection
+     */
     public ScoreController(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
@@ -27,7 +36,7 @@ public class ScoreController extends DatabaseController {
             ps.execute();
             return true;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -62,7 +71,7 @@ public class ScoreController extends DatabaseController {
             ps.execute();
             return true;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -93,7 +102,7 @@ public class ScoreController extends DatabaseController {
 
             return points;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
@@ -126,7 +135,7 @@ public class ScoreController extends DatabaseController {
 
             return gamesPlayed;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
