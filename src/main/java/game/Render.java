@@ -1,15 +1,18 @@
 package game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import menu.RenderLogin;
 import menu.RenderMenu;
 
+/**
+ * The render method is the one passed to the Game class such
+ * that the render method can be called in a loop.
+ */
 public class Render extends ApplicationAdapter {
 
+    /**
+     *  An enumeration of the possible states of the application.
+     */
     public enum GameState {
         LOGIN,
         MENU,
@@ -19,24 +22,27 @@ public class Render extends ApplicationAdapter {
     protected static GameState gameState;
     private static Renderer renderer;
 
+    /**
+     * This method is only being run once, initializing the application.
+     */
     @Override
     public void create() {
-
-
-
         gameState = GameState.GAME;
 
         renderer = new RenderLogin();
 
     }
 
+    /**
+     * The render method is being invoked in a loot.
+     */
     @Override
     public void render() {
         renderer.run();
     }
 
     /**
-     * Change Game State.
+     * Method that changes the state of the Game.
      * @param newGameState The New Game State
      */
     public static void changeGameState(GameState newGameState) {
@@ -57,16 +63,15 @@ public class Render extends ApplicationAdapter {
 
     }
 
+    /**
+     * Method being used to dispose of all the created object
+     * before closing the application.
+     */
     @Override
     public void dispose() {
-        //        batch.dispose();
         if (renderer != null) {
             renderer.dispose();
         }
-
-        //                img.dispose();
-        //                shape.dispose();
-        //                hitSound.dispose();
     }
 
 }

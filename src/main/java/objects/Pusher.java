@@ -2,6 +2,9 @@ package objects;
 
 import utilities.MathUtils;
 
+/**
+ * The class containing the behaviour of the pusher.
+ */
 public class Pusher {
 
     private transient float posX;
