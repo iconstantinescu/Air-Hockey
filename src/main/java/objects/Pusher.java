@@ -82,34 +82,41 @@ public class Pusher {
     public boolean[] restrictMovementOnWall(boolean playerId,
                                             boolean[] restricts,
                                             int screenWidth, int screenHeigth) {
+        // Initialize the restrict Array.
         for (int i = 0; i < 4; i++) {
             restricts[i] = false;
         }
 
+        // Restrict Down if necessary
         if (posY - radius < 0) {
             restricts[2] = true;
         }
 
+        // Restrict Up if necessary
         if (posY + radius >= screenHeigth) {
             restricts[0] = true;
         }
 
+        // Check for which player you should restrict the movement
         if (playerId) {
+            // Restrict Left if necessary
             if (posX - radius <= 0) {
                 restricts[1] = true;
             }
+            // Restrict Right if necessary
             if (posX + radius >= screenWidth / 2) {
                 restricts[3] = true;
             }
         } else {
+            // Restrict Left if necessary
             if (posX - radius <= screenWidth / 2) {
                 restricts[1] = true;
             }
+            // Restrict Right if necessary
             if (posX + radius >= screenWidth) {
                 restricts[3] = true;
             }
         }
-
 
         return restricts;
     }

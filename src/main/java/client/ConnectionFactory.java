@@ -12,6 +12,12 @@ import java.sql.SQLException;
  */
 class ConnectionFactory {
 
+    /**
+     * Use the DriverManager to create a new connection.
+     * @param url The url of the database.
+     * @return New Connection
+     * @throws SQLException An SQl Error can occur while trying to initialize the connection.
+     */
     Connection createConnection(String url) throws SQLException {
         return DriverManager.getConnection(url);
     }

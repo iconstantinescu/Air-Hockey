@@ -1,5 +1,8 @@
 package client;
 
+/**
+ * Class for authenticating and registering the user.
+ */
 public class Client {
 
     /**
