@@ -14,6 +14,9 @@ import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
+/**
+ * The specific Game renderer inheriting from the general Renderer.
+ */
 public class RenderGame implements Renderer {
     private transient ShapeRenderer shape;
     private transient Pusher pusher1;
@@ -32,21 +35,23 @@ public class RenderGame implements Renderer {
      * Constructor for the Renderer.
      */
     public RenderGame() {
+        // Set pusher 1 and 2 positions
         pusher1 = new Pusher(300, 100, 40);
         pusher2 = new Pusher(800, 360, 40);
 
+        // Set the field sprite
         img = new Texture("media/field.png");
         sprite = new Sprite(img);
         sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        batch = new SpriteBatch();
 
+        // Set the objects sprites
+        batch = new SpriteBatch();
         shape = new ShapeRenderer();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0);
         scoreBoard = new ScoreBoard(0, 0);
         font = new BitmapFont();
 
-
-
+        // Initiate the Background Sound
         SoundEffects.backgroundSound(backSound);
     }
 
@@ -57,6 +62,7 @@ public class RenderGame implements Renderer {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // DRAW THE BOARD
         batch.begin();
         batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
                 sprite.getY() - sprite.getHeight() / 2, sprite.getWidth(),
@@ -79,15 +85,15 @@ public class RenderGame implements Renderer {
 
         // Check and execute collision between Pusher 2 and Puck
         pusher2.checkAndExecuteCollision(puck);
-
         puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        // DRAW THE PUCK
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.RED);
         shape.circle(puck.getposX(), puck.getposY(), puck.getRadius());
         shape.end();
 
-        // Pusher position update and rendering
+        // GET RESTRICTIONS FOR PUSHER 1 MOVEMENT
         boolean[] restricts = new boolean[4];
 
         pusher1.restrictMovementOnWall(true, restricts,
@@ -106,6 +112,7 @@ public class RenderGame implements Renderer {
             pusher1.setposX(pusher1.getposX() + 4);
         }
 
+        // GET RESTRICTIONS FOR PUSHER 2 MOVEMENT
 
         pusher2.restrictMovementOnWall(false, restricts,
                 Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -123,18 +130,19 @@ public class RenderGame implements Renderer {
             pusher2.setposX(pusher2.getposX() + 4);
         }
 
-        // Render Pusher 1
+        // RENDER PUSHER 1
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.FIREBRICK);
         shape.circle(pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
         shape.end();
 
-        // Render Pusher 2
+        // RENDER PUSHER 1
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.FIREBRICK);
         shape.circle(pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
         shape.end();
 
+        // PAY THE SOUND EFFECTS
         SoundEffects.hitSound(hitSound, puck, pusher1,
                 Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         SoundEffects.hitSound(hitSound, puck, pusher2,
