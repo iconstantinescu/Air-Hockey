@@ -12,6 +12,7 @@ import game.Renderer;
 
 /**
  * The specific renderer of the Game Menu.
+ * Here the menu screen, all buttons and button actions are created and set.
  */
 public class RenderMenu implements Renderer {
     private transient SpriteBatch homeBatch;
@@ -28,7 +29,10 @@ public class RenderMenu implements Renderer {
     private transient Sprite quitSprite;
 
     /**
-     * Set everything in this class.
+     * This is the renderer for the menu.
+     * In here the following will happen:
+     * Create the new sprite batches for all parts of the menu screen.
+     * Assign the button variables and set the location of the field.
      */
     public RenderMenu() {
         homeBatch = new SpriteBatch();
@@ -56,15 +60,22 @@ public class RenderMenu implements Renderer {
     }
 
     /**
-     * Run the menu for in the render.
+     * Run the menu for in the main game renderer.
+     * Call the methods to set the homeScreen, the playButton, the scoresButton and the QuitButton.
+     * Once play is pressed, you will leave the menu and go into the Game.
+     * Once quit is pressed, you will exit the application with exit code: 0
+     * This means that everything went fine.
      */
     public void run() {
-        setHome(homeSprite, homeBatch);
-        setPlay(playSprite, playBatch);
-        setScores(scoresSprite, scoresBatch);
-        setQuit(quitSprite, quitBatch);
-        if (playPressed(playSprite, playBatch)) {
+        setHomeScreen(homeSprite, homeBatch);
+        setPlayButton(playSprite, playBatch);
+        setScoresButton(scoresSprite, scoresBatch);
+        setQuitButton(quitSprite, quitBatch);
+        if (playPressed(playSprite)) {
             Render.changeGameState(Render.GameState.GAME);
+        }
+        if (quitButtonPressed(quitSprite)) {
+            exit(0);
         }
     }
 
@@ -83,12 +94,14 @@ public class RenderMenu implements Renderer {
     }
 
     /**
-     * Sets the home sprite and batch.
+     * Sets the home sprite and batch, to show the home screen once this method is called.
+     * This method will be called in render as long as you are on the menu screen.
+     * At start of the method the batch will begin to draw and at the end it will dispose.
      *
      * @param sprite the sprite to draw
      * @param batch  the batch to render
      */
-    public static void setHome(Sprite sprite, SpriteBatch batch) {
+    public static void setHomeScreen(Sprite sprite, SpriteBatch batch) {
         batch.begin();
         batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
                 sprite.getY() - sprite.getHeight() / 3, sprite.getWidth(),
@@ -100,11 +113,14 @@ public class RenderMenu implements Renderer {
 
     /**
      * Sets the play sprite and batch.
+     * Here the play button will be displayed just above the middle of the menu screen.
+     * This method will be called in render as long as you are on the menu screen.
+     * At start of the method the batch will begin to draw and at the end it will dispose.
      *
      * @param sprite the sprite to draw
      * @param batch  the batch to render
      */
-    public static void setPlay(Sprite sprite, SpriteBatch batch) {
+    public static void setPlayButton(Sprite sprite, SpriteBatch batch) {
         batch.begin();
         batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
                 sprite.getY() + sprite.getHeight() / 2);
@@ -126,12 +142,12 @@ public class RenderMenu implements Renderer {
 
     /**
      * When 'play' is pressed, return true, else return false.
+     * This method will be called in render as long as you are on the menu screen.
      *
      * @param sprite the sprite to draw
-     * @param batch  the batch to render
      * @return a boolean whether play is pressed
      */
-    public static boolean playPressed(Sprite sprite, SpriteBatch batch) {
+    public static boolean playPressed(Sprite sprite) {
         if (Gdx.input.justTouched() && Gdx.input.getX() > (sprite.getX() - sprite.getWidth() / 2)
                 && Gdx.input.getX() < (sprite.getX()
                 + sprite.getWidth() / 2)
@@ -147,11 +163,14 @@ public class RenderMenu implements Renderer {
 
     /**
      * Sets the scores sprite and batch.
+     * Here the scores button will be displayed on the middle of the menu screen.
+     * This method will be called in render as long as you are on the menu screen.
+     * At start of the method the batch will begin to draw and at the end it will dispose.
      *
      * @param sprite the sprite to draw
      * @param batch  the batch to render
      */
-    public static void setScores(Sprite sprite, SpriteBatch batch) {
+    public static void setScoresButton(Sprite sprite, SpriteBatch batch) {
         batch.begin();
         batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
                 sprite.getY() - sprite.getHeight() / 2);
@@ -170,11 +189,14 @@ public class RenderMenu implements Renderer {
 
     /**
      * Sets the quit sprite and batch.
+     * Here the quit button is displayed on just below the middle of the menu screen.
+     * This method will be called in render as long as you are on the menu screen.
+     * At start of the method the batch will begin to draw and at the end it will dispose.
      *
      * @param sprite the sprite to draw
      * @param batch  the batch to render
      */
-    public static void setQuit(Sprite sprite, SpriteBatch batch) {
+    public static void setQuitButton(Sprite sprite, SpriteBatch batch) {
         batch.begin();
         batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
                 sprite.getY() - sprite.getHeight() * 2);
@@ -192,6 +214,18 @@ public class RenderMenu implements Renderer {
             batch.setColor(Color.WHITE);
         }
 
+        batch.end();
+    }
+
+    /**
+     * This method will return true when 'quit' is pressed and false otherwise.
+     * This method will be called in render as long as you are on the menu screen.
+     * Once quit is pressed, the render method will make sure you will leave the game.
+     *
+     * @param sprite the sprite to draw.
+     * @return a boolean, true if 'quit' is pressed or not.
+     */
+    public static boolean quitButtonPressed(Sprite sprite) {
         if (Gdx.input.justTouched() && Gdx.input.getX()
                 > (sprite.getX() - sprite.getWidth() / 2)
                 && Gdx.input.getX() < (sprite.getX() + sprite.getWidth() / 2)
@@ -199,10 +233,9 @@ public class RenderMenu implements Renderer {
                 > (sprite.getY() - sprite.getHeight() * 3 / 2)
                 && Gdx.graphics.getHeight() - Gdx.input.getY()
                 < (sprite.getY() - sprite.getHeight() / 2)) {
-            exit(0);
+            return true;
         }
-        batch.end();
+        return false;
     }
-
 
 }
