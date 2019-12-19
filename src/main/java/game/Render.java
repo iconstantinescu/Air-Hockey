@@ -27,10 +27,9 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void create() {
-        gameState = GameState.GAME;
-
+        // Initialize the login as the first login.
+        gameState = GameState.LOGIN;
         renderer = new RenderLogin();
-
     }
 
     /**

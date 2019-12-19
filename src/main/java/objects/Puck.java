@@ -110,6 +110,7 @@ public class Puck {
      * @param scoreBoard The scoreBoard to be updated
      */
     public void gateBehaviour(ScoreBoard scoreBoard, int screenWidth, int screenHeight) {
+        // Add point to second player if puck goes past the left gate
         if (getposX() + getRadius() < 0) {
             setposX(screenWidth / 2);
             setposY(screenHeight / 2);
@@ -118,6 +119,7 @@ public class Puck {
             scoreBoard.pointP2();
         }
 
+        // Add point to first player if puck goes past the right gate
         if (getposX() - getRadius() >= screenWidth) {
             setposX(screenWidth / 2);
             setposY(screenHeight / 2);

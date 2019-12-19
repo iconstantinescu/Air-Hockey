@@ -6,3 +6,7 @@
 4. Set Java 11 as your Java version in File > Project Structure.. > Project
 5. The game can be started by running the main of the Game class
 6. To login use nickname: test and password: test
+
+## How to use the provided tools
+1. In Intellij go to the Gradle menu on top-right and double click the "check" button (from the "verification" drop-down) in order to run Jacoco, Spotbugs, PMD, Checkstyle and the tests.
+2. If you want to check the code coverage double click on the "JacocoTestReport" button (from the "verification" drop-down).

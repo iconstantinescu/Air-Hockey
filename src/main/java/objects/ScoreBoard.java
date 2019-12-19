@@ -3,9 +3,6 @@ package objects;
 public class ScoreBoard {
 
     private transient int player1Score;
-
-
-
     private transient int player2Score;
 
     /**

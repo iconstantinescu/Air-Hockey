@@ -5,10 +5,15 @@ import objects.Puck;
 import objects.Pusher;
 import utilities.MathUtils;
 
+/**
+ * This is the class that sets the sound effects.
+ * Here you will find the sounds that are made and when they will be made.
+ */
 public class SoundEffects {
 
     /**
      * Whens starting the game, you will hear a background sound.
+     * The background sound will be played as long as you are on the game screen.
      *
      * @param sound The sound that will be played
      */
@@ -19,6 +24,7 @@ public class SoundEffects {
 
     /**
      * Make a hit sound when a pusher hits the puck or the puck hits the wall.
+     * You will hear a single hit.
      *
      * @param sound  The sound to be played
      * @param puck   The puck that hits
@@ -34,6 +40,7 @@ public class SoundEffects {
 
     /**
      * Check if the puck hits a wall to know when to play a hit sound.
+     * You will hear a single hit.
      *
      * @param screenWidth  The width of the screen
      * @param screenHeight The height of the screen
