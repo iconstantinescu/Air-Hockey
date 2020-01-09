@@ -61,8 +61,108 @@ public class RenderGame implements Renderer {
     public void run() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        drawBoard();
 
-        // DRAW THE BOARD
+        // CALCULATE THE POSITIONS OF ALL THE PUCK
+        movePuck();
+
+        // DRAW THE PUCK
+        drawGameObject(1, puck.getposX(), puck.getposY(), puck.getRadius());
+
+        // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
+        movePusher(pusher1, true);
+
+        // CHANGE PUSHER2 POSITION ACCORDING TO KEYBOARD INPUT
+        movePusher(pusher2, false);
+
+        // DRAW PUSHER 1
+        drawGameObject(2, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
+
+        // DRAW PUSHER 2
+        drawGameObject(2, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
+
+        // PLAY THE SOUND EFFECTS
+        SoundEffects.hitSound(hitSound, puck, pusher1,
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        SoundEffects.hitSound(hitSound, puck, pusher2,
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        // RENDER THE SCORE
+        drawText(scoreBoard.getPlayer1Score() + " : "
+                + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
+                Gdx.graphics.getHeight() - 20);
+
+        // DRAW UPPER WALL
+        drawWall(0,0, Gdx.graphics.getWidth(), 5);
+        // DRAW LOWER WALL
+        drawWall(0, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), -5);
+
+        // DRAW THE LEFT GATE
+        drawWall(0, Gdx.graphics.getHeight(), 5,- (Gdx.graphics.getHeight() / 3.0f));
+        drawWall(0, 0, 5,Gdx.graphics.getHeight() / 3.0f);
+
+        // DRAW THE RIGHT GATE
+        drawWall(Gdx.graphics.getWidth(),
+                Gdx.graphics.getHeight(), -5,-(Gdx.graphics.getHeight() / 3.0f));
+        drawWall(Gdx.graphics.getWidth(), 0, -5,Gdx.graphics.getHeight() / 3.0f);
+
+    }
+
+    /**
+     * Moves the pusher object according to the user input
+     * @param pusher The pusher object
+     * @param pusherId The id of the Pusher (either Pusher 1 - Left, or Pusher 2 - Right)
+     */
+    public void movePusher(Pusher pusher, boolean pusherId) {
+        int[] keyCodes;
+        if (pusherId) {
+            // USE WASD
+            keyCodes = new int[]{51, 47, 29, 32};
+        } else {
+            // USE IJKL
+            keyCodes = new int[]{37, 39, 38, 40};
+        }
+        boolean[] restricts = new boolean[4];
+
+        pusher.restrictMovementOnWall(pusherId, restricts,
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        if (Gdx.input.isKeyPressed(keyCodes[0]) && !restricts[0]) {
+            pusher.setposY(pusher.getposY() + 4);
+        }
+        if (Gdx.input.isKeyPressed(keyCodes[1]) && !restricts[2]) {
+            pusher.setposY(pusher.getposY() - 4);
+        }
+        if (Gdx.input.isKeyPressed(keyCodes[2]) && !restricts[1]) {
+            pusher.setposX(pusher.getposX() - 4);
+        }
+        if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
+            pusher.setposX(pusher.getposX() + 4);
+        }
+    }
+
+    /**
+     * Function that renders a gameObject (which can be either the puck or the pusher.
+     * @param objectType The type of object (1 for puck, 2 for pusher)
+     * @param posX The x coordinate of the object
+     * @param posY The y coordinate of the object
+     * @param radius The radius of the object
+     */
+    public void drawGameObject(int objectType, float posX, float posY, float radius) {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        if (objectType == 1) {
+            shape.setColor(Color.RED);
+        } else if (objectType == 2) {
+            shape.setColor(Color.FIREBRICK);
+        }
+        shape.circle(posX, posY, radius);
+        shape.end();
+    }
+
+    /**
+     * Draw the board (which is the background of the game).
+     */
+    public void drawBoard() {
         batch.begin();
         batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
                 sprite.getY() - sprite.getHeight() / 2, sprite.getWidth(),
@@ -70,8 +170,12 @@ public class RenderGame implements Renderer {
                 sprite.getScaleY(), sprite.getRotation());
 
         batch.end();
+    }
 
-
+    /**
+     * This method changes the puck position according to the rules of Air Hockey.
+     */
+    public void movePuck() {
         // Check if Puck can enter gate, if yes then act
         if (puck.checkInGateRange(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) {
             puck.gateBehaviour(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -86,101 +190,36 @@ public class RenderGame implements Renderer {
         // Check and execute collision between Pusher 2 and Puck
         pusher2.checkAndExecuteCollision(puck);
         puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
 
-        // DRAW THE PUCK
+    /**
+     * Draw a Wall for the game.
+     * @param posX The x coordinate of the wall
+     * @param posY The y coordinate of the wall
+     * @param width The width of the wall
+     * @param height The height of the wall
+     */
+    public void drawWall(float posX, float posY, float width, float height) {
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.RED);
-        shape.circle(puck.getposX(), puck.getposY(), puck.getRadius());
+        shape.setColor(Color.BLUE);
+        shape.rect(posX, posY, width, height);
         shape.end();
+    }
 
-        // GET RESTRICTIONS FOR PUSHER 1 MOVEMENT
-        boolean[] restricts = new boolean[4];
-
-        pusher1.restrictMovementOnWall(true, restricts,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        if (Gdx.input.isKeyPressed(51) && !restricts[0]) {
-            pusher1.setposY(pusher1.getposY() + 4);
-        }
-        if (Gdx.input.isKeyPressed(47) && !restricts[2]) {
-            pusher1.setposY(pusher1.getposY() - 4);
-        }
-        if (Gdx.input.isKeyPressed(29) && !restricts[1]) {
-            pusher1.setposX(pusher1.getposX() - 4);
-        }
-        if (Gdx.input.isKeyPressed(32) && !restricts[3]) {
-            pusher1.setposX(pusher1.getposX() + 4);
-        }
-
-        // GET RESTRICTIONS FOR PUSHER 2 MOVEMENT
-
-        pusher2.restrictMovementOnWall(false, restricts,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        if (Gdx.input.isKeyPressed(37) && !restricts[0]) {
-            pusher2.setposY(pusher2.getposY() + 4);
-        }
-        if (Gdx.input.isKeyPressed(39) && !restricts[2]) {
-            pusher2.setposY(pusher2.getposY() - 4);
-        }
-        if (Gdx.input.isKeyPressed(38) && !restricts[1]) {
-            pusher2.setposX(pusher2.getposX() - 4);
-        }
-        if (Gdx.input.isKeyPressed(40) && !restricts[3]) {
-            pusher2.setposX(pusher2.getposX() + 4);
-        }
-
-        // RENDER PUSHER 1
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.FIREBRICK);
-        shape.circle(pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
-        shape.end();
-
-        // RENDER PUSHER 1
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.FIREBRICK);
-        shape.circle(pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
-        shape.end();
-
-        // PAY THE SOUND EFFECTS
-        SoundEffects.hitSound(hitSound, puck, pusher1,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        SoundEffects.hitSound(hitSound, puck, pusher2,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        // RENDER THE SCORE
+    /**
+     * Draw text on the screen.
+     * @param str Text to display on screen
+     * @param posX The x coordinate of the text
+     * @param posY The y coordinate of the text
+     */
+    public void drawText(String str, float posX, float posY) {
         batch.begin();
         font.setColor(0,0,0,1);
         font.getData().setScale(4);
         font.draw(batch, scoreBoard.getPlayer1Score() + " : "
-                + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
+                        + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
                 Gdx.graphics.getHeight() - 20);
         batch.end();
-
-
-        // DRAW THE WALLS
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.BLUE);
-        shape.rect(0,0, Gdx.graphics.getWidth(), 5);
-        shape.rect(0, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), -5);
-        shape.end();
-
-        // DRAW THE LEFT GATE
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.BLUE);
-        shape.rect(0, Gdx.graphics.getHeight(), 5,- (Gdx.graphics.getHeight() / 3.0f));
-        shape.rect(0, 0, 5,Gdx.graphics.getHeight() / 3.0f);
-        shape.end();
-
-
-        // DRAW THE RIGHT GATE
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.BLUE);
-        shape.rect(Gdx.graphics.getWidth(),
-                Gdx.graphics.getHeight(), -5,-(Gdx.graphics.getHeight() / 3.0f));
-        shape.rect(Gdx.graphics.getWidth(), 0, -5,Gdx.graphics.getHeight() / 3.0f);
-        shape.end();
-
     }
 
     /**
