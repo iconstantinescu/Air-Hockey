@@ -2,6 +2,7 @@ package client;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LeaderboardController extends DatabaseController {
@@ -33,8 +34,9 @@ public class LeaderboardController extends DatabaseController {
                 leaderboardList.add(leaderboardInstance);
             }
 
+            Collections.sort(leaderboardList,
+                    (LeaderboardInstance a, LeaderboardInstance b) -> (int)(b.getPoints() - a.getPoints()));
             return leaderboardList;
-            //ALSO SORT THE LIST HERE!
 
         } catch (SQLException e) {
             System.out.println(e.toString());
