@@ -36,7 +36,6 @@ public class LeaderboardController extends DatabaseController {
 
             Collections.sort(leaderboardList,
                     (LeaderboardInstance a, LeaderboardInstance b) -> (int)(b.getPoints() - a.getPoints()));
-            return leaderboardList;
 
         } catch (SQLException e) {
             System.out.println(e.toString());

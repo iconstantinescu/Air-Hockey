@@ -38,6 +38,7 @@ class AuthenticationControllerTest {
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
+        Mockito.when(mockConnection.isClosed()).thenReturn(true);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
 

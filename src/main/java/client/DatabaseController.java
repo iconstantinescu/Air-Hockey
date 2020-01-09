@@ -47,17 +47,9 @@ abstract class DatabaseController {
      */
     protected void closeConnections() {
         try {
-            rs.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        try {
-            ps.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        try {
+            //System.out.println(conn.isClosed());
             conn.close();
+            System.out.println(conn.isClosed());
         } catch (Exception e) {
             System.out.println(e.toString());
 

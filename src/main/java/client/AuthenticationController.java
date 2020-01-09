@@ -87,8 +87,10 @@ public class AuthenticationController extends DatabaseController {
      * @param username the username of the player authenticating
      * @return player ID as stored in the Database
      */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public int getUserId(String username) {
 
+        int userId = -1;
         try {
 
             conn = connectionFactory.createConnection(URL);
@@ -101,7 +103,7 @@ public class AuthenticationController extends DatabaseController {
             rs = ps.executeQuery();
             rs.next();
 
-            return rs.getInt(1);
+            userId = rs.getInt(1);
 
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -109,6 +111,6 @@ public class AuthenticationController extends DatabaseController {
             closeConnections();
         }
 
-        return -1;
+        return userId;
     }
 }
