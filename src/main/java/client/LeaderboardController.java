@@ -20,7 +20,7 @@ public class LeaderboardController extends DatabaseController {
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select nickname, points from user_data";
+            String query = "select nickname, points from user_data limit 100";
             ps = conn.prepareStatement(query);
 
             rs = ps.executeQuery();
