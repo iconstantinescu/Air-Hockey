@@ -30,7 +30,8 @@ public class Puck {
      * @param deltaX x movement
      * @param deltaY y movement
      */
-    public Puck(float posX, float posY, float radius, float deltaX, float deltaY, ScoreBoard scoreBoard) {
+    public Puck(float posX, float posY, float radius, float deltaX,
+                float deltaY, ScoreBoard scoreBoard) {
         this.posX = posX;
         this.posY = posY;
         this.radius = radius;
@@ -88,7 +89,7 @@ public class Puck {
      * Method used to move the Puck according to its speed.
      */
     public void translate(int screenWidth, int screenHeight) {
-        checkCurrentState(new ScoreBoard(0, 0), screenWidth, screenHeight);
+        checkCurrentState(screenHeight);
 
         puckState.executeBehavior(this, screenWidth, screenHeight);
 
@@ -98,16 +99,20 @@ public class Puck {
 
     /**
      * Change the state of the puck.s
-     * @param newPuckState
+     * @param newPuckState The next State of the puck
      */
     private void changeStateTo(PuckState newPuckState) {
         this.puckState = newPuckState;
     }
 
 
-
-    public void checkCurrentState(ScoreBoard scoreBoard, int screenWidth, int screenHeight) {
-        if(getposY() >= screenHeight / 3
+    /**
+     * This method checks the current position of the puck and decides whether a change
+     * in its state is necessary.
+     * @param screenHeight The height of the screen.
+     */
+    public void checkCurrentState(float screenHeight) {
+        if (getposY() >= screenHeight / 3
                 && getposY() <= (screenHeight / 3) * 2) {
             if (!(puckState instanceof GateAlignedState)) {
                 changeStateTo(new GateAlignedState());
