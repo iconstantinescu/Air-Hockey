@@ -61,7 +61,6 @@ public class AuthenticationController extends DatabaseController {
             ps = conn.prepareStatement(query);
 
             String hashedPwd = BcryptHashing.hashPasswordWithSalt(password, salt);
-            System.out.println(hashedPwd);
 
             ps.setString(1, username);
             ps.setString(2, hashedPwd);
@@ -80,5 +79,38 @@ public class AuthenticationController extends DatabaseController {
         }
 
         return valid;
+    }
+
+    /**
+     * When you authenticate get the userID of the user as stored in the database.
+     * To be used for further database queries.
+     * @param username the username of the player authenticating
+     * @return player ID as stored in the Database
+     */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+    public int getUserId(String username) {
+
+        int userId = -1;
+        try {
+
+            conn = connectionFactory.createConnection(URL);
+            String query = "select user_id from user_data"
+                    + " where username = ?";
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, username);
+
+            rs = ps.executeQuery();
+            rs.next();
+
+            userId = rs.getInt(1);
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            closeConnections();
+        }
+
+        return userId;
     }
 }
