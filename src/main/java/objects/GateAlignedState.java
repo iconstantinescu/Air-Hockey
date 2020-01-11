@@ -26,19 +26,13 @@ public class GateAlignedState implements PuckState {
                               float screenWidth, float screenHeight) {
         // Add point to second player if puck goes past the left gate
         if (puck.getposX() + puck.getRadius() < 0) {
-            puck.setposX(screenWidth / 2);
-            puck.setposY(screenHeight / 2);
-            puck.setDeltaX(0);
-            puck.setDeltaY(0);
+            puck.resetPuck(screenWidth / 2 - 100, screenHeight / 2 + 8);
             scoreBoard.pointP2();
         }
 
         // Add point to first player if puck goes past the right gate
         if (puck.getposX() - puck.getRadius() >= screenWidth) {
-            puck.setposX(screenWidth / 2);
-            puck.setposY(screenHeight / 2);
-            puck.setDeltaX(0);
-            puck.setDeltaY(0);
+            puck.resetPuck(screenWidth / 2 + 100, screenHeight / 2 + 8);
             scoreBoard.pointP1();
         }
     }

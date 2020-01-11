@@ -102,6 +102,18 @@ public class Puck {
     }
 
     /**
+     * Method that resets the position of the Puck (used after a goal was scored).
+     * @param newX The new X coordinate
+     * @param newY The new Y coordinate
+     */
+    public void resetPuck(float newX, float newY) {
+        this.deltaX = 0;
+        this.deltaY = 0;
+        this.posX = newX;
+        this.posY = newY;
+    }
+
+    /**
      * Change the state of the puck.s
      * @param newPuckState The next State of the puck
      */

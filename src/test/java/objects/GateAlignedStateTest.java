@@ -16,8 +16,8 @@ class GateAlignedStateTest {
         state.executeBehavior(puck, 1280, 720);
 
         assertEquals(1, scoreBoard.getPlayer2Score());
-        assertEquals(puck.getposX(), 640);
-        assertEquals(puck.getposY(), 360);
+        assertEquals(puck.getposX(), 540);
+        assertEquals(puck.getposY(), 368);
     }
 
     @Test
@@ -30,8 +30,8 @@ class GateAlignedStateTest {
         state.executeBehavior(puck, 1280, 720);
 
         assertEquals(1, scoreBoard.getPlayer1Score());
-        assertEquals(puck.getposX(), 640);
-        assertEquals(puck.getposY(), 360);
+        assertEquals(puck.getposX(), 740);
+        assertEquals(puck.getposY(), 368);
     }
 
 }
