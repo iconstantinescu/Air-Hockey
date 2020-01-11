@@ -9,6 +9,14 @@ public class ScoreBoard {
     private transient int player2Score;
 
     /**
+     * Default constructor that initializes both scores to 0.
+     */
+    public ScoreBoard() {
+        this.player1Score = 0;
+        this.player2Score = 0;
+    }
+
+    /**
      * Score board constructor.
      * @param player1Score score of player 1
      * @param player2Score score of player 2

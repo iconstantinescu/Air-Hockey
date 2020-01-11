@@ -23,14 +23,17 @@ public class MathUtils {
 
     /**
      * Function that checks if the radius between Pusher and Puck is overlapping.
-     * @param pusher The pusher to be considered.
-     * @param puck The puck ot be considered
+     * @param x1 x coordinate of the first object
+     * @param y1 y coordinate of the first object
+     * @param radius1 radius of the first object
+     * @param x2 x coordinate of the second object
+     * @param y2 y coordinate of the second object
+     * @param radius2 radius of the second object
      * @return Whether the 2 objects overlap
      */
-    public static boolean checkRadius(Pusher pusher, Puck puck) {
-        return MathUtils.euclideanDistance(pusher.getposX(),
-                pusher.getposY(), puck.getposX(),
-                puck.getposY()) <= puck.getRadius() + pusher.getRadius();
+    public static boolean checkRadius(float x1, float y1, float radius1,
+                                      float x2, float y2, float radius2) {
+        return MathUtils.euclideanDistance(x1, y1, x2, y2) <= radius2 + radius1;
     }
 
     /**

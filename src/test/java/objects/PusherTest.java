@@ -50,7 +50,7 @@ class PusherTest {
     @Test
     void checkAndExecuteCollisionOverlap() {
         Pusher pusher = new Pusher(10, 10, 10);
-        Puck puck = new Puck(10, 12, 2, 0, 0);
+        Puck puck = new Puck(10, 12, 2, 0, 0, new ScoreBoard());
 
         assertTrue(pusher.checkAndExecuteCollision(puck));
         assertEquals(0, puck.getDeltaX());
@@ -60,7 +60,7 @@ class PusherTest {
     @Test
     void checkAndExecuteCollisionNoOverlap() {
         Pusher pusher = new Pusher(300, 450, 10);
-        Puck puck = new Puck(10, 12, 2, 0, 0);
+        Puck puck = new Puck(10, 12, 2, 0, 0, new ScoreBoard());
 
         assertFalse(pusher.checkAndExecuteCollision(puck));
         assertEquals(0, puck.getDeltaX());

@@ -32,7 +32,9 @@ public class SoundEffects {
      */
     public static void hitSound(com.badlogic.gdx.audio.Sound sound, Puck puck, Pusher pusher,
                                 int screenWidth, int screenHeigth) {
-        if (MathUtils.checkRadius(pusher, puck) || hitWall(screenWidth, screenHeigth, puck)) {
+        if (MathUtils.checkRadius(pusher.getposX(), pusher.getposY(), pusher.getRadius(),
+                puck.getposX(), puck.getposY(), puck.getRadius())
+                || hitWall(screenWidth, screenHeigth, puck)) {
             sound = Gdx.audio.newSound(Gdx.files.internal("media/hit.wav"));
             sound.play();
         }
