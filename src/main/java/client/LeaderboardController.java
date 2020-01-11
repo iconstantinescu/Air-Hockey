@@ -20,23 +20,18 @@ public class LeaderboardController extends DatabaseController {
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select nickname, points from user_data limit 100";
+            String query = "select nickname, points from user_data" +
+                    " order by points desc, nickname asc " +
+                    "limit 100";
             ps = conn.prepareStatement(query);
 
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                LeaderboardInstance leaderboardInstance = new LeaderboardInstance();
-                leaderboardInstance.setNickname(rs.getString(1));
-                leaderboardInstance.setPoints(rs.getInt(2));
+                LeaderboardInstance leaderboardInstance = new LeaderboardInstance(
+                        rs.getString(1), rs.getInt(2));
                 leaderboardList.add(leaderboardInstance);
             }
-
-            Collections.sort(leaderboardList,
-                    Comparator.comparing((LeaderboardInstance a) -> a.getNickname().toLowerCase(Locale.ENGLISH)));
-
-            Collections.sort(leaderboardList,
-                    (LeaderboardInstance a, LeaderboardInstance b) -> (int)(b.getPoints() - a.getPoints()));
 
         } catch (SQLException e) {
             System.out.println(e.toString());
