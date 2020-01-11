@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * in order to improve testability (this allows us to mock this object and call the method)
  *
  */
-class ConnectionFactory {
+public class ConnectionFactory {
 
     /**
      * Use the DriverManager to create a new connection.

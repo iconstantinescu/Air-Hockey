@@ -1,9 +1,7 @@
 package client;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class LeaderboardController extends DatabaseController {
 
@@ -33,6 +31,9 @@ public class LeaderboardController extends DatabaseController {
                 leaderboardInstance.setPoints(rs.getInt(2));
                 leaderboardList.add(leaderboardInstance);
             }
+
+            Collections.sort(leaderboardList,
+                    Comparator.comparing((LeaderboardInstance a) -> a.getNickname().toLowerCase(Locale.ENGLISH)));
 
             Collections.sort(leaderboardList,
                     (LeaderboardInstance a, LeaderboardInstance b) -> (int)(b.getPoints() - a.getPoints()));
