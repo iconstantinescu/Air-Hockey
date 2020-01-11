@@ -67,11 +67,11 @@ public class RenderGame implements Renderer {
             drawText("Game Over", (Gdx.graphics.getWidth() / 2) - 150,
                     Gdx.graphics.getHeight() - 100);
             // DRAW TOP SCORES
-            drawTopScores();
+            drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
         } else {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
-            drawGameObject(1, puck.getposX(), puck.getposY(), puck.getRadius());
+            drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
         }
 
         // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
@@ -80,9 +80,9 @@ public class RenderGame implements Renderer {
         updatePusher(pusher2, false);
 
         // DRAW PUSHER 1
-        drawGameObject(2, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
+        drawGameObject(0, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
         // DRAW PUSHER 2
-        drawGameObject(2, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
+        drawGameObject(0, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
 
         // PLAY THE SOUND EFFECTS
         SoundEffects.hitSound(hitSound, puck, pusher1,
@@ -100,11 +100,12 @@ public class RenderGame implements Renderer {
 
     /**
      * Method for Drawing the Top 5 Scores.
+     * @param posX The x coordinate of the first score
+     * @param posY The y coordinate of the first score
      */
-    public void drawTopScores() {
-        int posY = Gdx.graphics.getHeight() - 150;
+    public void drawTopScores(float posX, float posY) {
         for (int i = 1; i <= 5; i++) {
-            drawText(i + ". Name 100", Gdx.graphics.getWidth() / 2 - 150,
+            drawText(i + ". Name 100", posX,
                     posY);
 
             posY -= 50;
@@ -163,16 +164,16 @@ public class RenderGame implements Renderer {
 
     /**
      * Function that renders a gameObject (which can be either the puck or the pusher.
-     * @param objectType The type of object (1 for puck, 2 for pusher)
+     * @param objectType The type of object (-1 for puck, 0 for pusher)
      * @param posX The x coordinate of the object
      * @param posY The y coordinate of the object
      * @param radius The radius of the object
      */
     public void drawGameObject(int objectType, float posX, float posY, float radius) {
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        if (objectType == 1) {
+        if (objectType == -1) {
             shape.setColor(Color.RED);
-        } else if (objectType == 2) {
+        } else if (objectType == 0) {
             shape.setColor(Color.FIREBRICK);
         }
         shape.circle(posX, posY, radius);
