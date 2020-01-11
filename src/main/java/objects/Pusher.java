@@ -59,7 +59,8 @@ public class Pusher {
      * @return Boolean showing whether a collision happened or not
      */
     public boolean checkAndExecuteCollision(Puck puck) {
-        if (MathUtils.checkRadius(this, puck)) {
+        if (MathUtils.checkRadius(this.getposX(), this.getposY(), this.getRadius(),
+                puck.getposX(), puck.getposY(), puck.getRadius())) {
             double[] deltas = MathUtils.reflect(getposX(),
                     getposY(), puck.getposX(), puck.getposY());
             //puck.setDeltaX(-puck.getDeltaX());

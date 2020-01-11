@@ -93,125 +93,28 @@ class PuckTest {
 
     }
 
+    @Test
+    void checkInGateRangeTrue() {
+        Puck puck = new Puck(640, 360, 5, 2, 2, new ScoreBoard());
+        puck.checkCurrentState(720);
 
-    //
-    //    @Test
-    //    void checkInGateRangeTrue() {
-    //        Puck puck = new Puck(640, 360, 5, 2, 2, new ScoreBoard());
-    //        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
-    //
-    //        assertTrue(inRange);
-    //    }
-    //
-    //    @Test
-    //    void checkInGateRangeFalse() {
-    //        Puck puck = new Puck(5, 5, 5, 2, 2);
-    //        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
-    //
-    //        assertFalse(inRange);
-    //    }
-    //
-    //    @Test
-    //    void checkInGateRangeFalseAbove() {
-    //        Puck puck = new Puck(1200, 600, 5, 2, 2);
-    //        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
-    //
-    //        assertFalse(inRange);
-    //    }
-    //
-    //    @Test
-    //    void gateBehaviourUnderZero() {
-    //        ScoreBoard scoreBoard = new ScoreBoard(0,0);
-    //        Puck puck = new Puck(-20, 5, 5, 2, 2);
-    //
-    //        puck.gateBehaviour(scoreBoard, 1280, 720);
-    //
-    //        assertEquals(1, scoreBoard.getPlayer2Score());
-    //        assertEquals(puck.getposX(), 640);
-    //        assertEquals(puck.getposY(), 360);
-    //    }
-    //
-    //    @Test
-    //    void gateBehaviourOverWidth() {
-    //        ScoreBoard scoreBoard = new ScoreBoard(0,0);
-    //        Puck puck = new Puck(1300, 360, 5, 2, 2);
-    //
-    //        puck.gateBehaviour(scoreBoard, 1280, 720);
-    //
-    //        assertEquals(1, scoreBoard.getPlayer1Score());
-    //        assertEquals(puck.getposX(), 640);
-    //        assertEquals(puck.getposY(), 360);
-    //    }
-    //
-    //    @Test
-    //    void checkWallCollisionCheckWidthLeft() {
-    //        Puck puck = new Puck(-1,10,10,-1, 1);
-    //
-    //        puck.checkWallCollision(1280, 720);
-    //
-    //        assertEquals(1, puck.getDeltaX());
-    //
-    //    }
-    //
-    //    @Test
-    //    void checkWallCollisionCheckWidthRight() {
-    //        Puck puck = new Puck(1281,10,10,-1, 1);
-    //
-    //        puck.checkWallCollision(1280, 720);
-    //
-    //        assertEquals(1, puck.getDeltaX());
-    //
-    //    }
-    //
-    //    @Test
-    //    void checkWallCollisionCheckHeightDown() {
-    //        Puck puck = new Puck(10,-1,10,-1, 1);
-    //
-    //        puck.checkWallCollision(1280, 720);
-    //
-    //        assertEquals(-1, puck.getDeltaY());
-    //
-    //    }
-    //
-    //    @Test
-    //    void checkWallCollisionCheckNormal() {
-    //        Puck puck = new Puck(11,50,10,-1, 1);
-    //
-    //        puck.checkWallCollision(1280, 720);
-    //
-    //        assertEquals(1, puck.getDeltaY());
-    //        assertEquals(-1, puck.getDeltaX());
-    //    }
-    //
-    //    @Test
-    //    void checkWallCollisionCheckHeightUp() {
-    //        Puck puck = new Puck(10,721,10,-1, 1);
-    //
-    //        puck.checkWallCollision(1280, 720);
-    //
-    //        assertEquals(-1, puck.getDeltaY());
-    //
-    //    }
-    //
-    //    @Test
-    //    void preventOutLeftCorner() {
-    //        Puck puck = new Puck(10,10,10,-1, 1);
-    //
-    //        puck.preventOut(-5, -5, 1280, 720);
-    //
-    //        assertEquals(1, puck.getDeltaX());
-    //        assertEquals(-1, puck.getDeltaY());
-    //
-    //    }
-    //
-    //    @Test
-    //    void preventOutRightTopCorner() {
-    //        Puck puck = new Puck(10,10,10,1, 1);
-    //
-    //        puck.preventOut(1285, 725, 1280, 720);
-    //
-    //        assertEquals(-1, puck.getDeltaX());
-    //        assertEquals(-1, puck.getDeltaY());
-    //
-    //    }
+        assertTrue(puck.getPuckState() instanceof GateAlignedState);
+    }
+
+    @Test
+    void checkInGateRangeFalse() {
+        Puck puck = new Puck(5, 5, 5, 2, 2, new ScoreBoard());
+        puck.checkCurrentState(720);
+
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
+    }
+
+    @Test
+    void checkInGateRangeFalseAbove() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck.checkCurrentState(720);
+
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
+    }
+
 }

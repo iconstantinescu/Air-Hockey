@@ -24,7 +24,6 @@ class MathUtilsTest {
 
     @Test
     void reflect() {
-
         double[] reflection = MathUtils.reflect(0, 0, 0, 1);
 
         assertEquals(0, reflection[0]);
@@ -34,20 +33,14 @@ class MathUtilsTest {
 
     @Test
     void checkRadiusOverlapping() {
-        Pusher pusher  = new Pusher(0, 0, 10);
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
-
-        boolean overLapping = MathUtils.checkRadius(pusher, puck);
+        boolean overLapping = MathUtils.checkRadius(0, 0, 10, 10, 10, 10);
 
         assertTrue(overLapping);
     }
 
     @Test
     void checkRadiusNoOverlapping() {
-        Pusher pusher  = new Pusher(0, 0, 10);
-        Puck puck = new Puck(30, 30, 10, 0, 0, new ScoreBoard());
-
-        boolean overLapping = MathUtils.checkRadius(pusher, puck);
+        boolean overLapping = MathUtils.checkRadius(0, 0, 10, 30, 30, 10);
 
         assertFalse(overLapping);
     }
