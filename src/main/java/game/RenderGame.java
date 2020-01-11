@@ -29,7 +29,6 @@ public class RenderGame implements Renderer {
     private transient SpriteBatch batch;
     private static Sound backSound;
     private static Sound hitSound;
-    private transient BitmapFont font;
 
     /**
      * Constructor for the Renderer.
@@ -49,10 +48,10 @@ public class RenderGame implements Renderer {
         shape = new ShapeRenderer();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0);
         scoreBoard = new ScoreBoard(0, 0);
-        font = new BitmapFont();
 
         // Initiate the Background Sound
         SoundEffects.backgroundSound(backSound);
+
     }
 
     /**
@@ -63,21 +62,25 @@ public class RenderGame implements Renderer {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         drawBoard();
 
-        // CALCULATE THE POSITIONS OF ALL THE PUCK
-        movePuck();
-
-        // DRAW THE PUCK
-        drawGameObject(1, puck.getposX(), puck.getposY(), puck.getRadius());
+        // DRAW THE PUCK OR GAME OVER
+        if (scoreBoard.isGameOver()) {
+            drawText("Game Over", (Gdx.graphics.getWidth() / 2) - 150,
+                    Gdx.graphics.getHeight() - 100);
+            // DRAW TOP SCORES
+            drawTopScores();
+        } else {
+            // CALCULATE THE POSITIONS OF THE PUCK
+            updatePuck();
+            drawGameObject(1, puck.getposX(), puck.getposY(), puck.getRadius());
+        }
 
         // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
-        movePusher(pusher1, true);
-
+        updatePusher(pusher1, true);
         // CHANGE PUSHER2 POSITION ACCORDING TO KEYBOARD INPUT
-        movePusher(pusher2, false);
+        updatePusher(pusher2, false);
 
         // DRAW PUSHER 1
         drawGameObject(2, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
-
         // DRAW PUSHER 2
         drawGameObject(2, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
 
@@ -92,28 +95,45 @@ public class RenderGame implements Renderer {
                 + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
                 Gdx.graphics.getHeight() - 20);
 
+        drawWallsAndGates();
+    }
+
+    /**
+     * Method for Drawing the Top 5 Scores.
+     */
+    public void drawTopScores() {
+        int posY = Gdx.graphics.getHeight() - 150;
+        for (int i = 1; i <= 5; i++) {
+            drawText(i + ". Name 100", Gdx.graphics.getWidth() / 2 - 150,
+                    posY);
+
+            posY -= 50;
+        }
+    }
+
+    /**
+     * Method for drawing all the walls and gates.
+     */
+    public void drawWallsAndGates() {
         // DRAW UPPER WALL
         drawWall(0,0, Gdx.graphics.getWidth(), 5);
         // DRAW LOWER WALL
         drawWall(0, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), -5);
-
         // DRAW THE LEFT GATE
         drawWall(0, Gdx.graphics.getHeight(), 5,- (Gdx.graphics.getHeight() / 3.0f));
         drawWall(0, 0, 5,Gdx.graphics.getHeight() / 3.0f);
-
         // DRAW THE RIGHT GATE
         drawWall(Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(), -5,-(Gdx.graphics.getHeight() / 3.0f));
         drawWall(Gdx.graphics.getWidth(), 0, -5,Gdx.graphics.getHeight() / 3.0f);
-
     }
 
     /**
-     * Moves the pusher object according to the user input
+     * Moves the pusher object according to the user input.
      * @param pusher The pusher object
      * @param pusherId The id of the Pusher (either Pusher 1 - Left, or Pusher 2 - Right)
      */
-    public void movePusher(Pusher pusher, boolean pusherId) {
+    public void updatePusher(Pusher pusher, boolean pusherId) {
         int[] keyCodes;
         if (pusherId) {
             // USE WASD
@@ -168,14 +188,13 @@ public class RenderGame implements Renderer {
                 sprite.getY() - sprite.getHeight() / 2, sprite.getWidth(),
                 sprite.getHeight(), sprite.getWidth(), sprite.getHeight(), sprite.getScaleX(),
                 sprite.getScaleY(), sprite.getRotation());
-
         batch.end();
     }
 
     /**
      * This method changes the puck position according to the rules of Air Hockey.
      */
-    public void movePuck() {
+    public void updatePuck() {
         // Check if Puck can enter gate, if yes then act
         if (puck.checkInGateRange(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) {
             puck.gateBehaviour(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -213,12 +232,12 @@ public class RenderGame implements Renderer {
      * @param posY The y coordinate of the text
      */
     public void drawText(String str, float posX, float posY) {
+        BitmapFont font = new BitmapFont();
         batch.begin();
         font.setColor(0,0,0,1);
         font.getData().setScale(4);
-        font.draw(batch, scoreBoard.getPlayer1Score() + " : "
-                        + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
-                Gdx.graphics.getHeight() - 20);
+        font.draw(batch, str, posX,
+                posY);
         batch.end();
     }
 

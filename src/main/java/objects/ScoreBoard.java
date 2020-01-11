@@ -1,5 +1,8 @@
 package objects;
 
+/**
+ * Class for keeping track of the player scores.
+ */
 public class ScoreBoard {
 
     private transient int player1Score;
@@ -13,6 +16,14 @@ public class ScoreBoard {
     public ScoreBoard(int player1Score, int player2Score) {
         this.player1Score = player1Score;
         this.player2Score = player2Score;
+    }
+
+    /**
+     * Method returning whether the game is over or not.
+     * @return True if it is over, False otherwise
+     */
+    public boolean isGameOver() {
+        return player1Score == 5 || player2Score == 5;
     }
 
     public int getPlayer1Score() {

@@ -54,6 +54,7 @@ public class Render extends ApplicationAdapter {
                 renderer = new RenderMenu();
                 break;
             case GAME:
+                renderer.dispose();
                 renderer = new RenderGame();
                 break;
             default:
