@@ -46,8 +46,9 @@ public class RenderGame implements Renderer {
         // Set the objects sprites
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
-        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0);
-        scoreBoard = new ScoreBoard(0, 0);
+        scoreBoard = new ScoreBoard();
+        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0,
+                scoreBoard);
 
         // Initiate the Background Sound
         SoundEffects.backgroundSound(backSound);
@@ -196,19 +197,12 @@ public class RenderGame implements Renderer {
      * This method changes the puck position according to the rules of Air Hockey.
      */
     public void updatePuck() {
-        // Check if Puck can enter gate, if yes then act
-        if (puck.checkInGateRange(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) {
-            puck.gateBehaviour(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        } else {
-            puck.checkWallCollision(Gdx.graphics.getWidth(),
-                    Gdx.graphics.getHeight());
-        }
-
         // Collision between Pusher 1 and the puck
         pusher1.checkAndExecuteCollision(puck);
 
         // Check and execute collision between Pusher 2 and Puck
         pusher2.checkAndExecuteCollision(puck);
+
         puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
