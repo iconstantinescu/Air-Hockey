@@ -17,8 +17,8 @@ public class Client {
             System.out.println("empty field");
             return false;
         }
-        AuthenticationController authenticationController =
-                new AuthenticationController(new ConnectionFactory());
+        MySqlUserAuthentication authenticationController =
+                new MySqlUserAuthentication(new ConnectionFactory());
         String salt = authenticationController.getSalt(nameInput);
         return authenticationController.authenticate(nameInput, passInput, salt);
     }
@@ -31,8 +31,8 @@ public class Client {
      * @param nickname  inputted nickname.
      */
     public void register(String nameInput, String passInput, String nickname) {
-        RegistrationController registrationController =
-                new RegistrationController(new ConnectionFactory());
+        MySqlUserRegistration registrationController =
+                new MySqlUserRegistration(new ConnectionFactory());
         registrationController.createNewUser(nameInput, passInput, nameInput);
         System.out.println("registration called " + nameInput);
     }

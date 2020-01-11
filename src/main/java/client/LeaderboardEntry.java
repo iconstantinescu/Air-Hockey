@@ -1,6 +1,6 @@
 package client;
 
-public class LeaderboardInstance {
+public class LeaderboardEntry {
 
     private String nickname;
     private long points;
@@ -10,7 +10,7 @@ public class LeaderboardInstance {
      * @param nickname user nickname
      * @param points the amount of points
      */
-    public LeaderboardInstance(String nickname, long points) {
+    public LeaderboardEntry(String nickname, long points) {
         this.nickname = nickname;
         this.points = points;
     }
@@ -18,7 +18,7 @@ public class LeaderboardInstance {
     /**
      * Empty Constructor.
      */
-    public LeaderboardInstance(){
+    public LeaderboardEntry(){
 
     }
 

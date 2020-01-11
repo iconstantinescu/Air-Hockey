@@ -15,10 +15,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-class AuthenticationControllerTest {
+
+class MySqlUserRegistrationTest {
 
     @InjectMocks
-    private transient AuthenticationController authenticationController;
+    private transient MySqlUserRegistration registrationController;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -28,48 +29,22 @@ class AuthenticationControllerTest {
     @Mock
     private transient ConnectionFactory connectionFactory;
 
-    private transient String username;
-    private transient String pwd;
-    private transient String salt;
-
     @BeforeEach
     void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
-        Mockito.when(mockConnection.isClosed()).thenReturn(true);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
-
-        pwd = BcryptHashing.hashPassword("pwd");
-        salt = BcryptHashing.getSalt();
-        username = "user";
     }
 
     @Test
-    public void testGetSalt() throws SQLException {
+    public void testCreateNewUser() throws SQLException {
 
-        Mockito.when(mockResultSet.getString(1)).thenReturn("salt");
-        assertEquals("salt", authenticationController.getSalt(username));
-    }
-
-    @Test
-    public void testAuthenticateOk() throws SQLException {
-
-        Mockito.when(mockResultSet.getInt(1)).thenReturn(1);
-        boolean authenticated = authenticationController
-                .authenticate(username, pwd, salt);
-        assertEquals(true, authenticated);
-    }
-
-    @Test
-    public void testAuthenticateFailed() throws SQLException {
-
-        Mockito.when(mockResultSet.getInt(1)).thenReturn(0);
-        boolean authenticated = authenticationController
-                .authenticate(username, pwd, salt);
-        assertEquals(false, authenticated);
+        boolean created = registrationController
+                .createNewUser("user", "pwd", "john");
+        assertEquals(true, created);
     }
 
     @Test
@@ -78,9 +53,8 @@ class AuthenticationControllerTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        authenticationController.authenticate(username, pwd, salt);
-        assertEquals("", authenticationController.getSalt(username));
-
+        registrationController.createNewUser("user", "pwd", "john");
     }
+
 
 }

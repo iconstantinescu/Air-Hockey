@@ -3,9 +3,9 @@ package client;
 import java.sql.SQLException;
 import java.util.*;
 
-public class LeaderboardController extends DatabaseController {
+public class MySqlLeaderboardTracker extends DatabaseController {
 
-    public LeaderboardController(ConnectionFactory connectionFactory) {
+    public MySqlLeaderboardTracker(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 
@@ -13,9 +13,9 @@ public class LeaderboardController extends DatabaseController {
      * Get the points of all players in descending order.
      * @return a list with nicknames and points of all players in descending order
      */
-    public List<LeaderboardInstance> getAllScoresSorted() {
+    public List<LeaderboardEntry> getAllScoresSorted() {
 
-        List<LeaderboardInstance> leaderboardList = new ArrayList<>();
+        List<LeaderboardEntry> leaderboardList = new ArrayList<>();
 
         try {
 
@@ -28,9 +28,9 @@ public class LeaderboardController extends DatabaseController {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                LeaderboardInstance leaderboardInstance = new LeaderboardInstance(
+                LeaderboardEntry leaderboardEntry = new LeaderboardEntry(
                         rs.getString(1), rs.getInt(2));
-                leaderboardList.add(leaderboardInstance);
+                leaderboardList.add(leaderboardEntry);
             }
 
         } catch (SQLException e) {
@@ -45,8 +45,8 @@ public class LeaderboardController extends DatabaseController {
      * Get the top five scores achieved in the game.
      * @return a list with the nicknames and points of the top 5 players
      */
-    public List<LeaderboardInstance> getTopFive() {
-        List<LeaderboardInstance> topFive = getAllScoresSorted();
+    public List<LeaderboardEntry> getTopFive() {
+        List<LeaderboardEntry> topFive = getAllScoresSorted();
         return topFive.subList(0,5);
     }
 }

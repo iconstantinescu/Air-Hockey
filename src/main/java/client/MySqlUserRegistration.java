@@ -6,9 +6,9 @@ import java.sql.SQLException;
 /**
  * Class that contains the methods required to register a new user in the database.
  */
-public class RegistrationController extends DatabaseController {
+public class MySqlUserRegistration extends DatabaseController {
 
-    public RegistrationController(ConnectionFactory connectionFactory) {
+    public MySqlUserRegistration(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,13 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+class MySqlUserAuthenticationTest {
 
-
-
-
-public class ScoreControllerTest {
     @InjectMocks
-    private transient ScoreController scoreController;
+    private transient MySqlUserAuthentication authenticationController;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -30,47 +28,48 @@ public class ScoreControllerTest {
     @Mock
     private transient ConnectionFactory connectionFactory;
 
-    /**
-     * Setup Method.
-     * @throws SQLException Exception for SQL errors
-     * @throws ClassNotFoundException Exception in case the class is not found
-     */
+    private transient String username;
+    private transient String pwd;
+    private transient String salt;
+
     @BeforeEach
-    public void setUp() throws SQLException, ClassNotFoundException {
+    void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
+        Mockito.when(mockConnection.isClosed()).thenReturn(true);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+
+        pwd = BcryptHashing.hashPassword("pwd");
+        salt = BcryptHashing.getSalt();
+        username = "user";
     }
 
     @Test
-    public void testGetPoints() throws SQLException {
+    public void testGetSalt() throws SQLException {
 
-        Mockito.when(mockResultSet.getInt(1)).thenReturn(1000);
-        assertEquals(1000, scoreController.getPoints(1));
+        Mockito.when(mockResultSet.getString(1)).thenReturn("salt");
+        assertEquals("salt", authenticationController.getSalt(username));
     }
 
     @Test
-    public void testUpdatePoints() throws SQLException {
+    public void testAuthenticateOk() throws SQLException {
 
-        assertEquals(true, scoreController.updatePoints(1,100));
-
+        Mockito.when(mockResultSet.getInt(1)).thenReturn(1);
+        boolean authenticated = authenticationController
+                .authenticate(username, pwd, salt);
+        assertEquals(true, authenticated);
     }
 
     @Test
-    public void testSaveGame() {
+    public void testAuthenticateFailed() throws SQLException {
 
-        assertEquals(true, scoreController.saveGame(1,2,5,4));
-
-    }
-
-    @Test
-    public void testGetGamesPlayed() throws SQLException {
-
-        Mockito.when(mockResultSet.getInt(1)).thenReturn(5);
-        assertEquals(5, scoreController.getGamesPlayed(1));
+        Mockito.when(mockResultSet.getInt(1)).thenReturn(0);
+        boolean authenticated = authenticationController
+                .authenticate(username, pwd, salt);
+        assertEquals(false, authenticated);
     }
 
     @Test
@@ -79,13 +78,9 @@ public class ScoreControllerTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        assertEquals(false, scoreController.saveGame(1,2,5,4));
-        assertEquals(false, scoreController.updatePoints(1,100));
-        assertEquals(0, scoreController.getGamesPlayed(1));
-        assertEquals(0, scoreController.getPoints(1));
+        authenticationController.authenticate(username, pwd, salt);
+        assertEquals("", authenticationController.getSalt(username));
 
     }
-
-
 
 }

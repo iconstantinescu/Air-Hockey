@@ -5,9 +5,9 @@ import java.sql.SQLException;
 /**
  * Class that contains the methods required to authenticate the user with the database.
  */
-public class AuthenticationController extends DatabaseController {
+public class MySqlUserAuthentication extends DatabaseController {
 
-    public AuthenticationController(ConnectionFactory connectionFactory) {
+    public MySqlUserAuthentication(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 

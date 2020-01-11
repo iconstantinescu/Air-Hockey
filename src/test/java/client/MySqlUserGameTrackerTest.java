@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,10 +15,12 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
-class RegistrationControllerTest {
 
+
+
+public class MySqlUserGameTrackerTest {
     @InjectMocks
-    private transient RegistrationController registrationController;
+    private transient MySqlUserGameTracker mySqlUserGameTracker;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -29,8 +30,13 @@ class RegistrationControllerTest {
     @Mock
     private transient ConnectionFactory connectionFactory;
 
+    /**
+     * Setup Method.
+     * @throws SQLException Exception for SQL errors
+     * @throws ClassNotFoundException Exception in case the class is not found
+     */
     @BeforeEach
-    void setUp() throws SQLException, ClassNotFoundException {
+    public void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
@@ -40,11 +46,31 @@ class RegistrationControllerTest {
     }
 
     @Test
-    public void testCreateNewUser() throws SQLException {
+    public void testGetPoints() throws SQLException {
 
-        boolean created = registrationController
-                .createNewUser("user", "pwd", "john");
-        assertEquals(true, created);
+        Mockito.when(mockResultSet.getInt(1)).thenReturn(1000);
+        assertEquals(1000, mySqlUserGameTracker.getPoints(1));
+    }
+
+    @Test
+    public void testUpdatePoints() throws SQLException {
+
+        assertEquals(true, mySqlUserGameTracker.updatePoints(1,100));
+
+    }
+
+    @Test
+    public void testSaveGame() {
+
+        assertEquals(true, mySqlUserGameTracker.saveGame(1,2,5,4));
+
+    }
+
+    @Test
+    public void testGetGamesPlayed() throws SQLException {
+
+        Mockito.when(mockResultSet.getInt(1)).thenReturn(5);
+        assertEquals(5, mySqlUserGameTracker.getGamesPlayed(1));
     }
 
     @Test
@@ -53,8 +79,13 @@ class RegistrationControllerTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        registrationController.createNewUser("user", "pwd", "john");
+        assertEquals(false, mySqlUserGameTracker.saveGame(1,2,5,4));
+        assertEquals(false, mySqlUserGameTracker.updatePoints(1,100));
+        assertEquals(0, mySqlUserGameTracker.getGamesPlayed(1));
+        assertEquals(0, mySqlUserGameTracker.getPoints(1));
+
     }
+
 
 
 }

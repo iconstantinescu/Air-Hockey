@@ -6,14 +6,14 @@ import java.sql.SQLException;
  * Class that contains the methods required to save and retrieve
  * user points and match details to/from the database.
  */
-public class ScoreController extends DatabaseController {
+public class MySqlUserGameTracker extends DatabaseController {
 
     /**
      * Constructor of the class.
      * @param connectionFactory the connectionFactory object that facilitates
      *                          the creation of a new database connection
      */
-    public ScoreController(ConnectionFactory connectionFactory) {
+    public MySqlUserGameTracker(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 
