@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UserTest {
+public class UserTest {
 
     private transient User testUser;
     private transient ArrayList<GameDetails> testGameList;

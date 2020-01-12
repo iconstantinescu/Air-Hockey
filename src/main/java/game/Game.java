@@ -1,7 +1,9 @@
 package game;
 
+import client.BcryptHashing;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * The class containing the main which is calling the rendering methods.

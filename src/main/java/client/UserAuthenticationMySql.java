@@ -1,5 +1,7 @@
 package client;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -30,7 +32,7 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
             rs = ps.executeQuery();
             rs.next();
 
-            return rs.getString(1);
+            return rs.getString("salt");
 
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -51,12 +53,18 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
         try {
 
             conn = connectionFactory.createConnection(URL);
+
+            //This should be after the connection creation
+            //and before this method's preparedStatement initialization
+            String salt = getSalt(username);
+
             String query = "select user_id, nickname, points, games_won, games_lost "
                     + " from user_data"
                     + " where username = ? and password = ?";
+
+
             ps = conn.prepareStatement(query);
 
-            String salt = this.getSalt(username);
             String hashedPwd = BcryptHashing.hashPasswordWithSalt(password, salt);
 
             ps.setString(1, username);

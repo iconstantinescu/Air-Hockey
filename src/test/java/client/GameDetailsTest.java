@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class GameDetailsTest {
+public class GameDetailsTest {
 
     private transient GameDetails testGame;
     private transient Timestamp timestamp;

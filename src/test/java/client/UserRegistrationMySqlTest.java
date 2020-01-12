@@ -16,10 +16,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
-class UserRegistrationMySqlTest {
+public class UserRegistrationMySqlTest {
+
 
     @InjectMocks
-    private transient UserRegistrationMySql registrationController;
+    private transient UserRegistrationMySql registrationMySql;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -30,7 +31,7 @@ class UserRegistrationMySqlTest {
     private transient ConnectionFactory connectionFactory;
 
     @BeforeEach
-    void setUp() throws SQLException, ClassNotFoundException {
+    void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
@@ -40,20 +41,21 @@ class UserRegistrationMySqlTest {
     }
 
     @Test
-    public void testCreateNewUser() throws SQLException {
+    public void testCreateNewUser() {
 
-        boolean created = registrationController
+        boolean created = registrationMySql
                 .createNewUser("user", "pwd", "john");
         assertEquals(true, created);
     }
 
+
     @Test
-    public void testSqlException() throws SQLException, ClassNotFoundException {
+    public void testSqlException() throws SQLException {
 
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        registrationController.createNewUser("user", "pwd", "john");
+        registrationMySql.createNewUser("user", "pwd", "john");
     }
 
 
