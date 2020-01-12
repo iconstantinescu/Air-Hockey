@@ -1,6 +1,7 @@
 package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Matchers.anyString;
 
 import java.sql.Connection;
@@ -15,10 +16,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-class MySqlUserAuthenticationTest {
+class UserAuthenticationMySqlTest {
 
     @InjectMocks
-    private transient MySqlUserAuthentication authenticationController;
+    private transient UserAuthenticationMySql authenticationController;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -48,39 +49,24 @@ class MySqlUserAuthenticationTest {
     }
 
     @Test
-    public void testGetSalt() throws SQLException {
-
-        Mockito.when(mockResultSet.getString(1)).thenReturn("salt");
-        assertEquals("salt", authenticationController.getSalt(username));
-    }
-
-    @Test
     public void testAuthenticateOk() throws SQLException {
 
-        Mockito.when(mockResultSet.getInt(1)).thenReturn(1);
-        boolean authenticated = authenticationController
-                .authenticate(username, pwd, salt);
-        assertEquals(true, authenticated);
+        Mockito.when(mockResultSet.getInt("user_id")).thenReturn(1);
+        Mockito.when(mockResultSet.getString("nickname")).thenReturn("name");
+        Mockito.when(mockResultSet.getLong("points")).thenReturn(100L);
+        Mockito.when(mockResultSet.getInt("games_won")).thenReturn(2);
+        Mockito.when(mockResultSet.getInt("games_lost")).thenReturn(3);
+        User authenticatedUser = authenticationController.authenticate(username, pwd);
+        assertNotEquals(null, authenticatedUser);
     }
 
     @Test
     public void testAuthenticateFailed() throws SQLException {
 
         Mockito.when(mockResultSet.getInt(1)).thenReturn(0);
-        boolean authenticated = authenticationController
-                .authenticate(username, pwd, salt);
-        assertEquals(false, authenticated);
-    }
-
-    @Test
-    public void testSqlException() throws SQLException, ClassNotFoundException {
-
-        Mockito.when(connectionFactory.createConnection(anyString()))
-                .thenThrow(new SQLException());
-
-        authenticationController.authenticate(username, pwd, salt);
-        assertEquals("", authenticationController.getSalt(username));
-
+        User authenticatedUser = authenticationController
+                .authenticate(username, pwd);
+        assertEquals(null, authenticatedUser);
     }
 
 }

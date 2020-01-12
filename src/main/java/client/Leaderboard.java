@@ -47,5 +47,5 @@ public class Leaderboard {
     public void setSize(int newSize) {
         this.size = newSize;
     }
-    
+
 }

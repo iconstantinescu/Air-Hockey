@@ -1,11 +1,10 @@
 package client;
 
 import java.sql.SQLException;
-import java.util.*;
 
-public class MySqlLeaderboardTracker extends DatabaseController {
+public class LeaderboardDaoMySql extends DatabaseControllerMySql implements LeaderboardDao {
 
-    public MySqlLeaderboardTracker(ConnectionFactory connectionFactory) {
+    public LeaderboardDaoMySql(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 
@@ -13,24 +12,25 @@ public class MySqlLeaderboardTracker extends DatabaseController {
      * Get the points of all players in descending order.
      * @return a list with nicknames and points of all players in descending order
      */
-    public List<LeaderboardEntry> getAllScoresSorted() {
+    @Override
+    public Leaderboard getLeaderboard(int size) {
 
-        List<LeaderboardEntry> leaderboardList = new ArrayList<>();
-
+        Leaderboard leaderboard = new Leaderboard();
         try {
 
             conn = connectionFactory.createConnection(URL);
             String query = "select nickname, points from user_data" +
                     " order by points desc, nickname asc " +
-                    "limit 100";
+                    "limit ?";
             ps = conn.prepareStatement(query);
+            ps.setInt(1, size);
 
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 LeaderboardEntry leaderboardEntry = new LeaderboardEntry(
                         rs.getString(1), rs.getInt(2));
-                leaderboardList.add(leaderboardEntry);
+                leaderboard.addEntry(leaderboardEntry);
             }
 
         } catch (SQLException e) {
@@ -38,15 +38,6 @@ public class MySqlLeaderboardTracker extends DatabaseController {
         } finally {
             closeConnections();
         }
-        return leaderboardList;
-    }
-
-    /**
-     * Get the top five scores achieved in the game.
-     * @return a list with the nicknames and points of the top 5 players
-     */
-    public List<LeaderboardEntry> getTopFive() {
-        List<LeaderboardEntry> topFive = getAllScoresSorted();
-        return topFive.subList(0,5);
+        return leaderboard;
     }
 }

@@ -5,9 +5,9 @@ import java.sql.SQLException;
 /**
  * Class that contains the methods required to authenticate the user with the database.
  */
-public class MySqlUserAuthentication extends DatabaseController {
+public class UserAuthenticationMySql extends DatabaseControllerMySql implements  UserAuthentication{
 
-    public MySqlUserAuthentication(ConnectionFactory connectionFactory) {
+    public UserAuthenticationMySql(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 
@@ -17,10 +17,9 @@ public class MySqlUserAuthentication extends DatabaseController {
      * @param username The nickname of the user
      * @return The salt stored in the database as a String
      */
-    public String getSalt(String username) {
+    private String getSalt(String username) {
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "select salt from user_data"
                     + " where username = ?";
             ps = conn.prepareStatement(query);
@@ -32,12 +31,10 @@ public class MySqlUserAuthentication extends DatabaseController {
 
             return rs.getString(1);
 
-
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
+
         return "";
     }
 
@@ -48,28 +45,33 @@ public class MySqlUserAuthentication extends DatabaseController {
      * @return true if the user and password match and false otherwise
      */
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public boolean authenticate(String username, String password, String salt) {
-
-        boolean valid = false;
-        final int expectedCount = 1;
+    public User authenticate(String username, String password) {
 
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select count(user_id) from user_data"
+            String query = "select user_id, nickname, points, games_won, games_lost "
+                    + " from user_data"
                     + " where username = ? and password = ?";
             ps = conn.prepareStatement(query);
 
+            String salt = this.getSalt(username);
             String hashedPwd = BcryptHashing.hashPasswordWithSalt(password, salt);
 
             ps.setString(1, username);
             ps.setString(2, hashedPwd);
 
             rs = ps.executeQuery();
-            rs.next();
 
-            if (rs.getInt(1) == expectedCount) {
-                valid = true;
+            if(rs.next())
+            {
+                User user = new User();
+                user.setUserId( rs.getInt("user_id") );
+                user.setNickname( rs.getString("nickname") );
+                user.addPoints( rs.getLong("points") );
+                user.setNumOfWonGames( rs.getInt("games_won") );
+                user.setNumOfLostGames( rs.getInt("games_lost") );
+                return user;
             }
 
         } catch (SQLException e) {
@@ -78,39 +80,7 @@ public class MySqlUserAuthentication extends DatabaseController {
             closeConnections();
         }
 
-        return valid;
+        return null;
     }
 
-    /**
-     * When you authenticate get the userID of the user as stored in the database.
-     * To be used for further database queries.
-     * @param username the username of the player authenticating
-     * @return player ID as stored in the Database
-     */
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public int getUserId(String username) {
-
-        int userId = -1;
-        try {
-
-            conn = connectionFactory.createConnection(URL);
-            String query = "select user_id from user_data"
-                    + " where username = ?";
-            ps = conn.prepareStatement(query);
-
-            ps.setString(1, username);
-
-            rs = ps.executeQuery();
-            rs.next();
-
-            userId = rs.getInt(1);
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
-        }
-
-        return userId;
-    }
 }

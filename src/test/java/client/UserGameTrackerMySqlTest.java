@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,10 +15,12 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
-class MySqlUserRegistrationTest {
 
+
+
+public class UserGameTrackerMySqlTest {
     @InjectMocks
-    private transient MySqlUserRegistration registrationController;
+    private transient UserGameTrackerMySql userGameTrackerMySql;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -29,8 +30,13 @@ class MySqlUserRegistrationTest {
     @Mock
     private transient ConnectionFactory connectionFactory;
 
+    /**
+     * Setup Method.
+     * @throws SQLException Exception for SQL errors
+     * @throws ClassNotFoundException Exception in case the class is not found
+     */
     @BeforeEach
-    void setUp() throws SQLException, ClassNotFoundException {
+    public void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
@@ -40,11 +46,10 @@ class MySqlUserRegistrationTest {
     }
 
     @Test
-    public void testCreateNewUser() throws SQLException {
+    public void testSaveGame() {
 
-        boolean created = registrationController
-                .createNewUser("user", "pwd", "john");
-        assertEquals(true, created);
+        assertEquals(true, userGameTrackerMySql.saveGame(1,2,5,4));
+
     }
 
     @Test
@@ -53,8 +58,8 @@ class MySqlUserRegistrationTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        registrationController.createNewUser("user", "pwd", "john");
-    }
+        assertEquals(false, userGameTrackerMySql.saveGame(1,2,5,4));
 
+    }
 
 }

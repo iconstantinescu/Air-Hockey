@@ -1,7 +1,7 @@
 package menu;
 
-import client.Client;
-
+import client.UserDao;
+import client.UserDaoMySql;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -140,10 +140,10 @@ public class RenderLogin implements Renderer {
     public void loginClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        Client auth = new Client();
+        UserDao userDao = new UserDaoMySql();
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
-        if (auth.authenticate(passInput, nameInput)) {
+        if (userDao.authenticate(passInput, nameInput) != null) {
             Render.changeGameState(Render.GameState.MENU);
             System.out.println("user " + nameInput + " authenticated");
         }
@@ -156,8 +156,8 @@ public class RenderLogin implements Renderer {
     public void registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        Client auth = new Client();
-        auth.register(nameInput, passInput, nameInput);
+        UserDao userDao = new UserDaoMySql();
+        userDao.createNewUser(nameInput, passInput, nameInput);
     }
 
     /**
