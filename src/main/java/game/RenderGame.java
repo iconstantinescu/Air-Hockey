@@ -1,5 +1,9 @@
 package game;
 
+import client.ConnectionFactory;
+import client.LeaderboardController;
+import client.LeaderboardInstance;
+import client.ScoreController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -9,10 +13,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import java.util.List;
 import menu.SoundEffects;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
+
+
 
 /**
  * The specific Game renderer inheriting from the general Renderer.
@@ -27,8 +34,12 @@ public class RenderGame implements Renderer {
     private transient Texture img;
     private transient Sprite sprite;
     private transient SpriteBatch batch;
+    private transient ConnectionFactory connectionFactory;
     private static Sound backSound;
     private static Sound hitSound;
+    private static boolean databaseUpdated;
+    private static List<LeaderboardInstance> leaderboard;
+
 
     /**
      * Constructor for the Renderer.
@@ -53,6 +64,8 @@ public class RenderGame implements Renderer {
         // Initiate the Background Sound
         SoundEffects.backgroundSound(backSound);
 
+        connectionFactory = new ConnectionFactory();
+
     }
 
     /**
@@ -65,7 +78,7 @@ public class RenderGame implements Renderer {
 
         // DRAW THE PUCK OR GAME OVER
         if (scoreBoard.isGameOver()) {
-            drawText("Game Over", (Gdx.graphics.getWidth() / 2) - 150,
+            drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
                     Gdx.graphics.getHeight() - 100);
             // DRAW TOP SCORES
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
@@ -100,13 +113,30 @@ public class RenderGame implements Renderer {
     }
 
     /**
+     * Get the winner number (either 1 or 2).
+     */
+    public int winnerNumber() {
+        if (scoreBoard.getWinner()) {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
      * Method for Drawing the Top 5 Scores.
      * @param posX The x coordinate of the first score
      * @param posY The y coordinate of the first score
      */
     public void drawTopScores(float posX, float posY) {
-        for (int i = 1; i <= 5; i++) {
-            drawText(i + ". Name 100", posX,
+        if (leaderboard == null) {
+            LeaderboardController leaderboardController =
+                    new LeaderboardController(connectionFactory);
+
+            leaderboard = leaderboardController.getTopFive();
+        }
+        for (int i = 0; i < 5; i++) {
+            LeaderboardInstance score = leaderboard.get(i);
+            drawText((i + 1) + ". " + score.getNickname() + " " + score.getPoints(), posX,
                     posY);
 
             posY -= 50;

@@ -1,7 +1,9 @@
 package client;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class LeaderboardController extends DatabaseController {
 
@@ -20,9 +22,9 @@ public class LeaderboardController extends DatabaseController {
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select nickname, points from user_data" +
-                    " order by points desc, nickname asc " +
-                    "limit 100";
+            String query = "select nickname, points from user_data"
+                    + " order by points desc, nickname asc "
+                    + "limit 100";
             ps = conn.prepareStatement(query);
 
             rs = ps.executeQuery();
