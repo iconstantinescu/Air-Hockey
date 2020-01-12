@@ -23,6 +23,7 @@ public class Render extends ApplicationAdapter {
         MENU,
         GAME
     }
+    
     private static ApplicationStrategy applicationStrategy;
     private static RenderStrategy renderStrategy;
 
