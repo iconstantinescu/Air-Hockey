@@ -46,12 +46,13 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select rnk " +
-                    "from (select user_id," +
-                    "      (select count(distinct points) from user_data where points >= s.points) as rnk" +
-                    "      from user_data s " +
-                    "     ) as rank_table" +
-                    "where user_id= ?";
+            String query = "select rnk "
+                    + "from (select user_id,"
+                    + "      (select count(distinct points) "
+                    + "       from user_data where points >= s.points) as rnk"
+                    + "      from user_data s "
+                    + "     ) as rank_table"
+                    + "where user_id= ?";
 
             ps = conn.prepareStatement(query);
 

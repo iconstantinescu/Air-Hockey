@@ -129,7 +129,9 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
     }
 
 
+    @SuppressWarnings("PMD.CloseResource")
     private String getNicknameById(int userId) {
+
         try {
 
             // Nickname might change so we keep the userIDs in the database
@@ -144,8 +146,12 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             ResultSet newRs = ps.executeQuery();
 
             if (newRs.next()) {
-                return newRs.getString("nickname");
+                String nickname = newRs.getString("nickname");
+                newRs.close();
+                return nickname;
             }
+
+            newRs.close();
 
         } catch (SQLException e) {
             System.out.println(e.toString());

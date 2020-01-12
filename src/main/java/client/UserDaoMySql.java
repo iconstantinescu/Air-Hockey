@@ -4,9 +4,9 @@ import java.util.List;
 
 public class UserDaoMySql implements UserDao {
 
-    private UserGameTracker userGameTracker;
-    private UserRegistration userRegistration;
-    private UserAuthentication userAuthentication;
+    private transient UserGameTracker userGameTracker;
+    private transient UserRegistration userRegistration;
+    private transient UserAuthentication userAuthentication;
 
     public UserDaoMySql() {
         this.userAuthentication = new UserAuthenticationMySql(new ConnectionFactory());

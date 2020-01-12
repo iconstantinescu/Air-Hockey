@@ -46,7 +46,7 @@ public class GameDetails {
         this.scoreUser2 = 0;
         this.username1 = "";
         this.username2 = "";
-        this.timestamp = null;
+        this.timestamp = new Timestamp(0);
     }
 
     public String getUsername1() {
