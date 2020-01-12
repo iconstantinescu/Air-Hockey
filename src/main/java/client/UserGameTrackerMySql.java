@@ -1,6 +1,10 @@
 package client;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that contains the methods required to save and retrieve
@@ -81,6 +85,73 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             closeConnections();
         }
         return false;
+    }
+
+    @Override
+    public List<GameDetails> getGameHistory(int userId) {
+
+        List<GameDetails> gamesList = new ArrayList<>();
+
+        try {
+
+            conn = connectionFactory.createConnection(URL);
+
+            String query = "select * from game"
+                    + " where user_id_1 = ? or user_id_2 = ?";
+
+
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, userId);
+            ps.setInt(2, userId);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                GameDetails game = new GameDetails();
+                game.setUsername1(getNicknameById(rs.getInt("user_id_1")));
+                game.setScoreUser1(rs.getInt("score_user_1"));
+                game.setUsername2(getNicknameById(rs.getInt("user_id_2")));
+                game.setScoreUser2(rs.getInt("score_user_2"));
+                game.setTimestamp(new Timestamp(rs.getLong("game_timestamp")));
+
+                gamesList.add(game);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            closeConnections();
+        }
+
+        return gamesList;
+    }
+
+
+    private String getNicknameById(int userId) {
+        try {
+
+            // Nickname might change so we keep the userIDs in the database
+            String query = "select nickname from user_data"
+                    + " where user_id = ?";
+
+
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, userId);
+
+            ResultSet newRs = ps.executeQuery();
+
+            if (newRs.next()) {
+                return newRs.getString("nickname");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+
+        return "";
     }
 
 }

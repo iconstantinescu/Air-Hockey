@@ -32,7 +32,12 @@ public class User {
     }
 
     public User() {
-
+        this.userID = 0;
+        this.points = 0;
+        this.nickname = "";
+        this.gamesLost = 0;
+        this.gamesWon = 0;
+        this.gameHistory = new ArrayList<>();
     }
 
     public int getUserID() {

@@ -1,49 +1,49 @@
 package client;
 
+import java.util.List;
+
 public class UserDaoMySql implements UserDao {
 
+    private UserGameTracker userGameTracker;
+    private UserRegistration userRegistration;
+    private UserAuthentication userAuthentication;
 
+    public UserDaoMySql() {
+        this.userAuthentication = new UserAuthenticationMySql(new ConnectionFactory());
+        this.userRegistration = new UserRegistrationMySql(new ConnectionFactory());
+        this.userGameTracker = new UserGameTrackerMySql(new ConnectionFactory());
+    }
     @Override
     public User authenticate(String username, String password) {
         if (username.equals("") || password.equals("")) {
             System.out.println("empty field");
             return null;
         }
-        UserAuthentication userAuthentication =
-                new UserAuthenticationMySql(new ConnectionFactory());
         return userAuthentication.authenticate(username, password);
     }
 
     @Override
     public boolean createNewUser(String username, String password, String nickname) {
-        UserRegistrationMySql userRegistration =
-                new UserRegistrationMySql(new ConnectionFactory());
+        if (username.equals("") || password.equals("")) {
+            System.out.println("empty field");
+            return false;
+        }
         return userRegistration.createNewUser(username, password, nickname);
     }
 
     @Override
-    public boolean updateUser(String nickname, long points, int gamesWon, int gamesLost) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteUser(int userId) {
-        return false;
+    public boolean updateUser(User user) {
+        return userGameTracker.updateUserStats(user);
     }
 
     @Override
     public boolean saveGame(int userId1, int userId2, int score1, int score2) {
-        return false;
+        return userGameTracker.saveGame(userId1, userId2, score1, score2);
     }
 
     @Override
-    public boolean getGameHistory(int userId) {
-        return false;
-    }
-
-    @Override
-    public boolean getLeaderboardPosition(int userId) {
-        return false;
+    public List<GameDetails> getGameHistory(int userId) {
+        return userGameTracker.getGameHistory(userId);
     }
 
 }

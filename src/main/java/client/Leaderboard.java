@@ -1,5 +1,6 @@
 package client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Leaderboard {
@@ -11,7 +12,8 @@ public class Leaderboard {
      * Empty Constructor.
      */
     public Leaderboard() {
-
+        this.size = 0;
+        leaderboardList = new ArrayList<>();
     }
 
     /**

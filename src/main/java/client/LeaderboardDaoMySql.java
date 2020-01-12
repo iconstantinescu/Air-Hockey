@@ -40,4 +40,34 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
         }
         return leaderboard;
     }
+
+    @Override
+    public int getLeaderboardPosition(int userId) {
+        try {
+
+            conn = connectionFactory.createConnection(URL);
+            String query = "select rnk " +
+                    "from (select user_id," +
+                    "      (select count(distinct points) from user_data where points >= s.points) as rnk" +
+                    "      from user_data s " +
+                    "     ) as rank_table" +
+                    "where user_id= ?";
+
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, userId);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            closeConnections();
+        }
+        return -1;
+    }
 }

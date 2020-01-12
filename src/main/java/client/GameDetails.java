@@ -41,6 +41,14 @@ public class GameDetails {
         this.timestamp = timestamp;
     }
 
+    public GameDetails() {
+        this.scoreUser1 = 0;
+        this.scoreUser2 = 0;
+        this.username1 = "";
+        this.username2 = "";
+        this.timestamp = null;
+    }
+
     public String getUsername1() {
         return username1;
     }
@@ -59,6 +67,26 @@ public class GameDetails {
 
     public Timestamp getTimestamp() {
         return timestamp;
+    }
+
+    public void setUsername1(String username1) {
+        this.username1 = username1;
+    }
+
+    public void setUsername2(String username2) {
+        this.username2 = username2;
+    }
+
+    public void setScoreUser1(int scoreUser1) {
+        this.scoreUser1 = scoreUser1;
+    }
+
+    public void setScoreUser2(int scoreUser2) {
+        this.scoreUser2 = scoreUser2;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
 }
