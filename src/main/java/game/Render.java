@@ -1,5 +1,6 @@
 package game;
 
+import client.User;
 import com.badlogic.gdx.ApplicationAdapter;
 import menu.RenderLogin;
 import menu.RenderMenu;
@@ -9,6 +10,9 @@ import menu.RenderMenu;
  * that the render method can be called in a loop.
  */
 public class Render extends ApplicationAdapter {
+
+    public static int userID1;
+    public static int userID2;
 
     /**
      *  An enumeration of the possible states of the application.
@@ -20,7 +24,7 @@ public class Render extends ApplicationAdapter {
     }
 
     protected static GameState gameState;
-    private static Renderer renderer;
+    private static RenderStrategy renderStrategy;
 
     /**
      * This method is only being run once, initializing the application.
@@ -29,7 +33,9 @@ public class Render extends ApplicationAdapter {
     public void create() {
         // Initialize the login as the first login.
         gameState = GameState.LOGIN;
-        renderer = new RenderLogin();
+        renderStrategy = new RenderLogin();
+        this.userID1 = -1;
+        this.userID2 = -1;
     }
 
     /**
@@ -37,7 +43,7 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void render() {
-        renderer.run();
+        renderStrategy.run();
     }
 
     /**
@@ -48,13 +54,17 @@ public class Render extends ApplicationAdapter {
         gameState = newGameState;
         switch (gameState) {
             case LOGIN:
-                renderer = new RenderLogin();
+                renderStrategy = new RenderLogin();
                 break;
             case MENU:
-                renderer = new RenderMenu();
+                renderStrategy = new RenderMenu();
                 break;
             case GAME:
+<<<<<<< Updated upstream
                 renderer = new RenderGame();
+=======
+                renderStrategy = new RenderGame();
+>>>>>>> Stashed changes
                 break;
             default:
                 break;
@@ -68,8 +78,8 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void dispose() {
-        if (renderer != null) {
-            renderer.dispose();
+        if (renderStrategy != null) {
+            renderStrategy.dispose();
         }
     }
 

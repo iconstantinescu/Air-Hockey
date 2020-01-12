@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
-import game.Renderer;
+import game.RenderStrategy;
 
 /**
  * The specific renderer of the Game Menu.
  * Here the menu screen, all buttons and button actions are created and set.
  */
-public class RenderMenu implements Renderer {
+public class RenderMenu implements RenderStrategy {
     private transient SpriteBatch homeBatch;
     private transient SpriteBatch playBatch;
     private transient SpriteBatch scoresBatch;

@@ -1,7 +1,9 @@
 package menu;
 
+import client.AuthenticationController;
 import client.Client;
 
+import client.ConnectionFactory;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -17,12 +19,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.Render;
-import game.Renderer;
+import game.RenderStrategy;
 
 /**
  * The specific renderer of the Login.
  */
-public class RenderLogin implements Renderer {
+public class RenderLogin implements RenderStrategy {
     transient TextField username;
     transient TextField password;
     transient Stage stage;
@@ -146,6 +148,13 @@ public class RenderLogin implements Renderer {
         if (auth.authenticate(passInput, nameInput)) {
             Render.changeGameState(Render.GameState.MENU);
             System.out.println("user " + nameInput + " authenticated");
+            AuthenticationController idGetter = new AuthenticationController(new ConnectionFactory());
+            if(Render.userID1 == -1) {
+                Render.userID1 = idGetter.getUserId(nameInput);
+            } else if (Render.userID2 == -1) {
+                Render.userID2 = idGetter.getUserId(nameInput);
+            }
+
         }
     }
 

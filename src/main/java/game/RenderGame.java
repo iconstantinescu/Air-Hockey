@@ -1,8 +1,11 @@
 package game;
 
+<<<<<<< Updated upstream
 import client.ConnectionFactory;
 import client.LeaderboardController;
 import client.LeaderboardInstance;
+=======
+>>>>>>> Stashed changes
 import client.ScoreController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -24,7 +27,7 @@ import objects.ScoreBoard;
 /**
  * The specific Game renderer inheriting from the general Renderer.
  */
-public class RenderGame implements Renderer {
+public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
@@ -82,6 +85,7 @@ public class RenderGame implements Renderer {
                     Gdx.graphics.getHeight() - 100);
             // DRAW TOP SCORES
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
+//            uploadScore();
         } else {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
@@ -110,6 +114,12 @@ public class RenderGame implements Renderer {
                 Gdx.graphics.getHeight() - 20);
 
         drawWallsAndGates();
+    }
+
+    public void uploadMatch() {
+        if(ScoreController == null) {
+            scoreController = new ScoreController(connectionFactory)
+        }
     }
 
     /**
