@@ -18,6 +18,11 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
     }
 
 
+    /**
+     * Update the user values in the database with the new values.
+     * @param user the user object with the new values
+     * @return true if update succeeded
+     */
     public boolean updateUserStats(User user) {
 
         try {

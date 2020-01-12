@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
-class userRegistrationMySqlTest {
+class UserRegistrationMySqlTest {
 
     @InjectMocks
     private transient UserRegistrationMySql registrationController;

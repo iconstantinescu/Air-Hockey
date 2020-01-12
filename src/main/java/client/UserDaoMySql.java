@@ -1,6 +1,6 @@
 package client;
 
-public class UserDaoMySql implements UserDao{
+public class UserDaoMySql implements UserDao {
 
 
     @Override
@@ -9,13 +9,15 @@ public class UserDaoMySql implements UserDao{
             System.out.println("empty field");
             return null;
         }
-        UserAuthentication userAuthentication = new UserAuthenticationMySql(new ConnectionFactory());
+        UserAuthentication userAuthentication =
+                new UserAuthenticationMySql(new ConnectionFactory());
         return userAuthentication.authenticate(username, password);
     }
 
     @Override
     public boolean createNewUser(String username, String password, String nickname) {
-        UserRegistrationMySql userRegistration = new UserRegistrationMySql(new ConnectionFactory());
+        UserRegistrationMySql userRegistration =
+                new UserRegistrationMySql(new ConnectionFactory());
         return userRegistration.createNewUser(username, password, nickname);
     }
 

@@ -5,7 +5,8 @@ import java.sql.SQLException;
 /**
  * Class that contains the methods required to authenticate the user with the database.
  */
-public class UserAuthenticationMySql extends DatabaseControllerMySql implements  UserAuthentication{
+public class UserAuthenticationMySql extends DatabaseControllerMySql
+        implements  UserAuthentication {
 
     public UserAuthenticationMySql(ConnectionFactory connectionFactory) {
         super(connectionFactory);
@@ -63,14 +64,13 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql implements 
 
             rs = ps.executeQuery();
 
-            if(rs.next())
-            {
+            if (rs.next()) {
                 User user = new User();
-                user.setUserId( rs.getInt("user_id") );
-                user.setNickname( rs.getString("nickname") );
-                user.addPoints( rs.getLong("points") );
-                user.setNumOfWonGames( rs.getInt("games_won") );
-                user.setNumOfLostGames( rs.getInt("games_lost") );
+                user.setUserId(rs.getInt("user_id"));
+                user.setNickname(rs.getString("nickname"));
+                user.addPoints(rs.getLong("points"));
+                user.setNumOfWonGames(rs.getInt("games_won"));
+                user.setNumOfLostGames(rs.getInt("games_lost"));
                 return user;
             }
 

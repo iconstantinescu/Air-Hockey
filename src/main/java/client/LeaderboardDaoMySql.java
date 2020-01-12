@@ -19,9 +19,9 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select nickname, points from user_data" +
-                    " order by points desc, nickname asc " +
-                    "limit ?";
+            String query = "select nickname, points from user_data"
+                    + " order by points desc, nickname asc "
+                    + "limit ?";
             ps = conn.prepareStatement(query);
             ps.setInt(1, size);
 

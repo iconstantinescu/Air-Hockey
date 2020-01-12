@@ -7,11 +7,11 @@ import java.util.ArrayList;
  */
 public class User {
 
-    private int userID;
+    private transient int userID;
     private String nickname;
     private transient long points;
-    private int gamesLost;
-    private int gamesWon;
+    private transient int gamesLost;
+    private transient int gamesWon;
     private transient ArrayList<GameDetails> gameHistory;
 
     /**
@@ -31,7 +31,9 @@ public class User {
         this.gameHistory = new ArrayList<>();
     }
 
-    public User(){}
+    public User() {
+
+    }
 
     public int getUserID() {
         return userID;
