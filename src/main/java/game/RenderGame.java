@@ -5,6 +5,7 @@ import client.LeaderboardController;
 import client.LeaderboardInstance;
 import client.ScoreController;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -19,6 +20,8 @@ import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
+import static com.badlogic.gdx.Input.Keys.ENTER;
+
 /**
  * The specific Game renderer inheriting from the general Renderer.
  */
@@ -32,7 +35,7 @@ public class RenderGame implements RenderStrategy {
     private transient Sprite sprite;
     private transient SpriteBatch batch;
     private transient ConnectionFactory connectionFactory;
-    private static Sound backSound;
+    private static Music backSound;
     private static Sound hitSound;
     private static List<LeaderboardInstance> leaderboard;
     private static ScoreController scoreController;
@@ -59,7 +62,11 @@ public class RenderGame implements RenderStrategy {
                 scoreBoard);
 
         // Initiate the Background Sound
-        SoundEffects.backgroundSound(backSound);
+//        SoundEffects.backgroundSound(backSound);
+        backSound = Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
+        backSound.setLooping(true);
+        backSound.play();
+
 
         connectionFactory = new ConnectionFactory();
 
@@ -78,8 +85,10 @@ public class RenderGame implements RenderStrategy {
             drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
                     Gdx.graphics.getHeight() - 100);
             // DRAW TOP SCORES
+            uploadMatch();
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
-//            uploadScore();
+            // GO BACK TO MENU IF ENTER IS PRESSED
+            waitForEnter();
         } else {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
@@ -161,6 +170,8 @@ public class RenderGame implements RenderStrategy {
 
             posY -= 50;
         }
+
+        drawText("Press ENTER to go back to menu", 0, 0);
     }
 
     /**
@@ -210,6 +221,16 @@ public class RenderGame implements RenderStrategy {
         }
         if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
             pusher.setposX(pusher.getposX() + 4);
+        }
+    }
+
+    /**
+     * Waits for Enter to be pressed to go back to the menu.
+     */
+    public void waitForEnter() {
+        if(Gdx.input.isKeyJustPressed(ENTER)) {
+            Render.changeGameState(Render.GameState.MENU);
+            backSound.dispose();
         }
     }
 

@@ -17,9 +17,10 @@ public class SoundEffects {
      *
      * @param sound The sound that will be played
      */
-    public static void backgroundSound(com.badlogic.gdx.audio.Sound sound) {
-        sound = Gdx.audio.newSound(Gdx.files.internal("media/song.wav"));
-        sound.loop();
+    public static void backgroundSound(com.badlogic.gdx.audio.Music sound) {
+        sound = Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
+        sound.setLooping(true);
+        sound.play();
     }
 
     /**

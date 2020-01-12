@@ -33,6 +33,7 @@ public class RenderLogin implements RenderStrategy {
     transient Label passwordText;
     transient Label usernameText;
     transient Skin skin;
+    private transient AuthenticationController idGetter;
 
     transient String nameInput;
     transient String passInput;
@@ -143,11 +144,12 @@ public class RenderLogin implements RenderStrategy {
         passInput = password.getText();
         nameInput = username.getText();
         Client auth = new Client();
+
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
         if (auth.authenticate(passInput, nameInput)) {
             System.out.println("user " + nameInput + " authenticated");
-            AuthenticationController idGetter = new AuthenticationController(new ConnectionFactory());
+            idGetter = new AuthenticationController(new ConnectionFactory());
             if(Render.userID1 == -1) {
                 Render.userID1 = idGetter.getUserId(nameInput);
                 Render.changeGameState(Render.GameState.MENU);
@@ -156,7 +158,6 @@ public class RenderLogin implements RenderStrategy {
                 Render.secondAuthentication = true;
                 Render.changeGameState(Render.GameState.GAME);
             }
-
         }
     }
 
