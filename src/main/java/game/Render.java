@@ -13,6 +13,7 @@ public class Render extends ApplicationAdapter {
 
     public static int userID1;
     public static int userID2;
+    public static boolean secondAuthentication;
 
     /**
      *  An enumeration of the possible states of the application.
@@ -36,6 +37,7 @@ public class Render extends ApplicationAdapter {
         renderStrategy = new RenderLogin();
         this.userID1 = -1;
         this.userID2 = -1;
+        this.secondAuthentication = false;
     }
 
     /**
@@ -60,11 +62,7 @@ public class Render extends ApplicationAdapter {
                 renderStrategy = new RenderMenu();
                 break;
             case GAME:
-<<<<<<< Updated upstream
-                renderer = new RenderGame();
-=======
                 renderStrategy = new RenderGame();
->>>>>>> Stashed changes
                 break;
             default:
                 break;

@@ -1,11 +1,8 @@
 package game;
 
-<<<<<<< Updated upstream
 import client.ConnectionFactory;
 import client.LeaderboardController;
 import client.LeaderboardInstance;
-=======
->>>>>>> Stashed changes
 import client.ScoreController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -22,8 +19,6 @@ import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
-
-
 /**
  * The specific Game renderer inheriting from the general Renderer.
  */
@@ -32,7 +27,6 @@ public class RenderGame implements RenderStrategy {
     private transient Pusher pusher1;
     private transient Pusher pusher2;
     private transient Puck puck;
-    private static boolean[] restricts1;
     private transient ScoreBoard scoreBoard;
     private transient Texture img;
     private transient Sprite sprite;
@@ -40,8 +34,8 @@ public class RenderGame implements RenderStrategy {
     private transient ConnectionFactory connectionFactory;
     private static Sound backSound;
     private static Sound hitSound;
-    private static boolean databaseUpdated;
     private static List<LeaderboardInstance> leaderboard;
+    private static ScoreController scoreController;
 
 
     /**
@@ -116,9 +110,25 @@ public class RenderGame implements RenderStrategy {
         drawWallsAndGates();
     }
 
+    /**
+     * Method that uploads the match into the match history of the database,
+     * and adds points to the winner of the game.
+     */
     public void uploadMatch() {
-        if(ScoreController == null) {
-            scoreController = new ScoreController(connectionFactory)
+        if(scoreController == null) {
+            scoreController = new ScoreController(connectionFactory);
+            int addPoints = 10 * Math.abs(scoreBoard.getPlayer1Score() - scoreBoard.getPlayer2Score());
+
+            // ADD POINTS TO WINNER
+            if(scoreBoard.getWinner()) {
+                scoreController.updatePoints(Render.userID1, addPoints);
+            } else {
+                scoreController.updatePoints(Render.userID2, addPoints);
+            }
+
+            // SAVE GAME INTO HISTORY
+            scoreController.saveGame(Render.userID1, Render.userID2,
+                    scoreBoard.getPlayer1Score(), scoreBoard.getPlayer2Score());
         }
     }
 

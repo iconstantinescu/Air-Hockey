@@ -71,8 +71,10 @@ public class RenderMenu implements RenderStrategy {
         setPlayButton(playSprite, playBatch);
         setScoresButton(scoresSprite, scoresBatch);
         setQuitButton(quitSprite, quitBatch);
-        if (playPressed(playSprite)) {
+        if (playPressed(playSprite) && Render.secondAuthentication) {
             Render.changeGameState(Render.GameState.GAME);
+        } else if (playPressed(playSprite)) {
+            Render.changeGameState(Render.GameState.LOGIN);
         }
         if (quitButtonPressed(quitSprite)) {
             exit(0);
