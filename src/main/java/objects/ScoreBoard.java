@@ -7,6 +7,7 @@ public class ScoreBoard {
 
     private transient int player1Score;
     private transient int player2Score;
+    private static final short endScore = 5;
 
     /**
      * Default constructor that initializes both scores to 0.
@@ -32,6 +33,15 @@ public class ScoreBoard {
      */
     public boolean isGameOver() {
         return player1Score == 5 || player2Score == 5;
+    }
+
+    /**
+     * Method returning the winner between Player1 and Player2.
+     * @return True for Player 1, false for Player 2
+     */
+    public boolean getWinner() {
+        assert isGameOver();
+        return player1Score == endScore;
     }
 
     public int getPlayer1Score() {
