@@ -231,7 +231,7 @@ public class RenderGame implements RenderStrategy {
      */
     public void waitForEnter() {
         if (Gdx.input.isKeyJustPressed(ENTER)) {
-            Render.changeGameState(Render.GameState.MENU);
+            Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
             backSound.dispose();
         }
     }

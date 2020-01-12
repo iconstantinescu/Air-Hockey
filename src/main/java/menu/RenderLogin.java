@@ -152,11 +152,11 @@ public class RenderLogin implements RenderStrategy {
             idGetter = new AuthenticationController(new ConnectionFactory());
             if (Render.userID1 == -1) {
                 Render.userID1 = idGetter.getUserId(nameInput);
-                Render.changeGameState(Render.GameState.MENU);
+                Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
             } else if (Render.userID2 == -1) {
                 Render.userID2 = idGetter.getUserId(nameInput);
                 Render.secondAuthentication = true;
-                Render.changeGameState(Render.GameState.GAME);
+                Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
             }
         }
     }

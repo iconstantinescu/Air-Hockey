@@ -16,15 +16,14 @@ public class Render extends ApplicationAdapter {
     public static boolean secondAuthentication;
 
     /**
-     *  An enumeration of the possible states of the application.
+     *  An enumeration of the possible render strategies of the application.
      */
-    public enum GameState {
+    public enum ApplicationStrategy {
         LOGIN,
         MENU,
         GAME
     }
-
-    protected static GameState gameState;
+    private static ApplicationStrategy applicationStrategy;
     private static RenderStrategy renderStrategy;
 
     /**
@@ -33,7 +32,6 @@ public class Render extends ApplicationAdapter {
     @Override
     public void create() {
         // Initialize the login as the first login.
-        gameState = GameState.LOGIN;
         renderStrategy = new RenderLogin();
         this.userID1 = -1;
         this.userID2 = -1;
@@ -49,12 +47,12 @@ public class Render extends ApplicationAdapter {
     }
 
     /**
-     * Method that changes the state of the Game.
-     * @param newGameState The New Game State
+     * Method that changes the render strategy of the application.
+     * @param newApplicationStrategy The New Render Strategy
      */
-    public static void changeGameState(GameState newGameState) {
-        gameState = newGameState;
-        switch (gameState) {
+    public static void changeGameStrategy(ApplicationStrategy newApplicationStrategy) {
+        applicationStrategy = newApplicationStrategy;
+        switch (applicationStrategy) {
             case LOGIN:
                 renderStrategy = new RenderLogin();
                 break;
