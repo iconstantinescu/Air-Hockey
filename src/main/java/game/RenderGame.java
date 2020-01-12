@@ -1,5 +1,7 @@
 package game;
 
+import static com.badlogic.gdx.Input.Keys.ENTER;
+
 import client.ConnectionFactory;
 import client.LeaderboardController;
 import client.LeaderboardInstance;
@@ -20,7 +22,7 @@ import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
-import static com.badlogic.gdx.Input.Keys.ENTER;
+
 
 /**
  * The specific Game renderer inheriting from the general Renderer.
@@ -35,7 +37,8 @@ public class RenderGame implements RenderStrategy {
     private transient Sprite sprite;
     private transient SpriteBatch batch;
     private transient ConnectionFactory connectionFactory;
-    private static Music backSound;
+    private static final Music backSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
     private static Sound hitSound;
     private static List<LeaderboardInstance> leaderboard;
     private static ScoreController scoreController;
@@ -62,8 +65,6 @@ public class RenderGame implements RenderStrategy {
                 scoreBoard);
 
         // Initiate the Background Sound
-//        SoundEffects.backgroundSound(backSound);
-        backSound = Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
         backSound.setLooping(true);
         backSound.play();
 
@@ -124,12 +125,13 @@ public class RenderGame implements RenderStrategy {
      * and adds points to the winner of the game.
      */
     public void uploadMatch() {
-        if(scoreController == null) {
+        if (scoreController == null) {
             scoreController = new ScoreController(connectionFactory);
-            int addPoints = 10 * Math.abs(scoreBoard.getPlayer1Score() - scoreBoard.getPlayer2Score());
+            int addPoints = 10 * Math.abs(scoreBoard.getPlayer1Score()
+                    - scoreBoard.getPlayer2Score());
 
             // ADD POINTS TO WINNER
-            if(scoreBoard.getWinner()) {
+            if (scoreBoard.getWinner()) {
                 scoreController.updatePoints(Render.userID1, addPoints);
             } else {
                 scoreController.updatePoints(Render.userID2, addPoints);
@@ -228,7 +230,7 @@ public class RenderGame implements RenderStrategy {
      * Waits for Enter to be pressed to go back to the menu.
      */
     public void waitForEnter() {
-        if(Gdx.input.isKeyJustPressed(ENTER)) {
+        if (Gdx.input.isKeyJustPressed(ENTER)) {
             Render.changeGameState(Render.GameState.MENU);
             backSound.dispose();
         }
