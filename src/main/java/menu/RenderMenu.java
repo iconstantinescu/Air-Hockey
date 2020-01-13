@@ -2,13 +2,19 @@ package menu;
 
 import static java.lang.System.exit;
 
+import client.ConnectionFactory;
+import client.LeaderboardController;
+import client.LeaderboardInstance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
 import game.Renderer;
+
+import java.util.List;
 
 /**
  * The specific renderer of the Game Menu.
@@ -27,6 +33,9 @@ public class RenderMenu implements Renderer {
     private transient Sprite playSprite;
     private transient Sprite scoresSprite;
     private transient Sprite quitSprite;
+    private transient ConnectionFactory connectionFactory;
+    private static List<LeaderboardInstance> leaderboard;
+    private transient boolean showScores;
 
     /**
      * This is the renderer for the menu.
@@ -57,6 +66,8 @@ public class RenderMenu implements Renderer {
         quitSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         quitSprite.setPosition(quitSprite.getX(),
                 quitSprite.getY() - quitSprite.getHeight() / 2);
+        showScores = false;
+        connectionFactory = new ConnectionFactory();
     }
 
     /**
@@ -71,6 +82,12 @@ public class RenderMenu implements Renderer {
         setPlayButton(playSprite, playBatch);
         setScoresButton(scoresSprite, scoresBatch);
         setQuitButton(quitSprite, quitBatch);
+        if (scoresButtonPressed(scoresSprite)) {
+            showScores = !showScores;
+        }
+        if (showScores) {
+            drawLeaderboard(Gdx.graphics.getWidth() / 2 + 150, Gdx.graphics.getHeight() - 150);
+        }
         if (playPressed(playSprite)) {
             Render.changeGameState(Render.GameState.GAME);
         }
@@ -188,6 +205,25 @@ public class RenderMenu implements Renderer {
     }
 
     /**
+     * This method will return true when 'scores' is pressed and false otherwise.
+     * This method will be called in render as long as you are on the menu screen.
+     * Once scores is pressed, the render method will make sure you will be shown the leader board.
+     *
+     * @param sprite the sprite to draw.
+     * @return a boolean, true if 'quit' is pressed or not.
+     */
+    public static boolean scoresButtonPressed(Sprite sprite) {
+        if (Gdx.input.justTouched() && Gdx.input.getX()
+                > (sprite.getX() - sprite.getWidth() / 2)
+                && Gdx.input.getX() < (sprite.getX() + sprite.getWidth() / 2)
+                && Gdx.input.getY() > (sprite.getY() - sprite.getHeight() / 2)
+                && Gdx.input.getY() < (sprite.getY() + sprite.getHeight() / 2)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Sets the quit sprite and batch.
      * Here the quit button is displayed on just below the middle of the menu screen.
      * This method will be called in render as long as you are on the menu screen.
@@ -238,4 +274,43 @@ public class RenderMenu implements Renderer {
         return false;
     }
 
+    /**
+     * Method for Drawing the Top 10 Scores.
+     * When you press scores on the menu screen you will be shown them.
+     * Press it another time and they'll disappear.
+     *
+     * @param posX The x coordinate of the first score
+     * @param posY The y coordinate of the first score
+     */
+    public void drawLeaderboard(float posX, float posY) {
+        if (leaderboard == null) {
+            LeaderboardController leaderboardController =
+                    new LeaderboardController(connectionFactory);
+
+            leaderboard = leaderboardController.getTopTen();
+        }
+        for (int i = 0; i < 10; i++) {
+            LeaderboardInstance score = leaderboard.get(i);
+            setText((i + 1) + ". " + score.getNickname() + " " + score.getPoints(),
+                    posX, posY);
+
+            posY -= 50;
+        }
+    }
+
+    /**
+     * Draw text on the screen.
+     * @param str Text to display on screen
+     * @param posX The x coordinate of the text
+     * @param posY The y coordinate of the text
+     */
+    public void setText(String str, float posX, float posY) {
+        BitmapFont font = new BitmapFont();
+        homeBatch.begin();
+        font.setColor(0,0,0,1);
+        font.getData().setScale(4);
+        font.draw(homeBatch, str, posX,
+                posY);
+        homeBatch.end();
+    }
 }
