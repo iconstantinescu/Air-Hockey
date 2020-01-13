@@ -15,19 +15,11 @@ public class UserDaoMySql implements UserDao {
     }
     @Override
     public User authenticate(String username, String password) {
-        if (username.equals("") || password.equals("")) {
-            System.out.println("empty field");
-            return null;
-        }
         return userAuthentication.authenticate(username, password);
     }
 
     @Override
     public boolean createNewUser(String username, String password, String nickname) {
-        if (username.equals("") || password.equals("")) {
-            System.out.println("empty field");
-            return false;
-        }
         return userRegistration.createNewUser(username, password, nickname);
     }
 
