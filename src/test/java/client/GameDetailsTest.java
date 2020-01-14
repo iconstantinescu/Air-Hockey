@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Timestamp;
 
-import com.badlogic.gdx.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,14 +52,18 @@ public class GameDetailsTest {
 
     @Test
     void setNickname1() {
-        testGame.setNickname1("newName");
-        assertEquals("newName", testGame.getNickname1());
+
+        String newName = "darwin";
+        testGame.setNickname1(newName);
+        assertEquals(newName, testGame.getNickname1());
     }
 
     @Test
     void setUsername2() {
-        testGame.setNickname2("newName");
-        assertEquals("newName", testGame.getNickname2());
+
+        String newName = "darwin";
+        testGame.setNickname2(newName);
+        assertEquals(newName, testGame.getNickname2());
     }
 
     @Test
