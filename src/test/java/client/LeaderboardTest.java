@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class LeaderboardTest {
 
@@ -22,6 +23,13 @@ public class LeaderboardTest {
         leaderboardList.add(new LeaderboardEntry("robert", 200));
         sizeLimit = 10;
         testLeaderboard = new Leaderboard(leaderboardList, sizeLimit);
+    }
+
+    @Test
+    void testEmptyConstructor() {
+        Leaderboard emptyLeaderboard = new Leaderboard();
+        assertEquals(new ArrayList<>(), emptyLeaderboard.getLeaderboardList());
+        assertEquals(0, emptyLeaderboard.getSizeLimit());
     }
 
     @Test
@@ -63,7 +71,7 @@ public class LeaderboardTest {
     }
 
     @Test
-    void sizeExceededTest() {
+    void changeSizeLower() {
         testLeaderboard.setSizeLimit(1);
 
 
@@ -72,5 +80,32 @@ public class LeaderboardTest {
         assertEquals(leaderboardList, testLeaderboard.getLeaderboardList());
         assertEquals(1, testLeaderboard.getCurrentSize());
 
+    }
+
+    @Test
+    void sizeLimitExceeded() {
+        testLeaderboard.setSizeLimit(2);
+
+        assertFalse(testLeaderboard.addEntry(new LeaderboardEntry()));
+        assertEquals(leaderboardList, testLeaderboard.getLeaderboardList());
+        assertEquals(leaderboardList.size(), testLeaderboard.getCurrentSize());
+
+    }
+
+    @Test
+    void setListExceedLimit() {
+        testLeaderboard.setSizeLimit(0);
+
+        testLeaderboard.setLeaderboardList(leaderboardList);
+        assertEquals(new ArrayList<>(), testLeaderboard.getLeaderboardList());
+        assertEquals(0, testLeaderboard.getCurrentSize());
+    }
+
+    @Test
+    void initializeListExceedLimit() {
+        Leaderboard newLeaderboard = new Leaderboard(leaderboardList, 0);
+
+        assertEquals(new ArrayList<>(), newLeaderboard.getLeaderboardList());
+        assertEquals(0, newLeaderboard.getCurrentSize());
     }
 }
