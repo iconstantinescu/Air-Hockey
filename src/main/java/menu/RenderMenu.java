@@ -58,26 +58,28 @@ public class RenderMenu implements Renderer {
         detailsBatch = new SpriteBatch();
         quitBatch = new SpriteBatch();
 
+        int offSetX = 150;
+        int offSetY = 110;
         home = new Texture("media/home.png");
         homeSprite = new Sprite(home);
         homeSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         homeSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3);
         play = new Texture("media/play.png");
         playSprite = new Sprite(play);
-        playSprite.setPosition(Gdx.graphics.getWidth() / 2 - 150,
-                Gdx.graphics.getHeight() / 2 + 110);
+        playSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2 + offSetY);
         scores = new Texture("media/scores.png");
         scoresSprite = new Sprite(scores);
-        scoresSprite.setPosition(Gdx.graphics.getWidth() / 2 - 150,
+        scoresSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
                 Gdx.graphics.getHeight() / 2);
         details = new Texture("media/details.png");
         detailsSprite = new Sprite(details);
-        detailsSprite.setPosition(Gdx.graphics.getWidth() / 2 - 150,
-                Gdx.graphics.getHeight() / 2 - 110);
+        detailsSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2 - offSetY);
         quit = new Texture("media/quit.png");
         quitSprite = new Sprite(quit);
-        quitSprite.setPosition(Gdx.graphics.getWidth() / 2 - 150,
-                Gdx.graphics.getHeight() / 2 - 220);
+        quitSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2 - offSetY * 2);
         showScores = false;
         connectionFactory = new ConnectionFactory();
         scoreBoard = new ScoreBoard();
