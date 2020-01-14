@@ -9,6 +9,8 @@ public class Puck {
 
     private transient PuckState puckState;
 
+    private transient PuckState menuState;
+
     private transient ScoreBoard scoreBoard;
 
     private transient float posX;
@@ -38,6 +40,7 @@ public class Puck {
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.scoreBoard = scoreBoard;
+        menuState = new OutOfGatesState();
         changeStateTo(new GateAlignedState());
     }
 
@@ -97,6 +100,18 @@ public class Puck {
 
         puckState.executeBehavior(this, screenWidth, screenHeight);
 
+        setposX(deltaX + getposX());
+        setposY(deltaY + getposY());
+    }
+
+    /**
+     * Specific Puck translation for the menu.
+     * @param screenWidth Width of the screen
+     * @param screenHeight Height of the screen
+     */
+    public void translateMenu(float screenWidth, float screenHeight) {
+
+        menuState.executeBehavior(this, screenWidth, screenHeight);
         setposX(deltaX + getposX());
         setposY(deltaY + getposY());
     }
