@@ -12,9 +12,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
+import game.RenderGame;
 import game.Renderer;
-
 import java.util.List;
+import objects.Puck;
+import objects.ScoreBoard;
 
 /**
  * The specific renderer of the Game Menu.
@@ -33,9 +35,12 @@ public class RenderMenu implements Renderer {
     private transient Sprite playSprite;
     private transient Sprite scoresSprite;
     private transient Sprite quitSprite;
+    private transient Puck puck;
+    private transient ScoreBoard scoreBoard;
     private transient ConnectionFactory connectionFactory;
     private static List<LeaderboardInstance> leaderboard;
     private transient boolean showScores;
+    private transient RenderGame renderGame = new RenderGame();
 
     /**
      * This is the renderer for the menu.
@@ -68,6 +73,10 @@ public class RenderMenu implements Renderer {
                 quitSprite.getY() - quitSprite.getHeight() / 2);
         showScores = false;
         connectionFactory = new ConnectionFactory();
+        scoreBoard = new ScoreBoard();
+        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
+                scoreBoard);
+
     }
 
     /**
@@ -82,6 +91,10 @@ public class RenderMenu implements Renderer {
         setPlayButton(playSprite, playBatch);
         setScoresButton(scoresSprite, scoresBatch);
         setQuitButton(quitSprite, quitBatch);
+
+        updatePuckMenu();
+        renderGame.drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
+
         if (scoresButtonPressed(scoresSprite)) {
             showScores = !showScores;
         }
@@ -94,6 +107,13 @@ public class RenderMenu implements Renderer {
         if (quitButtonPressed(quitSprite)) {
             exit(0);
         }
+    }
+
+    /**
+     * This method changes the puck position according to the rules of Air Hockey.
+     */
+    public void updatePuckMenu() {
+        puck.translateMenu(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     /**
