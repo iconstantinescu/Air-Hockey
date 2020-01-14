@@ -51,4 +51,13 @@ public class LeaderboardController extends DatabaseController {
         List<LeaderboardInstance> topFive = getAllScoresSorted();
         return topFive.subList(0,5);
     }
+
+    /**
+     * Get the top ten scores achieved in the game.
+     * @return a list with the nicknames and points of the top 5 players
+     */
+    public List<LeaderboardInstance> getTopTen() {
+        List<LeaderboardInstance> topFive = getAllScoresSorted();
+        return topFive.subList(0,10);
+    }
 }

@@ -2,13 +2,21 @@ package menu;
 
 import static java.lang.System.exit;
 
+import client.ConnectionFactory;
+import client.LeaderboardController;
+import client.LeaderboardInstance;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
+import game.RenderGame;
 import game.RenderStrategy;
+import java.util.List;
+import objects.Puck;
+import objects.ScoreBoard;
 
 /**
  * The specific renderer of the Game Menu.
@@ -18,15 +26,26 @@ public class RenderMenu implements RenderStrategy {
     private transient SpriteBatch homeBatch;
     private transient SpriteBatch playBatch;
     private transient SpriteBatch scoresBatch;
+    private transient SpriteBatch detailsBatch;
     private transient SpriteBatch quitBatch;
     private transient Texture home;
     private transient Texture play;
     private transient Texture scores;
+    private transient Texture details;
     private transient Texture quit;
     private transient Sprite homeSprite;
     private transient Sprite playSprite;
     private transient Sprite scoresSprite;
+    private transient Sprite detailsSprite;
     private transient Sprite quitSprite;
+    private transient Puck puck;
+    private transient ScoreBoard scoreBoard;
+    private transient ConnectionFactory connectionFactory;
+    private static List<LeaderboardInstance> leaderboard;
+    private transient boolean showScores;
+    private transient RenderGame renderGame = new RenderGame();
+    private static final int offSetX = 150;
+    private static final int offSetY = 110;
 
     /**
      * This is the renderer for the menu.
@@ -38,6 +57,7 @@ public class RenderMenu implements RenderStrategy {
         homeBatch = new SpriteBatch();
         playBatch = new SpriteBatch();
         scoresBatch = new SpriteBatch();
+        detailsBatch = new SpriteBatch();
         quitBatch = new SpriteBatch();
 
         home = new Texture("media/home.png");
@@ -46,17 +66,25 @@ public class RenderMenu implements RenderStrategy {
         homeSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3);
         play = new Texture("media/play.png");
         playSprite = new Sprite(play);
-        playSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        playSprite.setPosition(playSprite.getX(),
-                playSprite.getY() + playSprite.getHeight() / 2);
+        playSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2 + offSetY);
         scores = new Texture("media/scores.png");
         scoresSprite = new Sprite(scores);
-        scoresSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        scoresSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2);
+        details = new Texture("media/details.png");
+        detailsSprite = new Sprite(details);
+        detailsSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2 - offSetY);
         quit = new Texture("media/quit.png");
         quitSprite = new Sprite(quit);
-        quitSprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        quitSprite.setPosition(quitSprite.getX(),
-                quitSprite.getY() - quitSprite.getHeight() / 2);
+        quitSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
+                Gdx.graphics.getHeight() / 2 - offSetY * 2);
+        showScores = false;
+        connectionFactory = new ConnectionFactory();
+        scoreBoard = new ScoreBoard();
+        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
+                scoreBoard);
     }
 
     /**
@@ -68,17 +96,36 @@ public class RenderMenu implements RenderStrategy {
      */
     public void run() {
         setHomeScreen(homeSprite, homeBatch);
-        setPlayButton(playSprite, playBatch);
-        setScoresButton(scoresSprite, scoresBatch);
-        setQuitButton(quitSprite, quitBatch);
-        if (playPressed(playSprite) && Render.secondAuthentication) {
+        setButton(playSprite, playBatch);
+        setButton(scoresSprite, scoresBatch);
+        setButton(detailsSprite, detailsBatch);
+        setButton(quitSprite, quitBatch);
+
+        updatePuckMenu();
+        renderGame.drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
+
+        if (inRange(scoresSprite) && Gdx.input.justTouched()) {
+            showScores = !showScores;
+        }
+        if (showScores) {
+            drawLeaderboard(Gdx.graphics.getWidth() / 2 + offSetX,
+                    Gdx.graphics.getHeight() - offSetX);
+        }
+        if (inRange(playSprite) && Gdx.input.justTouched() && Render.secondAuthentication) {
             Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
-        } else if (playPressed(playSprite)) {
+        } else if (inRange(playSprite) && Gdx.input.justTouched()) {
             Render.changeGameStrategy(Render.ApplicationStrategy.LOGIN);
         }
-        if (quitButtonPressed(quitSprite)) {
+        if (inRange(quitSprite) && Gdx.input.justTouched()) {
             exit(0);
         }
+    }
+
+    /**
+     * This method changes the puck position according to the rules of Air Hockey.
+     */
+    public void updatePuckMenu() {
+        puck.translateMenu(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     /**
@@ -88,10 +135,12 @@ public class RenderMenu implements RenderStrategy {
         homeBatch.dispose();
         playBatch.dispose();
         scoresBatch.dispose();
+        detailsBatch.dispose();
         quitBatch.dispose();
         home.dispose();
         play.dispose();
         scores.dispose();
+        details.dispose();
         quit.dispose();
     }
 
@@ -114,27 +163,20 @@ public class RenderMenu implements RenderStrategy {
     }
 
     /**
-     * Sets the play sprite and batch.
-     * Here the play button will be displayed just above the middle of the menu screen.
+     * Sets the sprite and batch of the button.
      * This method will be called in render as long as you are on the menu screen.
      * At start of the method the batch will begin to draw and at the end it will dispose.
+     * If the mouse is in the range of the button, it will turn sky blue.
      *
      * @param sprite the sprite to draw
      * @param batch  the batch to render
      */
-    public static void setPlayButton(Sprite sprite, SpriteBatch batch) {
+    public static void setButton(Sprite sprite, SpriteBatch batch) {
         batch.begin();
-        batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
-                sprite.getY() + sprite.getHeight() / 2);
+        batch.draw(sprite, sprite.getX(),
+                sprite.getY());
 
-        if (Gdx.input.getX() > (sprite.getX() - sprite.getWidth() / 2)
-                && Gdx.input.getX() < (sprite.getX()
-                + sprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (sprite.getY() + sprite.getHeight() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (sprite.getY() + sprite.getHeight() * 3 / 2)
-        ) {
+        if (inRange(sprite)) {
             batch.setColor(Color.SKY);
         } else {
             batch.setColor(Color.WHITE);
@@ -143,101 +185,54 @@ public class RenderMenu implements RenderStrategy {
     }
 
     /**
-     * When 'play' is pressed, return true, else return false.
-     * This method will be called in render as long as you are on the menu screen.
+     * Check if the mouse is inside of a sprite. If it is, return true.
+     * Else return false.
      *
-     * @param sprite the sprite to draw
-     * @return a boolean whether play is pressed
+     * @param sprite the sprite to get the range from
+     * @return true if the mouse is inside of the sprite
      */
-    public static boolean playPressed(Sprite sprite) {
-        if (Gdx.input.justTouched() && Gdx.input.getX() > (sprite.getX() - sprite.getWidth() / 2)
-                && Gdx.input.getX() < (sprite.getX()
-                + sprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (sprite.getY() + sprite.getHeight() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (sprite.getY() + sprite.getHeight() * 3 / 2)
-        ) {
-            return true;
-        }
-        return false;
+    public static boolean inRange(Sprite sprite) {
+        return sprite.getBoundingRectangle().contains(Gdx.input.getX(),
+                Gdx.graphics.getHeight() - Gdx.input.getY());
     }
 
     /**
-     * Sets the scores sprite and batch.
-     * Here the scores button will be displayed on the middle of the menu screen.
-     * This method will be called in render as long as you are on the menu screen.
-     * At start of the method the batch will begin to draw and at the end it will dispose.
+     * Method for Drawing the Top 10 Scores.
+     * When you press scores on the menu screen you will be shown them.
+     * Press it another time and they'll disappear.
      *
-     * @param sprite the sprite to draw
-     * @param batch  the batch to render
+     * @param posX The x coordinate of the first score
+     * @param posY The y coordinate of the first score
      */
-    public static void setScoresButton(Sprite sprite, SpriteBatch batch) {
-        batch.begin();
-        batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
-                sprite.getY() - sprite.getHeight() / 2);
+    public void drawLeaderboard(float posX, float posY) {
+        if (leaderboard == null) {
+            LeaderboardController leaderboardController =
+                    new LeaderboardController(connectionFactory);
 
-        if (Gdx.input.getX() > (sprite.getX() - sprite.getWidth() / 2)
-                && Gdx.input.getX() < (sprite.getX() + sprite.getWidth() / 2)
-                && Gdx.input.getY() > (sprite.getY() - sprite.getHeight() / 2)
-                && Gdx.input.getY() < (sprite.getY() + sprite.getHeight() / 2)
-        ) {
-            batch.setColor(Color.SKY);
-        } else {
-            batch.setColor(Color.WHITE);
+            leaderboard = leaderboardController.getTopTen();
         }
-        batch.end();
+        for (int i = 0; i < 10; i++) {
+            LeaderboardInstance score = leaderboard.get(i);
+            setText((i + 1) + ". " + score.getNickname() + " " + score.getPoints(),
+                    posX, posY);
+
+            posY -= 50;
+        }
     }
 
     /**
-     * Sets the quit sprite and batch.
-     * Here the quit button is displayed on just below the middle of the menu screen.
-     * This method will be called in render as long as you are on the menu screen.
-     * At start of the method the batch will begin to draw and at the end it will dispose.
-     *
-     * @param sprite the sprite to draw
-     * @param batch  the batch to render
+     * Draw text on the screen.
+     * @param str Text to display on screen
+     * @param posX The x coordinate of the text
+     * @param posY The y coordinate of the text
      */
-    public static void setQuitButton(Sprite sprite, SpriteBatch batch) {
-        batch.begin();
-        batch.draw(sprite, sprite.getX() - sprite.getWidth() / 2,
-                sprite.getY() - sprite.getHeight() * 2);
-
-        if (Gdx.input.getX()
-                > (sprite.getX() - sprite.getWidth() / 2)
-                && Gdx.input.getX() < (sprite.getX() + sprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (sprite.getY() - sprite.getHeight() * 3 / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (sprite.getY() - sprite.getHeight() / 2)
-        ) {
-            batch.setColor(Color.SKY);
-        } else {
-            batch.setColor(Color.WHITE);
-        }
-
-        batch.end();
+    public void setText(String str, float posX, float posY) {
+        BitmapFont font = new BitmapFont();
+        homeBatch.begin();
+        font.setColor(0,0,0,1);
+        font.getData().setScale(4);
+        font.draw(homeBatch, str, posX,
+                posY);
+        homeBatch.end();
     }
-
-    /**
-     * This method will return true when 'quit' is pressed and false otherwise.
-     * This method will be called in render as long as you are on the menu screen.
-     * Once quit is pressed, the render method will make sure you will leave the game.
-     *
-     * @param sprite the sprite to draw.
-     * @return a boolean, true if 'quit' is pressed or not.
-     */
-    public static boolean quitButtonPressed(Sprite sprite) {
-        if (Gdx.input.justTouched() && Gdx.input.getX()
-                > (sprite.getX() - sprite.getWidth() / 2)
-                && Gdx.input.getX() < (sprite.getX() + sprite.getWidth() / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                > (sprite.getY() - sprite.getHeight() * 3 / 2)
-                && Gdx.graphics.getHeight() - Gdx.input.getY()
-                < (sprite.getY() - sprite.getHeight() / 2)) {
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -173,7 +173,7 @@ public class RenderGame implements RenderStrategy {
             posY -= 50;
         }
 
-        drawText("Press ENTER to go back to menu", 0, 0);
+        drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
     }
 
     /**
