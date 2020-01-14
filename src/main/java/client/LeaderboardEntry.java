@@ -19,7 +19,8 @@ public class LeaderboardEntry {
      * Empty Constructor.
      */
     public LeaderboardEntry(){
-
+        this.nickname = "";
+        this.points = 0;
     }
 
     public String getNickname() {

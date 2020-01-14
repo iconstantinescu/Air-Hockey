@@ -5,7 +5,7 @@ import menu.RenderLogin;
 import menu.RenderMenu;
 
 /**
- * The render method is the one passed to the Game class such
+ * The render method is the one passed to the Main class such
  * that the render method can be called in a loop.
  */
 public class Render extends ApplicationAdapter {
@@ -41,8 +41,8 @@ public class Render extends ApplicationAdapter {
     }
 
     /**
-     * Method that changes the state of the Game.
-     * @param newGameState The New Game State
+     * Method that changes the state of the Main.
+     * @param newGameState The New Main State
      */
     public static void changeGameState(GameState newGameState) {
         gameState = newGameState;

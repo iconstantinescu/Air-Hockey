@@ -11,7 +11,7 @@ import game.Render;
 import game.Renderer;
 
 /**
- * The specific renderer of the Game Menu.
+ * The specific renderer of the Main Menu.
  * Here the menu screen, all buttons and button actions are created and set.
  */
 public class RenderMenu implements Renderer {
@@ -62,7 +62,7 @@ public class RenderMenu implements Renderer {
     /**
      * Run the menu for in the main game renderer.
      * Call the methods to set the homeScreen, the playButton, the scoresButton and the QuitButton.
-     * Once play is pressed, you will leave the menu and go into the Game.
+     * Once play is pressed, you will leave the menu and go into the Main.
      * Once quit is pressed, you will exit the application with exit code: 0
      * This means that everything went fine.
      */

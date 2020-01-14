@@ -10,8 +10,8 @@ public class GameDetails {
     /**
      * The username of the two players playing the game.
      */
-    private transient String username1;
-    private transient String username2;
+    private transient String nickname1;
+    private transient String nickname2;
 
     /**
      * The scores of the two players playing the game.
@@ -24,37 +24,40 @@ public class GameDetails {
 
     /**
      * Constructor for client.GameDetails class.
-     * @param username1 username of first player
-     * @param username2 username of second player
+     * @param nickname1 username of first player
+     * @param nickname2 username of second player
      * @param scoreUser1 score of the first player
      * @param scoreUser2 score of the second player
      * @param timestamp timestamp of the game
      */
-    public GameDetails(String username1, String username2,
+    public GameDetails(String nickname1, String nickname2,
                        int scoreUser1, int scoreUser2,
                        Timestamp timestamp) {
 
+        assert (scoreUser1 == 5 || scoreUser2 == 5);
+
         this.scoreUser1 = scoreUser1;
         this.scoreUser2 = scoreUser2;
-        this.username1 = username1;
-        this.username2 = username2;
+        this.nickname1 = nickname1;
+        this.nickname2 = nickname2;
         this.timestamp = timestamp;
+
     }
 
     public GameDetails() {
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
-        this.username1 = "";
-        this.username2 = "";
+        this.nickname1 = "";
+        this.nickname2 = "";
         this.timestamp = new Timestamp(0);
     }
 
-    public String getUsername1() {
-        return username1;
+    public String getNickname1() {
+        return nickname1;
     }
 
-    public String getUsername2() {
-        return username2;
+    public String getNickname2() {
+        return nickname2;
     }
 
     public int getScoreUser1() {
@@ -69,19 +72,21 @@ public class GameDetails {
         return timestamp;
     }
 
-    public void setUsername1(String username1) {
-        this.username1 = username1;
+    public void setNickname1(String nickname1) {
+        this.nickname1 = nickname1;
     }
 
-    public void setUsername2(String username2) {
-        this.username2 = username2;
+    public void setNickname2(String nickname2) {
+        this.nickname2 = nickname2;
     }
 
     public void setScoreUser1(int scoreUser1) {
+        assert (scoreUser1 <= 5 && scoreUser1 >= 0);
         this.scoreUser1 = scoreUser1;
     }
 
     public void setScoreUser2(int scoreUser2) {
+        assert (scoreUser2 <= 5 && scoreUser2 >= 0);
         this.scoreUser2 = scoreUser2;
     }
 

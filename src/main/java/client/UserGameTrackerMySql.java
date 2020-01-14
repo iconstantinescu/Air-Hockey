@@ -110,9 +110,9 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             while (rs.next()) {
 
                 GameDetails game = new GameDetails();
-                game.setUsername1(getNicknameById(rs.getInt("user_id_1")));
+                game.setNickname1(getNicknameById(rs.getInt("user_id_1")));
                 game.setScoreUser1(rs.getInt("score_user_1"));
-                game.setUsername2(getNicknameById(rs.getInt("user_id_2")));
+                game.setNickname2(getNicknameById(rs.getInt("user_id_2")));
                 game.setScoreUser2(rs.getInt("score_user_2"));
                 game.setTimestamp(new Timestamp(rs.getLong("game_timestamp")));
 

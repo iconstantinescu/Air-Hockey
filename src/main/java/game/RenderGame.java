@@ -15,7 +15,7 @@ import objects.Pusher;
 import objects.ScoreBoard;
 
 /**
- * The specific Game renderer inheriting from the general Renderer.
+ * The specific Main renderer inheriting from the general Renderer.
  */
 public class RenderGame implements Renderer {
     private transient ShapeRenderer shape;

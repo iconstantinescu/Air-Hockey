@@ -6,13 +6,13 @@ import java.util.List;
 public class Leaderboard {
 
     public List<LeaderboardEntry> leaderboardList;
-    public int size;
+    public int sizeLimit;
 
     /**
      * Empty Constructor.
      */
     public Leaderboard() {
-        this.size = 0;
+        this.sizeLimit = 0;
         leaderboardList = new ArrayList<>();
     }
 
@@ -22,12 +22,12 @@ public class Leaderboard {
      * @param size the maximum allowed size of the leaderboard list
      */
     public Leaderboard(List<LeaderboardEntry> leaderboardList, int size) {
-        this.size = size;
+        this.sizeLimit = size;
 
-        if (leaderboardList.size() <= this.size) {
+        if (leaderboardList.size() <= this.sizeLimit) {
             this.leaderboardList = leaderboardList;
         } else {
-            this.leaderboardList = leaderboardList.subList(0, this.size);
+            this.leaderboardList = leaderboardList.subList(0, this.sizeLimit);
         }
     }
 
@@ -45,10 +45,10 @@ public class Leaderboard {
      */
     public void setLeaderboardList(List<LeaderboardEntry> leaderboardList) {
 
-        if (leaderboardList.size() <= this.size) {
+        if (leaderboardList.size() <= this.sizeLimit) {
             this.leaderboardList = leaderboardList;
         } else {
-            this.leaderboardList = leaderboardList.subList(0, this.size);
+            this.leaderboardList = leaderboardList.subList(0, this.sizeLimit);
         }
     }
 
@@ -59,7 +59,7 @@ public class Leaderboard {
      */
     public boolean addEntry(LeaderboardEntry newEntry) {
 
-        if (leaderboardList.size() < this.size) {
+        if (leaderboardList.size() < this.sizeLimit) {
             leaderboardList.add(newEntry);
         } else {
             return false;
@@ -72,16 +72,25 @@ public class Leaderboard {
      * Return the max size of the leaderboard (not current size).
      * @return the maximum leaderboard size
      */
-    public int getSize() {
-        return this.size;
+    public int getSizeLimit() {
+        return this.sizeLimit;
     }
 
     /**
      * Change the maximum size of the leaderboard.
+     * If the new size is smaller than the list size, trim the list.
      * @param newSize the new size
      */
-    public void setSize(int newSize) {
-        this.size = newSize;
+    public void setSizeLimit(int newSize) {
+        this.sizeLimit = newSize;
+
+        if(this.leaderboardList.size() > newSize) {
+            this.leaderboardList.subList(0, newSize);
+        }
+    }
+
+    public int getCurrentSize() {
+        return this.leaderboardList.size();
     }
 
 }

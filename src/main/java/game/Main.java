@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * The class containing the main which is calling the rendering methods.
  */
-public class Game {
+public class Main {
 
     /**
      * Main function of the game, where the window is being created,
