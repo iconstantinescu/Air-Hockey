@@ -44,6 +44,8 @@ public class RenderMenu implements Renderer {
     private static List<LeaderboardInstance> leaderboard;
     private transient boolean showScores;
     private transient RenderGame renderGame = new RenderGame();
+    private static final int offSetX = 150;
+    private static final int offSetY = 110;
 
     /**
      * This is the renderer for the menu.
@@ -58,8 +60,6 @@ public class RenderMenu implements Renderer {
         detailsBatch = new SpriteBatch();
         quitBatch = new SpriteBatch();
 
-        int offSetX = 150;
-        int offSetY = 110;
         home = new Texture("media/home.png");
         homeSprite = new Sprite(home);
         homeSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -108,7 +108,8 @@ public class RenderMenu implements Renderer {
             showScores = !showScores;
         }
         if (showScores) {
-            drawLeaderboard(Gdx.graphics.getWidth() / 2 + 150, Gdx.graphics.getHeight() - 150);
+            drawLeaderboard(Gdx.graphics.getWidth() / 2 + offSetX,
+                    Gdx.graphics.getHeight() - offSetX);
         }
         if (inRange(playSprite) && Gdx.input.justTouched()) {
             Render.changeGameState(Render.GameState.GAME);
