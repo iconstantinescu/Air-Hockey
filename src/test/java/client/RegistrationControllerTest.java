@@ -1,7 +1,7 @@
 package client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.anyString;
 
 import java.sql.Connection;
@@ -31,7 +31,7 @@ class RegistrationControllerTest {
     private transient ConnectionFactory connectionFactory;
 
     @BeforeEach
-    void setUp() throws SQLException, ClassNotFoundException {
+    void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
@@ -41,11 +41,11 @@ class RegistrationControllerTest {
     }
 
     @Test
-    public void testCreateNewUser() throws SQLException {
+    public void testCreateNewUser() {
 
         boolean created = registrationController
                 .createNewUser("user", "pwd", "john");
-        assertEquals(true, created);
+        assertTrue(created);
     }
 
     @Test
@@ -56,6 +56,8 @@ class RegistrationControllerTest {
 
         assertFalse(registrationController.createNewUser("user", "pwd", "john"));
     }
+
+
 
 
 }

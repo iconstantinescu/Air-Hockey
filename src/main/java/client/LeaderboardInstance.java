@@ -18,8 +18,9 @@ public class LeaderboardInstance {
     /**
      * Empty Constructor.
      */
-    public LeaderboardInstance(){
-
+    public LeaderboardInstance() {
+        this.nickname = "";
+        this.points = 0;
     }
 
     public String getNickname() {

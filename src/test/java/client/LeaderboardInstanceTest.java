@@ -1,9 +1,9 @@
 package client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LeaderboardInstanceTest {
 
@@ -17,6 +17,13 @@ public class LeaderboardInstanceTest {
         nickname = "john";
         points = 100;
         leaderboardInstance = new LeaderboardInstance(nickname, points);
+    }
+
+    @Test
+    void testEmptyConstructor() {
+        LeaderboardInstance leaderboardInstanceEmpty = new LeaderboardInstance();
+        assertEquals("", leaderboardInstanceEmpty.getNickname());
+        assertEquals(0, leaderboardInstanceEmpty.getPoints());
     }
 
     @Test

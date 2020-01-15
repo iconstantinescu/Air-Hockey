@@ -1,9 +1,9 @@
 package menu;
 
 import client.AuthenticationController;
-import client.Client;
 
 import client.ConnectionFactory;
+import client.RegistrationController;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -143,11 +143,13 @@ public class RenderLogin implements RenderStrategy {
     public void loginClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        Client auth = new Client();
+        AuthenticationController auth =
+                new AuthenticationController(new ConnectionFactory());
 
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
-        if (auth.authenticate(passInput, nameInput)) {
+        String salt = auth.getSalt(nameInput);
+        if (auth.authenticate(passInput, nameInput, salt)) {
             System.out.println("user " + nameInput + " authenticated");
             idGetter = new AuthenticationController(new ConnectionFactory());
             if (Render.userID1 == -1) {
@@ -168,8 +170,8 @@ public class RenderLogin implements RenderStrategy {
     public void registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        Client auth = new Client();
-        auth.register(nameInput, passInput, nameInput);
+        RegistrationController register =  new RegistrationController(new ConnectionFactory());
+        register.createNewUser(nameInput, passInput, nameInput);
     }
 
     /**
