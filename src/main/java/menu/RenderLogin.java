@@ -32,6 +32,8 @@ public class RenderLogin implements RenderStrategy {
     transient TextButton registerButton;
     transient Label passwordText;
     transient Label usernameText;
+    transient Label playerLoginText;
+    transient Label error;
     transient Skin skin;
     private transient AuthenticationController idGetter;
 
@@ -43,8 +45,20 @@ public class RenderLogin implements RenderStrategy {
      */
     public RenderLogin() {
 
+
+
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
+        System.out.println(Render.userID1 + "id 1");
+        System.out.println(Render.userID2 + " id 2");
+
+        // check if player 1 or 2 is logging in
+        if (Render.userID1 <= 0) {
+            playerLoginText = new Label("Login Player 1", skin);
+        } else {
+            playerLoginText = new Label("Login Player 2", skin);
+        }
+
         float centerW = Gdx.graphics.getWidth() / 2;
         float centerH = Gdx.graphics.getHeight() / 2;
 
@@ -55,6 +69,10 @@ public class RenderLogin implements RenderStrategy {
         float usernameX = centerW - username.getWidth() / 2;
         float usernameY = centerH + username.getHeight();
         username.setPosition(usernameX,usernameY);
+
+        playerLoginText.setSize(300, 50);
+        playerLoginText.setPosition(usernameX, usernameY + 60);
+
 
         password = new TextField("", skin);
         password.setSize(400,40);
@@ -89,12 +107,14 @@ public class RenderLogin implements RenderStrategy {
         passwordText.setSize(100, 40);
         passwordText.setPosition(usernameX - 110, usernameY - username.getHeight() - 5);
 
+        error = new Label("", skin);
+        error.setSize(300, 50);
+        error.setPosition(usernameX, usernameY - username.getHeight() * 2 - 70);
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 loginClicked();
-
-
+                error.setText("Login failed, try again");
             }
         });
 
@@ -102,7 +122,7 @@ public class RenderLogin implements RenderStrategy {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 registerClicked();
-
+                error.setText("your account has been registered, please login");
 
             }
         });
@@ -113,7 +133,8 @@ public class RenderLogin implements RenderStrategy {
         stage.addActor(password);
         stage.addActor(usernameText);
         stage.addActor(passwordText);
-
+        stage.addActor(playerLoginText);
+        stage.addActor(error);
         Gdx.input.setInputProcessor(stage);
     }
 
