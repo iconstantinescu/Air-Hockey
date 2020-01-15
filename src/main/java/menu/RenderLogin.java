@@ -115,6 +115,7 @@ public class RenderLogin implements RenderStrategy {
             public void clicked(InputEvent event, float x, float y) {
                 loginClicked();
                 error.setText("Login failed, try again");
+                error.setColor(100, 0,0,1);
             }
         });
 
@@ -124,8 +125,10 @@ public class RenderLogin implements RenderStrategy {
                 boolean registered = registerClicked();
                 if (registered) {
                     error.setText("your account has been registered, please login");
+                    error.setColor(0, 100,0,1);
                 } else {
                     error.setText("There has been a problem, try another username");
+                    error.setColor(100, 0,0,1);
                 }
 
             }
