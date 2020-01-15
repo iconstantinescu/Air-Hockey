@@ -30,11 +30,11 @@ public class Client {
      * @param nameInput inputted name.
      * @param nickname  inputted nickname.
      */
-    public void register(String nameInput, String passInput, String nickname) {
+    public boolean register(String nameInput, String passInput, String nickname) {
         RegistrationController registrationController =
                 new RegistrationController(new ConnectionFactory());
-        registrationController.createNewUser(nameInput, passInput, nameInput);
-        System.out.println("registration called " + nameInput);
+        return registrationController.createNewUser(nameInput, passInput, nameInput);
+
     }
 
 

@@ -121,8 +121,12 @@ public class RenderLogin implements RenderStrategy {
         registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                registerClicked();
-                error.setText("your account has been registered, please login");
+                boolean registered = registerClicked();
+                if (registered) {
+                    error.setText("your account has been registered, please login");
+                } else {
+                    error.setText("There has been a problem, try another username");
+                }
 
             }
         });
@@ -186,11 +190,11 @@ public class RenderLogin implements RenderStrategy {
     /**
      * calls to register user.
      */
-    public void registerClicked() {
+    public boolean registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
         Client auth = new Client();
-        auth.register(nameInput, passInput, nameInput);
+        return auth.register(nameInput, passInput, nameInput);
     }
 
     /**
