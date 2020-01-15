@@ -163,7 +163,7 @@ public class RenderGame implements RenderStrategy {
             LeaderboardController leaderboardController =
                     new LeaderboardController(connectionFactory);
 
-            leaderboard = leaderboardController.getTopFive();
+            leaderboard = leaderboardController.getTopN(5);
         }
         for (int i = 0; i < 5; i++) {
             LeaderboardInstance score = leaderboard.get(i);
