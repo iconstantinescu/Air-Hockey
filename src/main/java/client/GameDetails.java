@@ -1,6 +1,7 @@
 package client;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * Class that contains the details of a single match between two players.
@@ -92,6 +93,18 @@ public class GameDetails {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameDetails that = (GameDetails) o;
+        return scoreUser1 == that.scoreUser1 &&
+                scoreUser2 == that.scoreUser2 &&
+                Objects.equals(nickname1, that.nickname1) &&
+                Objects.equals(nickname2, that.nickname2) &&
+                Objects.equals(timestamp, that.timestamp);
     }
 
 }

@@ -16,6 +16,7 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
     public Leaderboard getLeaderboard(int size) {
 
         Leaderboard leaderboard = new Leaderboard();
+        leaderboard.setSizeLimit(size);
         try {
 
             conn = connectionFactory.createConnection(URL);

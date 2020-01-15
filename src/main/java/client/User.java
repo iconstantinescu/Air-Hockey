@@ -1,6 +1,7 @@
 package client;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Class that encapsulates user details in a user object.
@@ -98,6 +99,19 @@ public class User {
 
     public int getNumOfGamesPlayed() {
         return  this.gamesLost + this.gamesWon;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userID == user.userID &&
+                points == user.points &&
+                gamesLost == user.gamesLost &&
+                gamesWon == user.gamesWon &&
+                Objects.equals(nickname, user.nickname) &&
+                Objects.equals(gameHistory, user.gameHistory);
     }
 
 }

@@ -30,7 +30,6 @@ public class UserAuthenticationMySqlTest {
 
     private transient String username;
     private transient String pwd;
-    private transient String hashedPwd;
     private transient String salt;
 
     @BeforeEach
@@ -44,17 +43,17 @@ public class UserAuthenticationMySqlTest {
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
 
         pwd = "pwd";
-        hashedPwd = BcryptHashing.hashPassword(pwd);
+        BcryptHashing.hashPassword(pwd);
         salt = BcryptHashing.getSalt();
         username = "user";
     }
 
-    /*
     @Test
     public void testAuthenticateOk() throws SQLException {
 
-        Mockito.when(mockResultSet.getString("salt")).thenReturn(salt);
+        Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
 
+        Mockito.when(mockResultSet.getString("salt")).thenReturn(salt);
         Mockito.when(mockResultSet.getInt("user_id")).thenReturn(1);
         Mockito.when(mockResultSet.getString("nickname")).thenReturn("name");
         Mockito.when(mockResultSet.getLong("points")).thenReturn(100L);
@@ -64,8 +63,8 @@ public class UserAuthenticationMySqlTest {
         User authenticatedUser = authenticationMySql.authenticate(username, pwd);
 
         User user =  new User(1, "name", 100L, 2, 3);
-        //assertEquals(user, authenticatedUser);
-    }*/
+        assertEquals(user, authenticatedUser);
+    }
 
     @Test
     public void testAuthenticateFailed() throws SQLException {

@@ -2,6 +2,7 @@ package client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Leaderboard {
 
@@ -91,6 +92,15 @@ public class Leaderboard {
 
     public int getCurrentSize() {
         return this.leaderboardList.size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Leaderboard that = (Leaderboard) o;
+        return sizeLimit == that.sizeLimit &&
+                Objects.equals(leaderboardList, that.leaderboardList);
     }
 
 }

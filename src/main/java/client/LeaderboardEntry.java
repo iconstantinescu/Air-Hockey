@@ -1,5 +1,7 @@
 package client;
 
+import java.util.Objects;
+
 public class LeaderboardEntry {
 
     private String nickname;
@@ -37,6 +39,15 @@ public class LeaderboardEntry {
 
     public void setPoints(long points) {
         this.points = points;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeaderboardEntry that = (LeaderboardEntry) o;
+        return points == that.points &&
+                Objects.equals(nickname, that.nickname);
     }
 
 }
