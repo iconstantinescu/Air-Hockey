@@ -20,6 +20,10 @@ public class Client {
         AuthenticationController authenticationController =
                 new AuthenticationController(new ConnectionFactory());
         String salt = authenticationController.getSalt(nameInput);
+
+        if (salt.equals("")) {
+            return false;
+        }
         return authenticationController.authenticate(nameInput, passInput, salt);
     }
 
