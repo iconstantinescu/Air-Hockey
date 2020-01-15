@@ -13,6 +13,7 @@ public class UserDaoMySql implements UserDao {
         this.userRegistration = new UserRegistrationMySql(new ConnectionFactory());
         this.userGameTracker = new UserGameTrackerMySql(new ConnectionFactory());
     }
+
     @Override
     public User authenticate(String username, String password) {
         return userAuthentication.authenticate(username, password);

@@ -36,7 +36,7 @@ public class UserGameTrackerMySqlTest {
      * @throws ClassNotFoundException Exception in case the class is not found
      */
     @BeforeEach
-    public void setUp() throws SQLException, ClassNotFoundException {
+    public void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);

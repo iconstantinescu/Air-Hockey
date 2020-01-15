@@ -34,7 +34,7 @@ public class GameDetails {
                        int scoreUser1, int scoreUser2,
                        Timestamp timestamp) {
 
-        assert (scoreUser1 == 5 || scoreUser2 == 5);
+        //assert (scoreUser1 == 5 || scoreUser2 == 5);
 
         this.scoreUser1 = scoreUser1;
         this.scoreUser2 = scoreUser2;
@@ -81,12 +81,12 @@ public class GameDetails {
     }
 
     public void setScoreUser1(int scoreUser1) {
-        assert (scoreUser1 <= 5 && scoreUser1 >= 0);
+        //assert (scoreUser1 <= 5 && scoreUser1 >= 0);
         this.scoreUser1 = scoreUser1;
     }
 
     public void setScoreUser2(int scoreUser2) {
-        assert (scoreUser2 <= 5 && scoreUser2 >= 0);
+        //assert (scoreUser2 <= 5 && scoreUser2 >= 0);
         this.scoreUser2 = scoreUser2;
     }
 
