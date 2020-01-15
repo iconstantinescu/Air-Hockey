@@ -117,4 +117,63 @@ class PuckTest {
         assertTrue(puck.getPuckState() instanceof OutOfGatesState);
     }
 
+
+    @Test
+    void translateMenu() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.translateMenu(1920, 1080);
+
+        assertEquals(1202, puck.getposX());
+        assertEquals(602, puck.getposY());
+    }
+
+    @Test
+    void setPuckState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.setPuckState(new OutOfGatesState());
+
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
+    }
+
+    @Test
+    void outToOutState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.setPuckState(new OutOfGatesState());
+
+        puck.checkCurrentState(700);
+
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
+    }
+
+    @Test
+    void gateToGateState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.setPuckState(new GateAlignedState());
+
+        puck.checkCurrentState(1200);
+
+        assertTrue(puck.getPuckState() instanceof GateAlignedState);
+    }
+
+    @Test
+    void checkCurrentStateOutState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.checkCurrentState(700);
+
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
+    }
+
+    @Test
+    void checkCurrentStateGateState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.checkCurrentState(1200);
+
+        assertTrue(puck.getPuckState() instanceof GateAlignedState);
+    }
 }
