@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class User {
 
     private transient int userID;
-    private transient  String nickname;
+    private transient String nickname;
     private transient long points;
     private transient int gamesLost;
     private transient int gamesWon;

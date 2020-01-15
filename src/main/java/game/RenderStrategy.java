@@ -5,7 +5,7 @@ package game;
  * 2 methods, one that specifies what to render and one that specifies
  * what to dispose of once the application is terminated.
  */
-public interface Renderer {
+public interface RenderStrategy {
 
     /**
      * The run method specifies the general behaviour of the renderer which will be

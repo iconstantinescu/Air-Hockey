@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
 import game.RenderGame;
-import game.Renderer;
+import game.RenderStrategy;
 import java.util.List;
 import objects.Puck;
 import objects.ScoreBoard;
@@ -22,7 +22,7 @@ import objects.ScoreBoard;
  * The specific renderer of the Game Menu.
  * Here the menu screen, all buttons and button actions are created and set.
  */
-public class RenderMenu implements Renderer {
+public class RenderMenu implements RenderStrategy {
     private transient SpriteBatch homeBatch;
     private transient SpriteBatch playBatch;
     private transient SpriteBatch scoresBatch;
@@ -111,8 +111,10 @@ public class RenderMenu implements Renderer {
             drawLeaderboard(Gdx.graphics.getWidth() / 2 + offSetX,
                     Gdx.graphics.getHeight() - offSetX);
         }
-        if (inRange(playSprite) && Gdx.input.justTouched()) {
-            Render.changeGameState(Render.GameState.GAME);
+        if (inRange(playSprite) && Gdx.input.justTouched() && Render.secondAuthentication) {
+            Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
+        } else if (inRange(playSprite) && Gdx.input.justTouched()) {
+            Render.changeGameStrategy(Render.ApplicationStrategy.LOGIN);
         }
         if (inRange(quitSprite) && Gdx.input.justTouched()) {
             exit(0);

@@ -1,5 +1,6 @@
 package game;
 
+import client.User;
 import com.badlogic.gdx.ApplicationAdapter;
 import menu.RenderLogin;
 import menu.RenderMenu;
@@ -10,17 +11,21 @@ import menu.RenderMenu;
  */
 public class Render extends ApplicationAdapter {
 
+    public static int userID1;
+    public static int userID2;
+    public static boolean secondAuthentication;
+
     /**
-     *  An enumeration of the possible states of the application.
+     *  An enumeration of the possible render strategies of the application.
      */
-    public enum GameState {
+    public enum ApplicationStrategy {
         LOGIN,
         MENU,
         GAME
     }
 
-    protected static GameState gameState;
-    private static Renderer renderer;
+    private static ApplicationStrategy applicationStrategy;
+    private static RenderStrategy renderStrategy;
 
     /**
      * This method is only being run once, initializing the application.
@@ -28,8 +33,10 @@ public class Render extends ApplicationAdapter {
     @Override
     public void create() {
         // Initialize the login as the first login.
-        gameState = GameState.LOGIN;
-        renderer = new RenderLogin();
+        renderStrategy = new RenderLogin();
+        this.userID1 = -1;
+        this.userID2 = -1;
+        this.secondAuthentication = false;
     }
 
     /**
@@ -37,24 +44,24 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void render() {
-        renderer.run();
+        renderStrategy.run();
     }
 
     /**
-     * Method that changes the state of the Game.
-     * @param newGameState The New Game State
+     * Method that changes the render strategy of the application.
+     * @param newApplicationStrategy The New Render Strategy
      */
-    public static void changeGameState(GameState newGameState) {
-        gameState = newGameState;
-        switch (gameState) {
+    public static void changeGameStrategy(ApplicationStrategy newApplicationStrategy) {
+        applicationStrategy = newApplicationStrategy;
+        switch (applicationStrategy) {
             case LOGIN:
-                renderer = new RenderLogin();
+                renderStrategy = new RenderLogin();
                 break;
             case MENU:
-                renderer = new RenderMenu();
+                renderStrategy = new RenderMenu();
                 break;
             case GAME:
-                renderer = new RenderGame();
+                renderStrategy = new RenderGame();
                 break;
             default:
                 break;
@@ -68,8 +75,8 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void dispose() {
-        if (renderer != null) {
-            renderer.dispose();
+        if (renderStrategy != null) {
+            renderStrategy.dispose();
         }
     }
 

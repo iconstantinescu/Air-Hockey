@@ -1,10 +1,13 @@
 package game;
 
+import static com.badlogic.gdx.Input.Keys.ENTER;
+
 import client.ConnectionFactory;
 import client.LeaderboardController;
 import client.LeaderboardInstance;
 import client.ScoreController;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,21 +27,21 @@ import objects.ScoreBoard;
 /**
  * The specific Game renderer inheriting from the general Renderer.
  */
-public class RenderGame implements Renderer {
+public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
     private transient Puck puck;
-    private static boolean[] restricts1;
     private transient ScoreBoard scoreBoard;
     private transient Texture img;
     private transient Sprite sprite;
     private transient SpriteBatch batch;
     private transient ConnectionFactory connectionFactory;
-    private static Sound backSound;
+    private static final Music backSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
     private static Sound hitSound;
-    private static boolean databaseUpdated;
     private static List<LeaderboardInstance> leaderboard;
+    private static ScoreController scoreController;
 
 
     /**
@@ -62,7 +65,9 @@ public class RenderGame implements Renderer {
                 scoreBoard);
 
         // Initiate the Background Sound
-        SoundEffects.backgroundSound(backSound);
+        backSound.setLooping(true);
+        backSound.play();
+
 
         connectionFactory = new ConnectionFactory();
 
@@ -81,7 +86,10 @@ public class RenderGame implements Renderer {
             drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
                     Gdx.graphics.getHeight() - 100);
             // DRAW TOP SCORES
+            uploadMatch();
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
+            // GO BACK TO MENU IF ENTER IS PRESSED
+            waitForEnter();
         } else {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
@@ -113,6 +121,29 @@ public class RenderGame implements Renderer {
     }
 
     /**
+     * Method that uploads the match into the match history of the database,
+     * and adds points to the winner of the game.
+     */
+    public void uploadMatch() {
+        if (scoreController == null) {
+            scoreController = new ScoreController(connectionFactory);
+            int addPoints = 10 * Math.abs(scoreBoard.getPlayer1Score()
+                    - scoreBoard.getPlayer2Score());
+
+            // ADD POINTS TO WINNER
+            if (scoreBoard.getWinner()) {
+                scoreController.updatePoints(Render.userID1, addPoints);
+            } else {
+                scoreController.updatePoints(Render.userID2, addPoints);
+            }
+
+            // SAVE GAME INTO HISTORY
+            scoreController.saveGame(Render.userID1, Render.userID2,
+                    scoreBoard.getPlayer1Score(), scoreBoard.getPlayer2Score());
+        }
+    }
+
+    /**
      * Get the winner number (either 1 or 2).
      */
     public int winnerNumber() {
@@ -141,6 +172,8 @@ public class RenderGame implements Renderer {
 
             posY -= 50;
         }
+
+        drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
     }
 
     /**
@@ -190,6 +223,16 @@ public class RenderGame implements Renderer {
         }
         if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
             pusher.setposX(pusher.getposX() + 4);
+        }
+    }
+
+    /**
+     * Waits for Enter to be pressed to go back to the menu.
+     */
+    public void waitForEnter() {
+        if (Gdx.input.isKeyJustPressed(ENTER)) {
+            Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
+            backSound.dispose();
         }
     }
 
