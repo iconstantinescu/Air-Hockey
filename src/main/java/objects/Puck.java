@@ -52,6 +52,10 @@ public class Puck {
         return puckState;
     }
 
+    public void setPuckState(PuckState puckState) {
+        this.puckState = puckState;
+    }
+
     public void setRadius(float radius) {
         this.radius = radius;
     }
@@ -154,10 +158,5 @@ public class Puck {
             }
         }
     }
-
-
-
-
-
 
 }

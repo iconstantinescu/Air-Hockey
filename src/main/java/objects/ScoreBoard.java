@@ -40,7 +40,6 @@ public class ScoreBoard {
      * @return True for Player 1, false for Player 2
      */
     public boolean getWinner() {
-        assert isGameOver();
         return player1Score == endScore;
     }
 
