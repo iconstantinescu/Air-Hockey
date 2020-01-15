@@ -1,6 +1,8 @@
 package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.anyString;
 
 import java.sql.Connection;
@@ -55,14 +57,14 @@ public class ScoreControllerTest {
     @Test
     public void testUpdatePoints() throws SQLException {
 
-        assertEquals(true, scoreController.updatePoints(1,100));
+        assertTrue(scoreController.updatePoints(1,100));
 
     }
 
     @Test
     public void testSaveGame() {
 
-        assertEquals(true, scoreController.saveGame(1,2,5,4));
+        assertTrue(scoreController.saveGame(1,2,5,4));
 
     }
 
@@ -79,8 +81,8 @@ public class ScoreControllerTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        assertEquals(false, scoreController.saveGame(1,2,5,4));
-        assertEquals(false, scoreController.updatePoints(1,100));
+        assertFalse(scoreController.saveGame(1,2,5,4));
+        assertFalse(scoreController.updatePoints(1,100));
         assertEquals(0, scoreController.getGamesPlayed(1));
         assertEquals(0, scoreController.getPoints(1));
 

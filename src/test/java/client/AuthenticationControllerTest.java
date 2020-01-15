@@ -73,13 +73,23 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    public void testSqlException() throws SQLException, ClassNotFoundException {
+    public void testGetUserId() throws SQLException {
+
+        int id = 10;
+        Mockito.when(mockResultSet.getInt(1)).thenReturn(id);
+        assertEquals(10, authenticationController.getUserId("john"));
+
+    }
+
+    @Test
+    public void testSqlExceptions() throws SQLException {
 
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
         authenticationController.authenticate(username, pwd, salt);
         assertEquals("", authenticationController.getSalt(username));
+        assertEquals(-1, authenticationController.getUserId(username));
 
     }
 

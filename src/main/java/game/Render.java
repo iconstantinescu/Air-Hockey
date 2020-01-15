@@ -1,6 +1,5 @@
 package game;
 
-import client.User;
 import com.badlogic.gdx.ApplicationAdapter;
 import menu.RenderLogin;
 import menu.RenderMenu;

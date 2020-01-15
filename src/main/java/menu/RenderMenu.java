@@ -209,7 +209,7 @@ public class RenderMenu implements RenderStrategy {
             LeaderboardController leaderboardController =
                     new LeaderboardController(connectionFactory);
 
-            leaderboard = leaderboardController.getTopTen();
+            leaderboard = leaderboardController.getTopN(10);
         }
         for (int i = 0; i < 10; i++) {
             LeaderboardInstance score = leaderboard.get(i);

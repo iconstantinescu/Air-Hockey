@@ -1,13 +1,14 @@
 package client;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.anyString;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-
-class RegistrationControllerTest {
+class LeaderboardControllerTest {
 
     @InjectMocks
-    private transient RegistrationController registrationController;
+    private transient LeaderboardController leaderboardController;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -29,6 +29,7 @@ class RegistrationControllerTest {
     private transient ResultSet mockResultSet;
     @Mock
     private transient ConnectionFactory connectionFactory;
+
 
     @BeforeEach
     void setUp() throws SQLException {
@@ -41,11 +42,16 @@ class RegistrationControllerTest {
     }
 
     @Test
-    public void testCreateNewUser() {
+    void getTopN() throws SQLException {
 
-        boolean created = registrationController
-                .createNewUser("user", "pwd", "john");
-        assertTrue(created);
+        String nickname = "john";
+        int points = 100;
+        Mockito.when(mockResultSet.getString(1)).thenReturn(nickname);
+        Mockito.when(mockResultSet.getInt(2)).thenReturn(points);
+
+        List<LeaderboardInstance> resultList = leaderboardController.getTopN(1);
+        assertEquals(nickname, resultList.get(0).getNickname());
+        assertEquals(points, resultList.get(0).getPoints());
     }
 
     @Test
@@ -54,10 +60,6 @@ class RegistrationControllerTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        assertFalse(registrationController.createNewUser("user", "pwd", "john"));
+        assertEquals(new ArrayList<>(), leaderboardController.getTopN(0));
     }
-
-
-
-
 }
