@@ -45,8 +45,7 @@ public class LeaderboardDaoMySqlTest {
     @Test
     void getLeaderboard() throws SQLException {
 
-        Leaderboard leaderboard = new Leaderboard();
-        leaderboard.setSizeLimit(1);
+        Leaderboard leaderboard = new Leaderboard(1);
         LeaderboardEntry leaderboardEntry = new LeaderboardEntry("john", 100);
         leaderboard.addEntry(leaderboardEntry);
 
@@ -63,5 +62,14 @@ public class LeaderboardDaoMySqlTest {
         Mockito.when(mockResultSet.getInt(anyInt())).thenReturn(position);
         assertEquals(position, leaderboardDaoMySql.getLeaderboardPosition(1));
 
+    }
+
+    @Test
+    void testExceptions() throws SQLException {
+
+        Mockito.when(connectionFactory.createConnection(anyString()))
+                .thenThrow(new SQLException());
+        assertEquals(-1, leaderboardDaoMySql.getLeaderboardPosition(1));
+        assertEquals(new Leaderboard(10), leaderboardDaoMySql.getLeaderboard(10));
     }
 }

@@ -26,10 +26,10 @@ public class LeaderboardTest {
     }
 
     @Test
-    void testEmptyConstructor() {
-        Leaderboard emptyLeaderboard = new Leaderboard();
+    void testJustSizeConstructor() {
+        Leaderboard emptyLeaderboard = new Leaderboard(sizeLimit);
         assertEquals(new ArrayList<>(), emptyLeaderboard.getLeaderboardList());
-        assertEquals(0, emptyLeaderboard.getSizeLimit());
+        assertEquals(sizeLimit, emptyLeaderboard.getSizeLimit());
     }
 
     @Test

@@ -10,10 +10,10 @@ public class Leaderboard {
     public int sizeLimit;
 
     /**
-     * Empty Constructor.
+     * Specify just the size when creating.
      */
-    public Leaderboard() {
-        this.sizeLimit = 0;
+    public Leaderboard(int sizeLimit) {
+        this.sizeLimit = sizeLimit;
         leaderboardList = new ArrayList<>();
     }
 
