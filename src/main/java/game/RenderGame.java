@@ -1,6 +1,12 @@
 package game;
 
+import static com.badlogic.gdx.Input.Keys.ENTER;
+
+import client.ConnectionFactory;
+import client.Leaderboard;
+import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,26 +15,32 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import menu.SoundEffects;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
+
+
 /**
  * The specific Main renderer inheriting from the general Renderer.
  */
-public class RenderGame implements Renderer {
+public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
     private transient Puck puck;
-    private static boolean[] restricts1;
     private transient ScoreBoard scoreBoard;
     private transient Texture img;
     private transient Sprite sprite;
     private transient SpriteBatch batch;
-    private static Sound backSound;
+    private transient ConnectionFactory connectionFactory;
+    private static final Music backSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
     private static Sound hitSound;
+    private boolean matchUploaded;
+    private transient Leaderboard leaderboard;
 
     /**
      * Constructor for the Renderer.
@@ -46,11 +58,18 @@ public class RenderGame implements Renderer {
         // Set the objects sprites
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
-        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0);
-        scoreBoard = new ScoreBoard(0, 0);
+        scoreBoard = new ScoreBoard();
+        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0,
+                scoreBoard);
 
         // Initiate the Background Sound
-        SoundEffects.backgroundSound(backSound);
+        backSound.setLooping(true);
+        backSound.play();
+
+
+        connectionFactory = new ConnectionFactory();
+
+        matchUploaded = false;
 
     }
 
@@ -64,10 +83,13 @@ public class RenderGame implements Renderer {
 
         // DRAW THE PUCK OR GAME OVER
         if (scoreBoard.isGameOver()) {
-            drawText("Game Over", (Gdx.graphics.getWidth() / 2) - 150,
+            drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
                     Gdx.graphics.getHeight() - 100);
             // DRAW TOP SCORES
+            uploadMatch();
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
+            // GO BACK TO MENU IF ENTER IS PRESSED
+            waitForEnter();
         } else {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
@@ -99,17 +121,64 @@ public class RenderGame implements Renderer {
     }
 
     /**
+     * Method that uploads the match into the match history of the database,
+     * and adds points to the winner of the game.
+     */
+    public void uploadMatch() {
+        if (matchUploaded == false) {
+            int addPoints = 10 * Math.abs(scoreBoard.getPlayer1Score()
+                    - scoreBoard.getPlayer2Score());
+
+            // ADD POINTS TO WINNER
+            if (scoreBoard.getWinner()) {
+                Render.user1.addPoints(addPoints);
+                Render.userDao.updateUser(Render.user1);
+            } else {
+                Render.user2.addPoints(addPoints);
+                Render.userDao.updateUser(Render.user2);
+            }
+
+            // SAVE GAME INTO HISTORY
+            matchUploaded = Render.userDao.saveGame(Render.user1.getUserID(), Render.user2.getUserID(),
+                    scoreBoard.getPlayer1Score(), scoreBoard.getPlayer2Score());
+
+
+        }
+    }
+
+    /**
+     * Get the winner number (either 1 or 2).
+     */
+    public int winnerNumber() {
+        if (scoreBoard.getWinner()) {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
      * Method for Drawing the Top 5 Scores.
      * @param posX The x coordinate of the first score
      * @param posY The y coordinate of the first score
      */
     public void drawTopScores(float posX, float posY) {
-        for (int i = 1; i <= 5; i++) {
-            drawText(i + ". Name 100", posX,
-                    posY);
+        if (leaderboard == null) {
 
+            leaderboard = Render.leaderboardDao.getLeaderboard(5);
+
+        }
+
+        int i = 1;
+        for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
+
+            drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
+                    posX, posY);
+
+            i++;
             posY -= 50;
         }
+
+        drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
     }
 
     /**
@@ -149,16 +218,26 @@ public class RenderGame implements Renderer {
                 Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.input.isKeyPressed(keyCodes[0]) && !restricts[0]) {
-            pusher.setposY(pusher.getposY() + 4);
+            pusher.setposY(pusher.getposY() + 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[1]) && !restricts[2]) {
-            pusher.setposY(pusher.getposY() - 4);
+            pusher.setposY(pusher.getposY() - 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[2]) && !restricts[1]) {
-            pusher.setposX(pusher.getposX() - 4);
+            pusher.setposX(pusher.getposX() - 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
-            pusher.setposX(pusher.getposX() + 4);
+            pusher.setposX(pusher.getposX() + 6);
+        }
+    }
+
+    /**
+     * Waits for Enter to be pressed to go back to the menu.
+     */
+    public void waitForEnter() {
+        if (Gdx.input.isKeyJustPressed(ENTER)) {
+            Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
+            backSound.dispose();
         }
     }
 
@@ -196,19 +275,12 @@ public class RenderGame implements Renderer {
      * This method changes the puck position according to the rules of Air Hockey.
      */
     public void updatePuck() {
-        // Check if Puck can enter gate, if yes then act
-        if (puck.checkInGateRange(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())) {
-            puck.gateBehaviour(scoreBoard, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        } else {
-            puck.checkWallCollision(Gdx.graphics.getWidth(),
-                    Gdx.graphics.getHeight());
-        }
-
         // Collision between Pusher 1 and the puck
         pusher1.checkAndExecuteCollision(puck);
 
         // Check and execute collision between Pusher 2 and Puck
         pusher2.checkAndExecuteCollision(puck);
+
         puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 

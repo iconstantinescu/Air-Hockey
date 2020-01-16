@@ -1,7 +1,6 @@
 package menu;
 
-import client.UserDao;
-import client.UserDaoMySql;
+import client.User;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -17,12 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.Render;
-import game.Renderer;
+import game.RenderStrategy;
 
 /**
  * The specific renderer of the Login.
  */
-public class RenderLogin implements Renderer {
+public class RenderLogin implements RenderStrategy {
     transient TextField username;
     transient TextField password;
     transient Stage stage;
@@ -30,6 +29,8 @@ public class RenderLogin implements Renderer {
     transient TextButton registerButton;
     transient Label passwordText;
     transient Label usernameText;
+    transient Label playerLoginText;
+    transient Label error;
     transient Skin skin;
 
     transient String nameInput;
@@ -40,8 +41,18 @@ public class RenderLogin implements Renderer {
      */
     public RenderLogin() {
 
+
+
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
+
+        // check if player 1 or 2 is logging in
+        if (Render.user1.getUserID() == 0) {
+            playerLoginText = new Label("Login Player 1", skin);
+        } else {
+            playerLoginText = new Label("Login Player 2", skin);
+        }
+
         float centerW = Gdx.graphics.getWidth() / 2;
         float centerH = Gdx.graphics.getHeight() / 2;
 
@@ -52,6 +63,10 @@ public class RenderLogin implements Renderer {
         float usernameX = centerW - username.getWidth() / 2;
         float usernameY = centerH + username.getHeight();
         username.setPosition(usernameX,usernameY);
+
+        playerLoginText.setSize(300, 50);
+        playerLoginText.setPosition(usernameX, usernameY + 60);
+
 
         password = new TextField("", skin);
         password.setSize(400,40);
@@ -86,20 +101,29 @@ public class RenderLogin implements Renderer {
         passwordText.setSize(100, 40);
         passwordText.setPosition(usernameX - 110, usernameY - username.getHeight() - 5);
 
+        error = new Label("", skin);
+        error.setSize(300, 50);
+        error.setPosition(usernameX, usernameY - username.getHeight() * 2 - 70);
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 loginClicked();
-
-
+                error.setText("Login failed, try again");
+                error.setColor(100, 0,0,1);
             }
         });
 
         registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                registerClicked();
-
+                boolean registered = registerClicked();
+                if (registered) {
+                    error.setText("your account has been registered, please login");
+                    error.setColor(0, 100,0,1);
+                } else {
+                    error.setText("There has been a problem, try another username");
+                    error.setColor(100, 0,0,1);
+                }
 
             }
         });
@@ -110,7 +134,8 @@ public class RenderLogin implements Renderer {
         stage.addActor(password);
         stage.addActor(usernameText);
         stage.addActor(passwordText);
-
+        stage.addActor(playerLoginText);
+        stage.addActor(error);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -140,12 +165,25 @@ public class RenderLogin implements Renderer {
     public void loginClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        UserDao userDao = new UserDaoMySql();
+        if (passInput.equals("") || nameInput.equals("")) {
+            return;
+        }
+
+
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
-        if (userDao.authenticate(passInput, nameInput) != null) {
-            Render.changeGameState(Render.GameState.MENU);
+
+        User resultUser = Render.userDao.authenticate(nameInput, passInput);
+        if (resultUser != null) {
             System.out.println("user " + nameInput + " authenticated");
+            if (Render.user1.getUserID() == 0) {
+                Render.user1 = resultUser;
+                Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
+            } else if (Render.user2.getUserID() == 0) {
+                Render.user2 = resultUser;
+                Render.secondAuthentication = true;
+                Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
+            }
         }
     }
 
@@ -153,11 +191,10 @@ public class RenderLogin implements Renderer {
     /**
      * calls to register user.
      */
-    public void registerClicked() {
+    public boolean registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        UserDao userDao = new UserDaoMySql();
-        userDao.createNewUser(nameInput, passInput, nameInput);
+        return Render.userDao.createNewUser(nameInput, passInput, nameInput);
     }
 
     /**

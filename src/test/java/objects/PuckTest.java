@@ -12,74 +12,72 @@ class PuckTest {
 
     @Test
     void getposX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         assertEquals(10, puck.getposX());
     }
 
     @Test
     void setposX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         puck.setposX(15);
         assertEquals(15, puck.getposX());
     }
 
     @Test
     void getposY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         assertEquals(10, puck.getposY());
     }
 
     @Test
     void setposY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         puck.setposY(15);
         assertEquals(15, puck.getposY());
     }
 
     @Test
     void getRadius() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         assertEquals(10, puck.getRadius());
     }
 
     @Test
     void setRadius() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         puck.setRadius(15);
         assertEquals(15, puck.getRadius());
     }
 
     @Test
     void getDeltaX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         assertEquals(0, puck.getDeltaX());
     }
 
     @Test
     void setDeltaX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         puck.setDeltaX(15);
         assertEquals(15, puck.getDeltaX());
     }
 
     @Test
     void getDeltaY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         assertEquals(0, puck.getDeltaY());
     }
 
     @Test
     void setDeltaY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0);
+        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
         puck.setDeltaY(15);
         assertEquals(15, puck.getDeltaY());
     }
 
-    //TODO Remove static calls first before testing these 3 methods !!!
-
     @Test
     void translate() {
-        Puck puck = new Puck(640, 360, 5, 2, 2);
+        Puck puck = new Puck(640, 360, 5, 2, 2, new ScoreBoard());
         puck.translate(1280, 720);
         assertEquals(puck.getposX(), 642);
         assertEquals(puck.getposY(), 362);
@@ -88,132 +86,94 @@ class PuckTest {
 
     @Test
     void translateOutOfGateRange() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2);
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
         puck.translate(1280, 720);
         assertEquals(puck.getposX(), 1202);
         assertEquals(puck.getposY(), 602);
 
     }
 
-
-
     @Test
     void checkInGateRangeTrue() {
-        Puck puck = new Puck(640, 360, 5, 2, 2);
-        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
+        Puck puck = new Puck(640, 360, 5, 2, 2, new ScoreBoard());
+        puck.checkCurrentState(720);
 
-        assertTrue(inRange);
+        assertTrue(puck.getPuckState() instanceof GateAlignedState);
     }
 
     @Test
     void checkInGateRangeFalse() {
-        Puck puck = new Puck(5, 5, 5, 2, 2);
-        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
+        Puck puck = new Puck(5, 5, 5, 2, 2, new ScoreBoard());
+        puck.checkCurrentState(720);
 
-        assertFalse(inRange);
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
     }
 
     @Test
     void checkInGateRangeFalseAbove() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2);
-        boolean inRange = puck.checkInGateRange(new ScoreBoard(0,0), 1280, 720);
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck.checkCurrentState(720);
 
-        assertFalse(inRange);
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
+    }
+
+
+    @Test
+    void translateMenu() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+
+        puck.translateMenu(1920, 1080);
+
+        assertEquals(1202, puck.getposX());
+        assertEquals(602, puck.getposY());
     }
 
     @Test
-    void gateBehaviourUnderZero() {
-        ScoreBoard scoreBoard = new ScoreBoard(0,0);
-        Puck puck = new Puck(-20, 5, 5, 2, 2);
+    void setPuckState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
 
-        puck.gateBehaviour(scoreBoard, 1280, 720);
+        puck.setPuckState(new OutOfGatesState());
 
-        assertEquals(1, scoreBoard.getPlayer2Score());
-        assertEquals(puck.getposX(), 640);
-        assertEquals(puck.getposY(), 360);
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
     }
 
     @Test
-    void gateBehaviourOverWidth() {
-        ScoreBoard scoreBoard = new ScoreBoard(0,0);
-        Puck puck = new Puck(1300, 360, 5, 2, 2);
+    void outToOutState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
 
-        puck.gateBehaviour(scoreBoard, 1280, 720);
+        puck.setPuckState(new OutOfGatesState());
 
-        assertEquals(1, scoreBoard.getPlayer1Score());
-        assertEquals(puck.getposX(), 640);
-        assertEquals(puck.getposY(), 360);
+        puck.checkCurrentState(700);
+
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
     }
 
     @Test
-    void checkWallCollisionCheckWidthLeft() {
-        Puck puck = new Puck(-1,10,10,-1, 1);
+    void gateToGateState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
 
-        puck.checkWallCollision(1280, 720);
+        puck.setPuckState(new GateAlignedState());
 
-        assertEquals(1, puck.getDeltaX());
+        puck.checkCurrentState(1200);
 
+        assertTrue(puck.getPuckState() instanceof GateAlignedState);
     }
 
     @Test
-    void checkWallCollisionCheckWidthRight() {
-        Puck puck = new Puck(1281,10,10,-1, 1);
+    void checkCurrentStateOutState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
 
-        puck.checkWallCollision(1280, 720);
+        puck.checkCurrentState(700);
 
-        assertEquals(1, puck.getDeltaX());
-
+        assertTrue(puck.getPuckState() instanceof OutOfGatesState);
     }
 
     @Test
-    void checkWallCollisionCheckHeightDown() {
-        Puck puck = new Puck(10,-1,10,-1, 1);
+    void checkCurrentStateGateState() {
+        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
 
-        puck.checkWallCollision(1280, 720);
+        puck.checkCurrentState(1200);
 
-        assertEquals(-1, puck.getDeltaY());
-
-    }
-
-    @Test
-    void checkWallCollisionCheckNormal() {
-        Puck puck = new Puck(11,50,10,-1, 1);
-
-        puck.checkWallCollision(1280, 720);
-
-        assertEquals(1, puck.getDeltaY());
-        assertEquals(-1, puck.getDeltaX());
-    }
-
-    @Test
-    void checkWallCollisionCheckHeightUp() {
-        Puck puck = new Puck(10,721,10,-1, 1);
-
-        puck.checkWallCollision(1280, 720);
-
-        assertEquals(-1, puck.getDeltaY());
-
-    }
-
-    @Test
-    void preventOutLeftCorner() {
-        Puck puck = new Puck(10,10,10,-1, 1);
-
-        puck.preventOut(-5, -5, 1280, 720);
-
-        assertEquals(1, puck.getDeltaX());
-        assertEquals(-1, puck.getDeltaY());
-
-    }
-
-    @Test
-    void preventOutRightTopCorner() {
-        Puck puck = new Puck(10,10,10,1, 1);
-
-        puck.preventOut(1285, 725, 1280, 720);
-
-        assertEquals(-1, puck.getDeltaX());
-        assertEquals(-1, puck.getDeltaY());
-
+        assertTrue(puck.getPuckState() instanceof GateAlignedState);
     }
 }

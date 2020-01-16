@@ -1,26 +1,33 @@
 package game;
 
+import client.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import menu.RenderLogin;
 import menu.RenderMenu;
 
 /**
- * The render method is the one passed to the Main class such
+ * The render method is the one passed to the Game class such
  * that the render method can be called in a loop.
  */
 public class Render extends ApplicationAdapter {
 
+    public static User user1;
+    public static User user2;
+    public static UserDao userDao;
+    public static LeaderboardDao leaderboardDao;
+    public static boolean secondAuthentication;
+
     /**
-     *  An enumeration of the possible states of the application.
+     *  An enumeration of the possible render strategies of the application.
      */
-    public enum GameState {
+    public enum ApplicationStrategy {
         LOGIN,
         MENU,
         GAME
     }
 
-    protected static GameState gameState;
-    private static Renderer renderer;
+    private static ApplicationStrategy applicationStrategy;
+    private static RenderStrategy renderStrategy;
 
     /**
      * This method is only being run once, initializing the application.
@@ -28,8 +35,13 @@ public class Render extends ApplicationAdapter {
     @Override
     public void create() {
         // Initialize the login as the first login.
-        gameState = GameState.LOGIN;
-        renderer = new RenderLogin();
+        this.user1 = new User();
+        this.user2 = new User();
+        this.userDao = new UserDaoMySql();
+        this.leaderboardDao = new LeaderboardDaoMySql(new ConnectionFactory());
+
+        renderStrategy = new RenderLogin();
+        this.secondAuthentication = false;
     }
 
     /**
@@ -37,25 +49,24 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void render() {
-        renderer.run();
+        renderStrategy.run();
     }
 
     /**
-     * Method that changes the state of the Main.
-     * @param newGameState The New Main State
+     * Method that changes the render strategy of the application.
+     * @param newApplicationStrategy The New Render Strategy
      */
-    public static void changeGameState(GameState newGameState) {
-        gameState = newGameState;
-        switch (gameState) {
+    public static void changeGameStrategy(ApplicationStrategy newApplicationStrategy) {
+        applicationStrategy = newApplicationStrategy;
+        switch (applicationStrategy) {
             case LOGIN:
-                renderer = new RenderLogin();
+                renderStrategy = new RenderLogin();
                 break;
             case MENU:
-                renderer = new RenderMenu();
+                renderStrategy = new RenderMenu();
                 break;
             case GAME:
-                renderer.dispose();
-                renderer = new RenderGame();
+                renderStrategy = new RenderGame();
                 break;
             default:
                 break;
@@ -69,8 +80,8 @@ public class Render extends ApplicationAdapter {
      */
     @Override
     public void dispose() {
-        if (renderer != null) {
-            renderer.dispose();
+        if (renderStrategy != null) {
+            renderStrategy.dispose();
         }
     }
 

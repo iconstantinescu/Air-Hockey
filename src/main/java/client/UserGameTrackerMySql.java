@@ -40,6 +40,7 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             ps.setLong(2, user.getPoints());
             ps.setInt(3, user.getNumOfWonGames());
             ps.setInt(4, user.getNumOfLostGames());
+            ps.setInt(5, user.getUserID());
 
             ps.execute();
             return true;
