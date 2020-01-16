@@ -95,6 +95,7 @@ public class GameDetails {
         this.timestamp = timestamp;
     }
 
+    @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

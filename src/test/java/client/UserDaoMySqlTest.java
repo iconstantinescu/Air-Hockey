@@ -19,25 +19,27 @@ import static org.mockito.Matchers.anyString;
 public class UserDaoMySqlTest {
 
     @InjectMocks
-    UserDaoMySql userDao;
+    transient UserDaoMySql userDao;
 
     @Mock
-    UserGameTrackerMySql mockUserGameTracker;
+    transient UserGameTrackerMySql mockUserGameTracker;
 
     @Mock
-    UserAuthenticationMySql mockUserAuthentication;
+    transient UserAuthenticationMySql mockUserAuthentication;
 
     @Mock
-    UserRegistrationMySql mockUserRegistration;
+    transient UserRegistrationMySql mockUserRegistration;
 
-    User testUser;
+    transient User testUser;
+    transient String name;
 
     @BeforeEach
     void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
-        testUser = new User(1, "john",  100, 2, 3);
+        name = "john";
+        testUser = new User(1, name,  100, 2, 3);
 
     }
 
@@ -45,7 +47,7 @@ public class UserDaoMySqlTest {
     void authenticate() {
         Mockito.when(mockUserAuthentication.authenticate(anyString(), anyString()))
                .thenReturn(testUser);
-        assertEquals(testUser, userDao.authenticate("john", "pwd"));
+        assertEquals(testUser, userDao.authenticate(name, "pwd"));
 
     }
 
@@ -53,7 +55,7 @@ public class UserDaoMySqlTest {
     void createNewUser() {
         Mockito.when(mockUserRegistration.createNewUser(anyString(), anyString(), anyString()))
                 .thenReturn(true);
-        assertTrue(userDao.createNewUser("john", "pwd", "john"));
+        assertTrue(userDao.createNewUser(name, "pwd", name));
     }
 
     @Test
@@ -73,7 +75,7 @@ public class UserDaoMySqlTest {
     @Test
     void getGameHistory() {
         List<GameDetails> gameList = new ArrayList<>();
-        gameList.add(new GameDetails("john", "robert", 5, 3,
+        gameList.add(new GameDetails(name, "robert", 5, 3,
                 new Timestamp(System.currentTimeMillis())));
 
         Mockito.when(mockUserGameTracker.getGameHistory(anyInt())).thenReturn(gameList);

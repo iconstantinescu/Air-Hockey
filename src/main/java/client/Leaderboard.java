@@ -94,6 +94,7 @@ public class Leaderboard {
         return this.leaderboardList.size();
     }
 
+    @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

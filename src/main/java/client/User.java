@@ -101,6 +101,7 @@ public class User {
         return  this.gamesLost + this.gamesWon;
     }
 
+    @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

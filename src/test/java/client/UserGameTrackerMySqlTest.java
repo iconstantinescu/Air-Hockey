@@ -30,12 +30,11 @@ public class UserGameTrackerMySqlTest {
     @Mock
     private transient ConnectionFactory connectionFactory;
 
-    User testUser;
+    private transient User testUser;
 
     /**
      * Setup Method.
      * @throws SQLException Exception for SQL errors
-     * @throws ClassNotFoundException Exception in case the class is not found
      */
     @BeforeEach
     public void setUp() throws SQLException {
@@ -75,6 +74,7 @@ public class UserGameTrackerMySqlTest {
     }
 
     @Test
+    @SuppressWarnings("PMD.CloseResource")
     void getGameHistory() throws SQLException {
 
         Long time = System.currentTimeMillis();
