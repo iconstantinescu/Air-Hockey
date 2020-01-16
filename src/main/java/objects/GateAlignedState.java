@@ -1,11 +1,16 @@
 package objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+
 /**
  * This class implements the behaviour of the Puck when is is
  * inside the Gate Range.
  */
 public class GateAlignedState implements PuckState {
 
+    public static final Music goalSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
     private static final float offset = 100;
 
     /**
@@ -30,12 +35,14 @@ public class GateAlignedState implements PuckState {
         if (puck.getposX() + puck.getRadius() < 0) {
             puck.resetPuck(screenWidth / 2 - offset, screenHeight / 2 + 8);
             scoreBoard.pointP2();
+            goalSound.play();
         }
 
         // Add point to first player if puck goes past the right gate
         if (puck.getposX() - puck.getRadius() >= screenWidth) {
             puck.resetPuck(screenWidth / 2 + offset, screenHeight / 2 + 8);
             scoreBoard.pointP1();
+            goalSound.play();
         }
     }
 }

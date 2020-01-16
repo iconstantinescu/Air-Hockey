@@ -29,10 +29,12 @@ public class OutOfGatesState implements PuckState {
                            float screenWidth, float screenHeight) {
         if (futureX + puck.getRadius() > screenWidth || futureX - puck.getRadius() < 0) {
             puck.setDeltaX(-puck.getDeltaX());
+            Puck.hitSound.play();
         }
 
         if (futureY + puck.getRadius() > screenHeight || futureY - puck.getRadius() < 0) {
             puck.setDeltaY(-puck.getDeltaY());
+            Puck.hitSound.play();
         }
     }
 }

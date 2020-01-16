@@ -67,6 +67,7 @@ public class Pusher {
             //puck.setDeltaY(-puck.getDeltaY());
             puck.setDeltaX((float) deltas[0] * 6f);
             puck.setDeltaY((float) deltas[1] * 6f);
+            Puck.hitSound.play();
             return true;
         }
         return false;

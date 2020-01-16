@@ -39,7 +39,6 @@ public class RenderGame implements RenderStrategy {
     private transient ConnectionFactory connectionFactory;
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
-    private static Sound hitSound;
     private static List<LeaderboardInstance> leaderboard;
     private static ScoreController scoreController;
 
@@ -68,9 +67,7 @@ public class RenderGame implements RenderStrategy {
         backSound.setLooping(true);
         backSound.play();
 
-
         connectionFactory = new ConnectionFactory();
-
     }
 
     /**
@@ -105,12 +102,6 @@ public class RenderGame implements RenderStrategy {
         drawGameObject(0, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
         // DRAW PUSHER 2
         drawGameObject(0, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
-
-        // PLAY THE SOUND EFFECTS
-        SoundEffects.hitSound(hitSound, puck, pusher1,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        SoundEffects.hitSound(hitSound, puck, pusher2,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "
