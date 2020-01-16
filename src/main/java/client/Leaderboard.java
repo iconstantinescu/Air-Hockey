@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The class is used to keep the Leaderboard List with the users and the scores
+ * that will be displayed after the game ends or in the main menu.
+ *
+ * The class allows leaderboards of variable sizes to be created.
+ *
+ * To get the leaderboard from the database, the LeaderboardDao class will be used:
+ * Leaderboard newLeaderboard = leaderboardDao.getLeaderboard(int size);
+ */
 public class Leaderboard {
 
     public List<LeaderboardEntry> leaderboardList;
@@ -90,10 +99,16 @@ public class Leaderboard {
         }
     }
 
+    /**
+     * Get the current size of the leaderboard list.
+     * @return the current size of the leaderboard list
+     */
     public int getCurrentSize() {
         return this.leaderboardList.size();
     }
 
+    //The hashCode is not needed for our application.
+    //We just use the equals method.
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {

@@ -130,6 +130,8 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
     }
 
 
+    // We are actually closing the resultSet in all the cases
+    // but the PMD does not see this for some reason
     @SuppressWarnings("PMD.CloseResource")
     private String getNicknameById(int userId) {
 
@@ -157,7 +159,6 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
-
         return "";
     }
 

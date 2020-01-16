@@ -41,6 +41,8 @@ public class LeaderboardEntry {
         this.points = points;
     }
 
+    //The hashCode is not needed for our application.
+    //We just use the equals method.
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {

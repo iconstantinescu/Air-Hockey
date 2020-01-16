@@ -35,8 +35,6 @@ public class GameDetails {
                        int scoreUser1, int scoreUser2,
                        Timestamp timestamp) {
 
-        //assert (scoreUser1 == 5 || scoreUser2 == 5);
-
         this.scoreUser1 = scoreUser1;
         this.scoreUser2 = scoreUser2;
         this.nickname1 = nickname1;
@@ -85,12 +83,10 @@ public class GameDetails {
     }
 
     public void setScoreUser1(int scoreUser1) {
-        //assert (scoreUser1 <= 5 && scoreUser1 >= 0);
         this.scoreUser1 = scoreUser1;
     }
 
     public void setScoreUser2(int scoreUser2) {
-        //assert (scoreUser2 <= 5 && scoreUser2 >= 0);
         this.scoreUser2 = scoreUser2;
     }
 
@@ -98,6 +94,8 @@ public class GameDetails {
         this.timestamp = timestamp;
     }
 
+    //The hashCode is not needed for our application.
+    //We just use the equals method.
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {

@@ -18,13 +18,13 @@ public class BcryptHashing {
      * @return hashed password as a String
      */
     public static String hashPassword(String passwordPlaintext) {
-        int workload = 12;
-        salt = BCrypt.gensalt(workload);
+        salt = BCrypt.gensalt();
         return BCrypt.hashpw(passwordPlaintext, salt);
     }
 
     /**
      * Hash a password with a given salt (as a parameter).
+     * This method will be used during the authentication phase.
      * @param passwordPlaintext the password in plain text
      * @param salt the salt that will be used for hashing
      * @return hashed password as a String
