@@ -1,9 +1,6 @@
 package menu;
 
-import client.AuthenticationController;
-
-import client.ConnectionFactory;
-import client.RegistrationController;
+import client.User;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
@@ -35,7 +32,6 @@ public class RenderLogin implements RenderStrategy {
     transient Label playerLoginText;
     transient Label error;
     transient Skin skin;
-    private transient AuthenticationController idGetter;
 
     transient String nameInput;
     transient String passInput;
@@ -49,11 +45,9 @@ public class RenderLogin implements RenderStrategy {
 
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
-        System.out.println(Render.userID1 + "id 1");
-        System.out.println(Render.userID2 + " id 2");
 
         // check if player 1 or 2 is logging in
-        if (Render.userID1 <= 0) {
+        if (Render.user1.getUserID() == 0) {
             playerLoginText = new Label("Login Player 1", skin);
         } else {
             playerLoginText = new Label("Login Player 2", skin);
@@ -175,26 +169,18 @@ public class RenderLogin implements RenderStrategy {
             return;
         }
 
-        AuthenticationController auth = new AuthenticationController(new ConnectionFactory());
 
         System.out.println("username: " + nameInput);
         System.out.println("password: " + passInput);
 
-        String salt = auth.getSalt(nameInput);
-
-        // if username is not present in the database will return empty salt
-        if (salt.equals("")) {
-            return;
-        }
-
-        if (auth.authenticate(passInput, nameInput, salt)) {
+        User resultUser = Render.userDao.authenticate(nameInput, passInput);
+        if (resultUser != null) {
             System.out.println("user " + nameInput + " authenticated");
-            idGetter = new AuthenticationController(new ConnectionFactory());
-            if (Render.userID1 == -1) {
-                Render.userID1 = idGetter.getUserId(nameInput);
+            if (Render.user1.getUserID() == 0) {
+                Render.user1 = resultUser;
                 Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
-            } else if (Render.userID2 == -1) {
-                Render.userID2 = idGetter.getUserId(nameInput);
+            } else if (Render.user2.getUserID() == 0) {
+                Render.user2 = resultUser;
                 Render.secondAuthentication = true;
                 Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
             }
@@ -208,8 +194,7 @@ public class RenderLogin implements RenderStrategy {
     public boolean registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
-        RegistrationController registration = new RegistrationController(new ConnectionFactory());
-        return registration.createNewUser(nameInput, passInput, nameInput);
+        return Render.userDao.createNewUser(nameInput, passInput, nameInput);
     }
 
     /**

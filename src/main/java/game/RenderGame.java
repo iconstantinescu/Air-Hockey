@@ -3,9 +3,8 @@ package game;
 import static com.badlogic.gdx.Input.Keys.ENTER;
 
 import client.ConnectionFactory;
-import client.LeaderboardController;
-import client.LeaderboardInstance;
-import client.ScoreController;
+import client.Leaderboard;
+import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -16,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import java.util.List;
+
 import menu.SoundEffects;
 import objects.Puck;
 import objects.Pusher;
@@ -25,7 +24,7 @@ import objects.ScoreBoard;
 
 
 /**
- * The specific Game renderer inheriting from the general Renderer.
+ * The specific Main renderer inheriting from the general Renderer.
  */
 public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
@@ -40,9 +39,8 @@ public class RenderGame implements RenderStrategy {
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
     private static Sound hitSound;
-    private static List<LeaderboardInstance> leaderboard;
-    private static ScoreController scoreController;
-
+    private transient boolean matchUploaded;
+    private transient Leaderboard leaderboard;
 
     /**
      * Constructor for the Renderer.
@@ -70,6 +68,8 @@ public class RenderGame implements RenderStrategy {
 
 
         connectionFactory = new ConnectionFactory();
+
+        matchUploaded = false;
 
     }
 
@@ -114,7 +114,7 @@ public class RenderGame implements RenderStrategy {
 
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "
-                + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
+                        + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
                 Gdx.graphics.getHeight() - 20);
 
         drawWallsAndGates();
@@ -125,21 +125,26 @@ public class RenderGame implements RenderStrategy {
      * and adds points to the winner of the game.
      */
     public void uploadMatch() {
-        if (scoreController == null) {
-            scoreController = new ScoreController(connectionFactory);
+        if (matchUploaded == false) {
             int addPoints = 10 * Math.abs(scoreBoard.getPlayer1Score()
                     - scoreBoard.getPlayer2Score());
 
             // ADD POINTS TO WINNER
             if (scoreBoard.getWinner()) {
-                scoreController.updatePoints(Render.userID1, addPoints);
+                Render.user1.addPoints(addPoints);
+                Render.userDao.updateUser(Render.user1);
             } else {
-                scoreController.updatePoints(Render.userID2, addPoints);
+                Render.user2.addPoints(addPoints);
+                Render.userDao.updateUser(Render.user2);
             }
 
             // SAVE GAME INTO HISTORY
-            scoreController.saveGame(Render.userID1, Render.userID2,
-                    scoreBoard.getPlayer1Score(), scoreBoard.getPlayer2Score());
+            matchUploaded = Render.userDao.saveGame(
+                    Render.user1.getUserID(),
+                    Render.user2.getUserID(),
+                    scoreBoard.getPlayer1Score(),
+                    scoreBoard.getPlayer2Score());
+
         }
     }
 
@@ -158,20 +163,25 @@ public class RenderGame implements RenderStrategy {
      * @param posX The x coordinate of the first score
      * @param posY The y coordinate of the first score
      */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public void drawTopScores(float posX, float posY) {
         if (leaderboard == null) {
-            LeaderboardController leaderboardController =
-                    new LeaderboardController(connectionFactory);
-
-            leaderboard = leaderboardController.getTopN(5);
+            leaderboard = Render.leaderboardDao.getLeaderboard(5);
         }
-        for (int i = 0; i < 5; i++) {
-            LeaderboardInstance score = leaderboard.get(i);
-            drawText((i + 1) + ". " + score.getNickname() + " " + score.getPoints(), posX,
-                    posY);
 
-            posY -= 50;
+        if (leaderboard != null) {
+
+            int i = 1;
+            for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
+
+                drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
+                        posX, posY);
+
+                posY -= 50;
+                i++;
+            }
         }
+
 
         drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
     }
@@ -213,16 +223,16 @@ public class RenderGame implements RenderStrategy {
                 Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.input.isKeyPressed(keyCodes[0]) && !restricts[0]) {
-            pusher.setposY(pusher.getposY() + 4);
+            pusher.setposY(pusher.getposY() + 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[1]) && !restricts[2]) {
-            pusher.setposY(pusher.getposY() - 4);
+            pusher.setposY(pusher.getposY() - 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[2]) && !restricts[1]) {
-            pusher.setposX(pusher.getposX() - 4);
+            pusher.setposX(pusher.getposX() - 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
-            pusher.setposX(pusher.getposX() + 4);
+            pusher.setposX(pusher.getposX() + 6);
         }
     }
 

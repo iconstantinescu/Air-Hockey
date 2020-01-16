@@ -2,9 +2,9 @@ package menu;
 
 import static java.lang.System.exit;
 
-import client.ConnectionFactory;
-import client.LeaderboardController;
-import client.LeaderboardInstance;
+import client.Leaderboard;
+
+import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,12 +14,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
 import game.RenderGame;
 import game.RenderStrategy;
-import java.util.List;
+
 import objects.Puck;
 import objects.ScoreBoard;
 
 /**
- * The specific renderer of the Game Menu.
+ * The specific renderer of the Main Menu.
  * Here the menu screen, all buttons and button actions are created and set.
  */
 public class RenderMenu implements RenderStrategy {
@@ -40,8 +40,7 @@ public class RenderMenu implements RenderStrategy {
     private transient Sprite quitSprite;
     private transient Puck puck;
     private transient ScoreBoard scoreBoard;
-    private transient ConnectionFactory connectionFactory;
-    private static List<LeaderboardInstance> leaderboard;
+    private transient Leaderboard leaderboard;
     private transient boolean showScores;
     private transient RenderGame renderGame = new RenderGame();
     private static final int offSetX = 150;
@@ -81,7 +80,6 @@ public class RenderMenu implements RenderStrategy {
         quitSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
                 Gdx.graphics.getHeight() / 2 - offSetY * 2);
         showScores = false;
-        connectionFactory = new ConnectionFactory();
         scoreBoard = new ScoreBoard();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
                 scoreBoard);
@@ -90,7 +88,7 @@ public class RenderMenu implements RenderStrategy {
     /**
      * Run the menu for in the main game renderer.
      * Call the methods to set the homeScreen, the playButton, the scoresButton and the QuitButton.
-     * Once play is pressed, you will leave the menu and go into the Game.
+     * Once play is pressed, you will leave the menu and go into the Main.
      * Once quit is pressed, you will exit the application with exit code: 0
      * This means that everything went fine.
      */
@@ -204,19 +202,24 @@ public class RenderMenu implements RenderStrategy {
      * @param posX The x coordinate of the first score
      * @param posY The y coordinate of the first score
      */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public void drawLeaderboard(float posX, float posY) {
         if (leaderboard == null) {
-            LeaderboardController leaderboardController =
-                    new LeaderboardController(connectionFactory);
 
-            leaderboard = leaderboardController.getTopN(10);
+            leaderboard = Render.leaderboardDao.getLeaderboard(10);
         }
-        for (int i = 0; i < 10; i++) {
-            LeaderboardInstance score = leaderboard.get(i);
-            setText((i + 1) + ". " + score.getNickname() + " " + score.getPoints(),
-                    posX, posY);
 
-            posY -= 50;
+        if (leaderboard != null) {
+
+            int i = 1;
+            for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
+
+                setText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
+                        posX, posY);
+
+                posY -= 50;
+                i++;
+            }
         }
     }
 

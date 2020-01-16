@@ -1,37 +1,46 @@
 package client;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that contains the methods required to save and retrieve
  * user points and match details to/from the database.
  */
-public class ScoreController extends DatabaseController {
+public class UserGameTrackerMySql extends DatabaseControllerMySql implements UserGameTracker {
 
     /**
      * Constructor of the class.
      * @param connectionFactory the connectionFactory object that facilitates
      *                          the creation of a new database connection
      */
-    public ScoreController(ConnectionFactory connectionFactory) {
+    public UserGameTrackerMySql(ConnectionFactory connectionFactory) {
         super(connectionFactory);
     }
 
+
     /**
-     * Update the points for a user in the database.
-     * @param userId id of the user
-     * @param points number of point to be added
+     * Update the user values in the database with the new values.
+     * @param user the user object with the new values
+     * @return true if update succeeded
      */
-    public boolean updatePoints(int userId, int points) {
+    public boolean updateUserStats(User user) {
 
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "update user_data set points = points + ? where user_id = ?";
+            String query = "update user_data set nickname=?, points=?, games_won=?, games_lost=?"
+                    + " where user_id = ?";
             ps = conn.prepareStatement(query);
 
-            ps.setInt(1, points);
-            ps.setInt(2, userId);
+            ps.setString(1, user.getNickname());
+            ps.setLong(2, user.getPoints());
+            ps.setInt(3, user.getNumOfWonGames());
+            ps.setInt(4, user.getNumOfLostGames());
+            ps.setInt(5, user.getUserID());
 
             ps.execute();
             return true;
@@ -79,67 +88,78 @@ public class ScoreController extends DatabaseController {
         return false;
     }
 
-    /**
-     * Get the number of points for a user from database.
-     * @param userId id of the user
-     * @return number of points the user has
-     */
-    public int getPoints(int userId) {
+    @Override
+    public List<GameDetails> getGameHistory(int userId) {
+
+        List<GameDetails> gamesList = new ArrayList<>();
 
         try {
 
             conn = connectionFactory.createConnection(URL);
-            String query = "select points from user_data where user_id = ?";
-            ps = conn.prepareStatement(query);
 
-            ps.setInt(1, userId);
+            String query = "select * from game"
+                    + " where user_id_1 = ? or user_id_2 = ?";
 
-            int points = 0;
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                points += rs.getInt(1);
-            }
 
-            return points;
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
-        }
-        return 0;
-    }
-
-    /**
-     * Get the number of games a user has played.
-     * @param userId id of the user
-     * @return the number of games a user has played
-     */
-    public int getGamesPlayed(int userId) {
-
-        try {
-
-            conn = connectionFactory.createConnection(URL);
-            String query = "select count(game_id) from game"
-                        + " where user_id_1 = ? or user_id_2 = ?";
             ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
             ps.setInt(2, userId);
 
-            int gamesPlayed = 0;
             rs = ps.executeQuery();
-            while (rs.next()) {
-                gamesPlayed += rs.getInt(1);
-            }
 
-            return gamesPlayed;
+            while (rs.next()) {
+
+                GameDetails game = new GameDetails();
+                game.setNickname1(getNicknameById(rs.getInt("user_id_1")));
+                game.setScoreUser1(rs.getInt("score_user_1"));
+                game.setNickname2(getNicknameById(rs.getInt("user_id_2")));
+                game.setScoreUser2(rs.getInt("score_user_2"));
+                game.setTimestamp(new Timestamp(rs.getLong("game_timestamp")));
+
+                gamesList.add(game);
+            }
 
         } catch (SQLException e) {
             System.out.println(e.toString());
         } finally {
             closeConnections();
         }
-        return 0;
+
+        return gamesList;
     }
+
+
+    // We are actually closing the resultSet in all the cases
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
+    private String getNicknameById(int userId) {
+
+        try {
+
+            // Nickname might change so we keep the userIDs in the database
+            String query = "select nickname from user_data"
+                    + " where user_id = ?";
+
+
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, userId);
+
+            ResultSet newRs = ps.executeQuery();
+
+            if (newRs.next()) {
+                String nickname = newRs.getString("nickname");
+                newRs.close();
+                return nickname;
+            }
+
+            newRs.close();
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+        return "";
+    }
+
 }
