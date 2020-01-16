@@ -2,7 +2,6 @@ package menu;
 
 import static java.lang.System.exit;
 
-import client.ConnectionFactory;
 import client.Leaderboard;
 
 import client.LeaderboardEntry;
@@ -41,8 +40,7 @@ public class RenderMenu implements RenderStrategy {
     private transient Sprite quitSprite;
     private transient Puck puck;
     private transient ScoreBoard scoreBoard;
-    private transient ConnectionFactory connectionFactory;
-    private Leaderboard leaderboard;
+    private transient Leaderboard leaderboard;
     private transient boolean showScores;
     private transient RenderGame renderGame = new RenderGame();
     private static final int offSetX = 150;
@@ -82,7 +80,6 @@ public class RenderMenu implements RenderStrategy {
         quitSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
                 Gdx.graphics.getHeight() / 2 - offSetY * 2);
         showScores = false;
-        connectionFactory = new ConnectionFactory();
         scoreBoard = new ScoreBoard();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
                 scoreBoard);
@@ -205,19 +202,24 @@ public class RenderMenu implements RenderStrategy {
      * @param posX The x coordinate of the first score
      * @param posY The y coordinate of the first score
      */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public void drawLeaderboard(float posX, float posY) {
         if (leaderboard == null) {
 
             leaderboard = Render.leaderboardDao.getLeaderboard(10);
         }
-        
-        int i = 1;
-        for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
-            setText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
-                    posX, posY);
+        if (leaderboard != null) {
 
-            posY -= 50;
+            int i = 1;
+            for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
+
+                setText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
+                        posX, posY);
+
+                posY -= 50;
+                i++;
+            }
         }
     }
 

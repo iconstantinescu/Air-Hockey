@@ -20,7 +20,7 @@ public class LeaderboardEntry {
     /**
      * Empty Constructor.
      */
-    public LeaderboardEntry(){
+    public LeaderboardEntry() {
         this.nickname = "";
         this.points = 0;
     }
@@ -44,11 +44,15 @@ public class LeaderboardEntry {
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         LeaderboardEntry that = (LeaderboardEntry) o;
-        return points == that.points &&
-                Objects.equals(nickname, that.nickname);
+        return points == that.points
+                && Objects.equals(nickname, that.nickname);
     }
 
 }

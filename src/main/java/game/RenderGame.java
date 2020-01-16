@@ -39,7 +39,7 @@ public class RenderGame implements RenderStrategy {
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
     private static Sound hitSound;
-    private boolean matchUploaded;
+    private transient boolean matchUploaded;
     private transient Leaderboard leaderboard;
 
     /**
@@ -114,7 +114,7 @@ public class RenderGame implements RenderStrategy {
 
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "
-                + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
+                        + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
                 Gdx.graphics.getHeight() - 20);
 
         drawWallsAndGates();
@@ -139,9 +139,11 @@ public class RenderGame implements RenderStrategy {
             }
 
             // SAVE GAME INTO HISTORY
-            matchUploaded = Render.userDao.saveGame(Render.user1.getUserID(), Render.user2.getUserID(),
-                    scoreBoard.getPlayer1Score(), scoreBoard.getPlayer2Score());
-
+            matchUploaded = Render.userDao.saveGame(
+                    Render.user1.getUserID(),
+                    Render.user2.getUserID(),
+                    scoreBoard.getPlayer1Score(),
+                    scoreBoard.getPlayer2Score());
 
         }
     }
@@ -161,22 +163,25 @@ public class RenderGame implements RenderStrategy {
      * @param posX The x coordinate of the first score
      * @param posY The y coordinate of the first score
      */
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public void drawTopScores(float posX, float posY) {
         if (leaderboard == null) {
-
             leaderboard = Render.leaderboardDao.getLeaderboard(5);
-
         }
 
-        int i = 1;
-        for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
+        if (leaderboard != null) {
 
-            drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
-                    posX, posY);
+            int i = 1;
+            for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
-            i++;
-            posY -= 50;
+                drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
+                        posX, posY);
+
+                posY -= 50;
+                i++;
+            }
         }
+
 
         drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
     }

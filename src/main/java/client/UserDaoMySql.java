@@ -8,6 +8,10 @@ public class UserDaoMySql implements UserDao {
     private transient UserRegistration userRegistration;
     private transient UserAuthentication userAuthentication;
 
+    /**
+     * The constructor that initializes the class fields with
+     * the corresponding interface implementations.
+     */
     public UserDaoMySql() {
         this.userAuthentication = new UserAuthenticationMySql(new ConnectionFactory());
         this.userRegistration = new UserRegistrationMySql(new ConnectionFactory());

@@ -45,6 +45,9 @@ public class GameDetails {
 
     }
 
+    /**
+     * Constructor that initializes everything with "0" values.
+     */
     public GameDetails() {
         this.scoreUser1 = 0;
         this.scoreUser2 = 0;
@@ -98,14 +101,18 @@ public class GameDetails {
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         GameDetails that = (GameDetails) o;
-        return scoreUser1 == that.scoreUser1 &&
-                scoreUser2 == that.scoreUser2 &&
-                Objects.equals(nickname1, that.nickname1) &&
-                Objects.equals(nickname2, that.nickname2) &&
-                Objects.equals(timestamp, that.timestamp);
+        return scoreUser1 == that.scoreUser1
+                && scoreUser2 == that.scoreUser2
+                && Objects.equals(nickname1, that.nickname1)
+                && Objects.equals(nickname2, that.nickname2)
+                && Objects.equals(timestamp, that.timestamp);
     }
 
 }

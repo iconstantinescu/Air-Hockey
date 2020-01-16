@@ -85,7 +85,7 @@ public class Leaderboard {
     public void setSizeLimit(int newSize) {
         this.sizeLimit = newSize;
 
-        if(this.leaderboardList.size() > newSize) {
+        if (this.leaderboardList.size() > newSize) {
             this.leaderboardList.subList(0, newSize);
         }
     }
@@ -97,11 +97,15 @@ public class Leaderboard {
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Leaderboard that = (Leaderboard) o;
-        return sizeLimit == that.sizeLimit &&
-                Objects.equals(leaderboardList, that.leaderboardList);
+        return sizeLimit == that.sizeLimit
+                && Objects.equals(leaderboardList, that.leaderboardList);
     }
 
 }

@@ -32,6 +32,9 @@ public class User {
         this.gameHistory = new ArrayList<>();
     }
 
+    /**
+     * Constructor that initializes everything with "0" or empty values.
+     */
     public User() {
         this.userID = 0;
         this.points = 0;
@@ -104,15 +107,19 @@ public class User {
     @SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
-        return userID == user.userID &&
-                points == user.points &&
-                gamesLost == user.gamesLost &&
-                gamesWon == user.gamesWon &&
-                Objects.equals(nickname, user.nickname) &&
-                Objects.equals(gameHistory, user.gameHistory);
+        return userID == user.userID
+                && points == user.points
+                && gamesLost == user.gamesLost
+                && gamesWon == user.gamesWon
+                && Objects.equals(nickname, user.nickname)
+                && Objects.equals(gameHistory, user.gameHistory);
     }
 
 }

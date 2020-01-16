@@ -1,6 +1,11 @@
 package game;
 
-import client.*;
+import client.ConnectionFactory;
+import client.LeaderboardDao;
+import client.LeaderboardDaoMySql;
+import client.User;
+import client.UserDao;
+import client.UserDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
 import menu.RenderLogin;
 import menu.RenderMenu;

@@ -1,21 +1,20 @@
 package client;
 
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 
 public class LeaderboardDaoMySqlTest {
 
@@ -52,7 +51,7 @@ public class LeaderboardDaoMySqlTest {
         Mockito.when(mockResultSet.getString(1)).thenReturn("john");
         Mockito.when(mockResultSet.getInt(2)).thenReturn(100);
 
-        assertEquals(leaderboard, leaderboardDaoMySql.getLeaderboard(1));
+        Assertions.assertEquals(leaderboard, leaderboardDaoMySql.getLeaderboard(1));
     }
 
     @Test
@@ -60,7 +59,7 @@ public class LeaderboardDaoMySqlTest {
 
         int position = 10;
         Mockito.when(mockResultSet.getInt(anyInt())).thenReturn(position);
-        assertEquals(position, leaderboardDaoMySql.getLeaderboardPosition(1));
+        Assertions.assertEquals(position, leaderboardDaoMySql.getLeaderboardPosition(1));
 
     }
 
@@ -69,7 +68,7 @@ public class LeaderboardDaoMySqlTest {
 
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
-        assertEquals(-1, leaderboardDaoMySql.getLeaderboardPosition(1));
-        assertEquals(new Leaderboard(10), leaderboardDaoMySql.getLeaderboard(10));
+        Assertions.assertEquals(-1, leaderboardDaoMySql.getLeaderboardPosition(1));
+        Assertions.assertEquals(new Leaderboard(10), leaderboardDaoMySql.getLeaderboard(10));
     }
 }
