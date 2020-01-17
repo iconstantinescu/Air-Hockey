@@ -43,6 +43,7 @@ public class RenderMenu implements RenderStrategy {
     private transient Leaderboard leaderboard;
     private transient String leaderboardString;
     private transient boolean showScores;
+    private transient boolean showDetails;
     private transient RenderGame renderGame = new RenderGame();
     private static final int offSetX = 150;
     private static final int offSetY = 110;
@@ -81,6 +82,7 @@ public class RenderMenu implements RenderStrategy {
         quitSprite.setPosition(Gdx.graphics.getWidth() / 2 - offSetX,
                 Gdx.graphics.getHeight() / 2 - offSetY * 2);
         showScores = false;
+        showDetails = false;
         scoreBoard = new ScoreBoard();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
                 scoreBoard);
@@ -119,6 +121,13 @@ public class RenderMenu implements RenderStrategy {
             Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
         } else if (inRange(playSprite) && Gdx.input.justTouched()) {
             Render.changeGameStrategy(Render.ApplicationStrategy.LOGIN);
+        }
+        if (inRange(detailsSprite) && Gdx.input.justTouched()) {
+            showDetails = !showDetails;
+        }
+        if (showDetails) {
+            drawDetails(Gdx.graphics.getWidth() / 2 - 4 * offSetX,
+                    Gdx.graphics.getHeight() - offSetX);
         }
         if (inRange(quitSprite) && Gdx.input.justTouched()) {
             exit(0);
@@ -240,4 +249,16 @@ public class RenderMenu implements RenderStrategy {
                 posY);
         homeBatch.end();
     }
+
+    /**
+     * This method will draw the details of the current logged in player to the screen.
+     * @param posX The X coordinate on the screen.
+     * @param posY The Y coordinate on the screen.
+     */
+    public void drawDetails(float posX, float posY) {
+        setText("Games Played: " + "20\n"
+                + "Games Lost: " + "10\n"
+                + "Games Won: " + "10\n", posX, posY);
+    }
+
 }
