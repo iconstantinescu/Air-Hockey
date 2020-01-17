@@ -256,9 +256,10 @@ public class RenderMenu implements RenderStrategy {
      * @param posY The Y coordinate on the screen.
      */
     public void drawDetails(float posX, float posY) {
-        setText("Games Played: " + "20\n"
-                + "Games Lost: " + "10\n"
-                + "Games Won: " + "10\n", posX, posY);
+        setText("Games Played: " + Render.user1.getNumOfGamesPlayed() + "\n"
+                + "Games Lost: " + Render.user1.getNumOfLostGames() + "\n"
+                + "Games Won: " + Render.user1.getNumOfWonGames() + "\n"
+                + "Points: " + Render.user1.getPoints(), posX, posY);
     }
 
 }
