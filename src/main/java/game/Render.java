@@ -65,15 +65,14 @@ public class Render extends ApplicationAdapter {
         applicationStrategy = newApplicationStrategy;
         switch (applicationStrategy) {
             case LOGIN:
-                renderStrategy.dispose();
                 renderStrategy = new RenderLogin();
                 break;
             case MENU:
-                renderStrategy.dispose();
+                if(renderStrategy instanceof RenderLogin)
+                    renderStrategy.dispose();
                 renderStrategy = new RenderMenu();
                 break;
             case GAME:
-                renderStrategy.dispose();
                 renderStrategy = new RenderGame();
                 break;
             default:

@@ -14,12 +14,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import java.util.List;
 
 import objects.GateAlignedState;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
+
+
 
 /**
  * The specific Main renderer inheriting from the general Renderer.
@@ -36,13 +37,12 @@ public class RenderGame implements RenderStrategy {
     private transient ConnectionFactory connectionFactory;
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
-    private static final Music goalSound =
-            Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
+    private transient boolean matchUploaded;
+    private transient Leaderboard leaderboard;
     private static final Music hitSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/hit.wav"));
-    private static List<LeaderboardInstance> leaderboard;
-    private static ScoreController scoreController;
-
+    private static final Music goalSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
 
     /**
      * Constructor for the Renderer.
@@ -67,6 +67,7 @@ public class RenderGame implements RenderStrategy {
         // Initiate the Background Sound
         backSound.setLooping(true);
         backSound.play();
+
 
         connectionFactory = new ConnectionFactory();
 
@@ -97,16 +98,6 @@ public class RenderGame implements RenderStrategy {
             drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
         }
 
-        // PLAY SOUNDS
-        if (GateAlignedState.playGoalSound) {
-            goalSound.play();
-            GateAlignedState.playGoalSound = false;
-        }
-        if (Pusher.playHitSound) {
-            hitSound.play();
-            Pusher.playHitSound = false;
-        }
-
         // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
         updatePusher(pusher1, true);
         // CHANGE PUSHER2 POSITION ACCORDING TO KEYBOARD INPUT
@@ -116,6 +107,16 @@ public class RenderGame implements RenderStrategy {
         drawGameObject(0, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
         // DRAW PUSHER 2
         drawGameObject(0, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
+
+        // PLAY SOUNDS
+        if (GateAlignedState.playGoalSound) {
+            goalSound.play();
+            GateAlignedState.playGoalSound = false;
+        }
+        if (Pusher.playHitSound) {
+            hitSound.play();
+            Pusher.playHitSound = false;
+        }
 
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "
