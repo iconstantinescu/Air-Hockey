@@ -41,6 +41,7 @@ public class RenderMenu implements RenderStrategy {
     private transient Puck puck;
     private transient ScoreBoard scoreBoard;
     private transient Leaderboard leaderboard;
+    private transient String leaderboardString;
     private transient boolean showScores;
     private transient RenderGame renderGame = new RenderGame();
     private static final int offSetX = 150;
@@ -102,13 +103,18 @@ public class RenderMenu implements RenderStrategy {
         updatePuckMenu();
         renderGame.drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
 
+        if (leaderboardString == null) {
+            leaderboardString = drawLeaderboard();
+        }
+
         if (inRange(scoresSprite) && Gdx.input.justTouched()) {
             showScores = !showScores;
         }
         if (showScores) {
-            drawLeaderboard(Gdx.graphics.getWidth() / 2 + offSetX,
+            setText(leaderboardString, Gdx.graphics.getWidth() / 2 + offSetX,
                     Gdx.graphics.getHeight() - offSetX);
         }
+
         if (inRange(playSprite) && Gdx.input.justTouched() && Render.secondAuthentication) {
             Render.changeGameStrategy(Render.ApplicationStrategy.GAME);
         } else if (inRange(playSprite) && Gdx.input.justTouched()) {
@@ -199,28 +205,24 @@ public class RenderMenu implements RenderStrategy {
      * When you press scores on the menu screen you will be shown them.
      * Press it another time and they'll disappear.
      *
-     * @param posX The x coordinate of the first score
-     * @param posY The y coordinate of the first score
      */
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void drawLeaderboard(float posX, float posY) {
+    public String drawLeaderboard() {
         if (leaderboard == null) {
-
             leaderboard = Render.leaderboardDao.getLeaderboard(10);
         }
-
+        StringBuilder stringBuilder = new StringBuilder();
         if (leaderboard != null) {
-
             int i = 1;
             for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
-                setText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
-                        posX, posY);
+                stringBuilder.append(i + ". " + entry.getNickname() + " "
+                        + entry.getPoints() + "\n");
 
-                posY -= 50;
                 i++;
             }
         }
+        return stringBuilder.toString();
     }
 
     /**
@@ -233,7 +235,7 @@ public class RenderMenu implements RenderStrategy {
         BitmapFont font = new BitmapFont();
         homeBatch.begin();
         font.setColor(0,0,0,1);
-        font.getData().setScale(4);
+        font.getData().setScale(3);
         font.draw(homeBatch, str, posX,
                 posY);
         homeBatch.end();
