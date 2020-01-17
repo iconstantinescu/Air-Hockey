@@ -13,6 +13,8 @@ public class Pusher {
 
     private float radius;
 
+    public static boolean playHitSound = false;
+
     /**
      * Constructor for the pusher object.
      *
@@ -67,7 +69,7 @@ public class Pusher {
             //puck.setDeltaY(-puck.getDeltaY());
             puck.setDeltaX((float) deltas[0] * 6f);
             puck.setDeltaY((float) deltas[1] * 6f);
-            Puck.hitSound.play();
+            playHitSound = true;
             return true;
         }
         return false;

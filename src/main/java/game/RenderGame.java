@@ -8,7 +8,6 @@ import client.LeaderboardInstance;
 import client.ScoreController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,12 +16,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.List;
-import menu.SoundEffects;
+
+import objects.GateAlignedState;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
-
-
 
 /**
  * The specific Game renderer inheriting from the general Renderer.
@@ -39,6 +37,10 @@ public class RenderGame implements RenderStrategy {
     private transient ConnectionFactory connectionFactory;
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
+    private static final Music goalSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
+    private static final Music hitSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/hit.wav"));
     private static List<LeaderboardInstance> leaderboard;
     private static ScoreController scoreController;
 
@@ -91,6 +93,16 @@ public class RenderGame implements RenderStrategy {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
             drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
+        }
+
+        // PLAY SOUNDS
+        if (GateAlignedState.playGoalSound) {
+            goalSound.play();
+            GateAlignedState.playGoalSound = false;
+        }
+        if (Pusher.playHitSound) {
+            hitSound.play();
+            Pusher.playHitSound = false;
         }
 
         // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT

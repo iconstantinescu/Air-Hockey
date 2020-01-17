@@ -1,10 +1,5 @@
 package objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
-
 /**
  * Class implementing the behaviour of the Puck.
  */
@@ -25,8 +20,6 @@ public class Puck {
     private float deltaX;
 
     private float deltaY;
-
-    public static final Music hitSound = Gdx.audio.newMusic(Gdx.files.internal("media/hit.wav"));
 
     /**
      * Constructor for the puck object.
