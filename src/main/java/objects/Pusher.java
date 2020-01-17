@@ -13,6 +13,8 @@ public class Pusher {
 
     private float radius;
 
+    public static boolean playHitSound = false;
+
     /**
      * Constructor for the pusher object.
      *

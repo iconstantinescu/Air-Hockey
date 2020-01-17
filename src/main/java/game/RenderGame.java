@@ -7,7 +7,6 @@ import client.Leaderboard;
 import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import menu.SoundEffects;
+import objects.GateAlignedState;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
@@ -38,9 +37,12 @@ public class RenderGame implements RenderStrategy {
     private transient ConnectionFactory connectionFactory;
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
-    private static Sound hitSound;
     private transient boolean matchUploaded;
     private transient Leaderboard leaderboard;
+    private static final Music hitSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/hit.wav"));
+    private static final Music goalSound =
+            Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
 
     /**
      * Constructor for the Renderer.
@@ -106,11 +108,15 @@ public class RenderGame implements RenderStrategy {
         // DRAW PUSHER 2
         drawGameObject(0, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
 
-        // PLAY THE SOUND EFFECTS
-        SoundEffects.hitSound(hitSound, puck, pusher1,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        SoundEffects.hitSound(hitSound, puck, pusher2,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // PLAY SOUNDS
+        if (GateAlignedState.playGoalSound) {
+            goalSound.play();
+            GateAlignedState.playGoalSound = false;
+        }
+        if (Pusher.playHitSound) {
+            hitSound.play();
+            Pusher.playHitSound = false;
+        }
 
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "

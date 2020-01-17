@@ -1,7 +1,5 @@
 package objects;
 
-import com.badlogic.gdx.Gdx;
-
 /**
  * Class implementing the behaviour of the Puck.
  */
