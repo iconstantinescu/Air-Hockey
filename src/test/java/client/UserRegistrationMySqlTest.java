@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +15,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-class LeaderboardControllerTest {
+
+public class UserRegistrationMySqlTest {
+
 
     @InjectMocks
-    private transient LeaderboardController leaderboardController;
+    private transient UserRegistrationMySql registrationMySql;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -29,7 +29,6 @@ class LeaderboardControllerTest {
     private transient ResultSet mockResultSet;
     @Mock
     private transient ConnectionFactory connectionFactory;
-
 
     @BeforeEach
     void setUp() throws SQLException {
@@ -42,17 +41,13 @@ class LeaderboardControllerTest {
     }
 
     @Test
-    void getTopN() throws SQLException {
+    public void testCreateNewUser() {
 
-        String nickname = "john";
-        int points = 100;
-        Mockito.when(mockResultSet.getString(1)).thenReturn(nickname);
-        Mockito.when(mockResultSet.getInt(2)).thenReturn(points);
-
-        List<LeaderboardInstance> resultList = leaderboardController.getTopN(1);
-        assertEquals(nickname, resultList.get(0).getNickname());
-        assertEquals(points, resultList.get(0).getPoints());
+        boolean created = registrationMySql
+                .createNewUser("user", "pwd", "john");
+        assertEquals(true, created);
     }
+
 
     @Test
     public void testSqlException() throws SQLException {
@@ -60,6 +55,8 @@ class LeaderboardControllerTest {
         Mockito.when(connectionFactory.createConnection(anyString()))
                 .thenThrow(new SQLException());
 
-        assertEquals(new ArrayList<>(), leaderboardController.getTopN(0));
+        registrationMySql.createNewUser("user", "pwd", "john");
     }
+
+
 }

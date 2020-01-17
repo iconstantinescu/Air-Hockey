@@ -54,7 +54,7 @@ class PusherTest {
 
         assertTrue(pusher.checkAndExecuteCollision(puck));
         assertEquals(0, puck.getDeltaX());
-        assertEquals(6, puck.getDeltaY());
+        assertEquals(12, puck.getDeltaY());
     }
 
     @Test

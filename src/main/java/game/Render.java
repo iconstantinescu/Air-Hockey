@@ -1,5 +1,11 @@
 package game;
 
+import client.ConnectionFactory;
+import client.LeaderboardDao;
+import client.LeaderboardDaoMySql;
+import client.User;
+import client.UserDao;
+import client.UserDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
 import menu.RenderLogin;
 import menu.RenderMenu;
@@ -10,8 +16,10 @@ import menu.RenderMenu;
  */
 public class Render extends ApplicationAdapter {
 
-    public static int userID1;
-    public static int userID2;
+    public static User user1;
+    public static User user2;
+    public static UserDao userDao;
+    public static LeaderboardDao leaderboardDao;
     public static boolean secondAuthentication;
 
     /**
@@ -32,9 +40,12 @@ public class Render extends ApplicationAdapter {
     @Override
     public void create() {
         // Initialize the login as the first login.
+        this.user1 = new User();
+        this.user2 = new User();
+        this.userDao = new UserDaoMySql();
+        this.leaderboardDao = new LeaderboardDaoMySql(new ConnectionFactory());
+
         renderStrategy = new RenderLogin();
-        this.userID1 = -1;
-        this.userID2 = -1;
         this.secondAuthentication = false;
     }
 

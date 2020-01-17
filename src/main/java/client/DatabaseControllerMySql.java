@@ -9,7 +9,7 @@ import java.sql.ResultSet;
  * used by all other classes that connect to the database.
  * The purpose of the class is to improve modularity and code reuse.
  */
-abstract class DatabaseController {
+abstract class DatabaseControllerMySql {
 
     /**
      * The connectionFactory object is injected in this class in order to improve testability.
@@ -37,7 +37,7 @@ abstract class DatabaseController {
      * @param connectionFactory the connectionFactory object used to create
      *                          new database connections.
      */
-    public DatabaseController(ConnectionFactory connectionFactory) {
+    public DatabaseControllerMySql(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
