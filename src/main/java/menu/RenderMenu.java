@@ -192,8 +192,7 @@ public class RenderMenu implements RenderStrategy {
      */
     public static void setButton(Sprite sprite, SpriteBatch batch) {
         batch.begin();
-        batch.draw(sprite, sprite.getX(),
-                sprite.getY());
+        batch.draw(sprite, sprite.getX(), sprite.getY());
 
         if (inRange(sprite)) {
             batch.setColor(Color.SKY);
@@ -251,8 +250,7 @@ public class RenderMenu implements RenderStrategy {
         homeBatch.begin();
         font.setColor(0,0,0,1);
         font.getData().setScale(3);
-        font.draw(homeBatch, str, posX,
-                posY);
+        font.draw(homeBatch, str, posX, posY);
         homeBatch.end();
     }
 

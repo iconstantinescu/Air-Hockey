@@ -90,7 +90,7 @@ public class RenderGame implements RenderStrategy {
         // DRAW THE PUCK OR GAME OVER
         if (scoreBoard.isGameOver()) {
             drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
-                    Gdx.graphics.getHeight() - 100);
+                    Gdx.graphics.getHeight() - 100, 4);
             // DRAW TOP SCORES
             uploadMatch();
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
@@ -125,9 +125,11 @@ public class RenderGame implements RenderStrategy {
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "
                         + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
-                Gdx.graphics.getHeight() - 20);
+                Gdx.graphics.getHeight() - 20, 4);
 
         drawWallsAndGates();
+        drawText("Player 1", 80, Gdx.graphics.getHeight() - 20,2);
+        drawText("Player 2", Gdx.graphics.getWidth() - 180, Gdx.graphics.getHeight() - 20, 2);
     }
 
     /**
@@ -185,7 +187,7 @@ public class RenderGame implements RenderStrategy {
             for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
                 drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
-                        posX, posY);
+                        posX, posY, 4);
 
                 posY -= 50;
                 i++;
@@ -193,7 +195,7 @@ public class RenderGame implements RenderStrategy {
         }
 
 
-        drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
+        drawText("Press ENTER to go back to menu", posX - 250, posY - 100, 3);
     }
 
     /**
@@ -319,11 +321,11 @@ public class RenderGame implements RenderStrategy {
      * @param posX The x coordinate of the text
      * @param posY The y coordinate of the text
      */
-    public void drawText(String str, float posX, float posY) {
+    public void drawText(String str, float posX, float posY, int fontScale) {
         BitmapFont font = new BitmapFont();
         batch.begin();
         font.setColor(0,0,0,1);
-        font.getData().setScale(4);
+        font.getData().setScale(fontScale);
         font.draw(batch, str, posX,
                 posY);
         batch.end();
