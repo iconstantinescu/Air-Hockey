@@ -62,7 +62,7 @@ public class UserGameTrackerMySqlTest {
 
         assertFalse(userGameTrackerMySql.saveGame(1,2,5,4));
         assertFalse(userGameTrackerMySql.updateUserStats(testUser));
-        assertEquals(new ArrayList<>(), userGameTrackerMySql.getGameHistory(1));
+        assertEquals(new ArrayList<>(), userGameTrackerMySql.getGameHistory(1, 5));
 
     }
 
@@ -95,7 +95,7 @@ public class UserGameTrackerMySqlTest {
                 .thenReturn("john").thenReturn("robert");
 
 
-        List<GameDetails> resultList = userGameTrackerMySql.getGameHistory(1);
+        List<GameDetails> resultList = userGameTrackerMySql.getGameHistory(1, 5);
         assertEquals(gameList, resultList);
     }
 }

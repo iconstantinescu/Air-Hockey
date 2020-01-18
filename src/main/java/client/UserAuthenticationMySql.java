@@ -81,11 +81,11 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
                 return user;
             }
 
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        }
+            return null;
 
-        return null;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
 }

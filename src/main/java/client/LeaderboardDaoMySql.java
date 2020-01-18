@@ -18,8 +18,6 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
     @Override
     public Leaderboard getLeaderboard(int size) {
 
-        Leaderboard leaderboard = new Leaderboard(size);
-
         try {
 
             String query = "select nickname, points from user_data"
@@ -30,16 +28,19 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
 
             ResultSet rs = ps.executeQuery();
 
+            Leaderboard leaderboard = new Leaderboard(size);
+
             while (rs.next()) {
                 LeaderboardEntry leaderboardEntry = new LeaderboardEntry(
                         rs.getString(1), rs.getInt(2));
                 leaderboard.addEntry(leaderboardEntry);
             }
 
+            return leaderboard;
+
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return new Leaderboard(size);
         }
-        return leaderboard;
     }
 
     @Override
@@ -64,9 +65,11 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
                 return rs.getInt(1);
             }
 
+            return -1;
+
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return -1;
         }
-        return -1;
+
     }
 }

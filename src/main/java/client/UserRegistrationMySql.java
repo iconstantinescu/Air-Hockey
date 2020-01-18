@@ -23,7 +23,6 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public boolean createNewUser(String username, String password, String nickname) {
 
-        boolean created = false;
         try {
 
             String query = "insert into user_data (username, password, salt, nickname)"
@@ -41,13 +40,12 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
 
             preparedStatement.execute();
 
-            created = true;
+            return true;
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return false;
         }
 
-        return created;
     }
 
 }

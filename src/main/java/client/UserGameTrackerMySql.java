@@ -42,10 +42,8 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -74,16 +72,12 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return false;
         }
-
-        return false;
     }
 
     @Override
     public List<GameDetails> getGameHistory(int userId, int size) {
-
-        List<GameDetails> gamesList = new ArrayList<>();
 
         try {
 
@@ -100,6 +94,8 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
             ResultSet rs = ps.executeQuery();
 
+            List<GameDetails> gamesList = new ArrayList<>();
+
             while (rs.next()) {
 
                 GameDetails game = new GameDetails();
@@ -112,10 +108,11 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
                 gamesList.add(game);
             }
 
+            return gamesList;
+
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return new ArrayList<>();
         }
-        return gamesList;
     }
 
 
@@ -139,16 +136,14 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
             if (rs.next()) {
                 String nickname = rs.getString("nickname");
-                rs.close();
                 return nickname;
             }
 
-            rs.close();
+            return "";
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return "";
         }
-        return "";
     }
 
 }
