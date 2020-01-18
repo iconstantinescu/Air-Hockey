@@ -156,13 +156,13 @@ public class RenderGame implements RenderStrategy {
             // ADD POINTS TO WINNER
             if (scoreBoard.getWinner()) {
                 Render.user1.addPoints(addPoints);
-                Render.user1.addWonGame();
-                Render.user2.addLostGame();
+                Render.user1.addNumOfWonGames(1);
+                Render.user2.addNumOfLostGames(1);
                 Render.userDao.updateUser(Render.user1);
             } else {
                 Render.user2.addPoints(addPoints);
-                Render.user2.addWonGame();
-                Render.user1.addLostGame();
+                Render.user2.addNumOfWonGames(1);
+                Render.user1.addNumOfLostGames(1);
                 Render.userDao.updateUser(Render.user2);
             }
 

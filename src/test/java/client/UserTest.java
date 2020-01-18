@@ -31,7 +31,6 @@ class UserTest {
         User emptyUser = new User();
         assertEquals(0, emptyUser.getUserID());
         assertEquals(0, emptyUser.getPoints());
-        assertEquals(0, emptyUser.getNumOfGamesPlayed());
         assertEquals(0, emptyUser.getNumOfLostGames());
         assertEquals(0, emptyUser.getNumOfWonGames());
         assertEquals("", emptyUser.getNickname());
@@ -74,44 +73,15 @@ class UserTest {
     }
 
     @Test
-    void addGame() {
-        GameDetails newGame = new GameDetails("john", "robert",
-                5, 2, timestamp);
-
-        testUser.addGame(newGame);
-        testGameList.add(newGame);
-        assertEquals(testGameList, testUser.getGameHistory());
-    }
-
-    @Test
     void getNumOfLostGames() {
-        testUser.addLostGame();
+        testUser.addNumOfLostGames(1);
         assertEquals(2, testUser.getNumOfLostGames());
     }
 
     @Test
-    void setNumOfLostGames() {
-        testUser.setNumOfLostGames(10);
-        assertEquals(10, testUser.getNumOfLostGames());
-    }
-
-    @Test
     void getNumOfWonGames() {
-        testUser.addWonGame();
-        testUser.addWonGame();
+        testUser.addNumOfWonGames(2);
         assertEquals(4, testUser.getNumOfWonGames());
-    }
-
-    @Test
-    void setNumOfWonGames() {
-        testUser.setNumOfWonGames(10);
-        assertEquals(10, testUser.getNumOfWonGames());
-    }
-
-
-    @Test
-    void getNumOfGamesPlayed() {
-        assertEquals(3, testUser.getNumOfGamesPlayed());
     }
 
     @Test
@@ -171,9 +141,9 @@ class UserTest {
 
     @Test
     void notEqualsGamesWonLost() {
-        otherUser.addWonGame();
+        otherUser.addNumOfWonGames(1);
         assertFalse(testUser.equals(otherUser));
-        otherUser.addLostGame();
+        otherUser.addNumOfLostGames(1);
         assertFalse(testUser.equals(otherUser));
     }
 

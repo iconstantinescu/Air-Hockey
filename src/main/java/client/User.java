@@ -76,38 +76,21 @@ public class User {
         this.gameHistory = gameHistory;
     }
 
-    public void addGame(GameDetails newGame) {
-        this.gameHistory.add(newGame);
-    }
-
-    public void addLostGame() {
-        this.gamesLost++;
-    }
-
-    public void addWonGame() {
-        this.gamesWon++;
-    }
-
     public int getNumOfLostGames() {
         return  this.gamesLost;
     }
 
-    public void setNumOfLostGames(int gamesLost) {
-        this.gamesLost = gamesLost;
+    public void addNumOfLostGames(int gamesLost) {
+        this.gamesLost += gamesLost;
     }
 
     public int getNumOfWonGames() {
         return  this.gamesWon;
     }
 
-    public void setNumOfWonGames(int gamesWon) {
-        this.gamesWon = gamesWon;
+    public void addNumOfWonGames(int gamesWon) {
+        this.gamesWon += gamesWon;
     }
-
-    public int getNumOfGamesPlayed() {
-        return  this.gamesLost + this.gamesWon;
-    }
-
 
     //The hashCode is not needed for our application.
     //We just use the equals method.

@@ -142,7 +142,7 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
             ResultSet rs = ps.executeQuery();
 
-            rs.next() ;
+            rs.next();
 
             String nickname = rs.getString("nickname");
             rs.close();

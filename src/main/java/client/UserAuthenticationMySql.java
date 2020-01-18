@@ -1,11 +1,11 @@
 package client;
 
-import utilities.BcryptHashing;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import utilities.BcryptHashing;
 
 /**
  * Class that contains the methods required to authenticate the user with the database.
@@ -82,8 +82,8 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
                 user.setUserId(rs.getInt("user_id"));
                 user.setNickname(rs.getString("nickname"));
                 user.addPoints(rs.getLong("points"));
-                user.setNumOfWonGames(rs.getInt("games_won"));
-                user.setNumOfLostGames(rs.getInt("games_lost"));
+                user.addNumOfWonGames(rs.getInt("games_won"));
+                user.addNumOfLostGames(rs.getInt("games_lost"));
                 return user;
             }
 
