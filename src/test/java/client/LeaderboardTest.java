@@ -1,13 +1,14 @@
 package client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LeaderboardTest {
 
@@ -127,6 +128,7 @@ class LeaderboardTest {
     }
 
     @Test
+    @SuppressWarnings("PMD.EqualsNull") // we need explicitly to call equals null for the test
     void notEqualsNull() {
         assertFalse(testLeaderboard.equals(null));
     }

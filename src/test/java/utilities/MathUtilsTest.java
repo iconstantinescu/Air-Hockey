@@ -1,14 +1,10 @@
+package utilities;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import objects.Puck;
-import objects.Pusher;
-import objects.ScoreBoard;
 import org.junit.jupiter.api.Test;
-import utilities.MathUtils;
-
-
 
 class MathUtilsTest {
 
