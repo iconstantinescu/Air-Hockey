@@ -23,11 +23,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.Render;
 import game.RenderGame;
 import game.RenderStrategy;
+import java.util.List;
 
 import objects.Puck;
 import objects.ScoreBoard;
 
-import java.util.List;
+
 
 /**
  * The specific renderer of the Main Menu.
@@ -74,7 +75,8 @@ public class RenderMenu implements RenderStrategy {
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
 
-        float nicknameX = 30, nicknameY = Gdx.graphics.getHeight() - 80;
+        float nicknameX = 30;
+        float nicknameY = Gdx.graphics.getHeight() - 80;
         nickname = new TextField("", skin);
         nickname.setPosition(nicknameX, nicknameY);
         nickname.setHeight(40);
@@ -91,8 +93,6 @@ public class RenderMenu implements RenderStrategy {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 nicknameChange();
-//                error.setText("Login failed, try again");
-//                error.setColor(100, 0,0,1);
             }
         });
 
@@ -323,11 +323,13 @@ public class RenderMenu implements RenderStrategy {
         StringBuilder buildString = new StringBuilder("Game History:\n");
 
 
-        for(int i = 0; i < 5 && i < history.size(); i++) {
+        for (int i = 0; i < 5 && i < history.size(); i++) {
             // Append first User
-            buildString.append(history.get(i).getNickname1() + " " + history.get(i).getScoreUser1() + " : ");
+            buildString.append(history.get(i).getNickname1()
+                    + " " + history.get(i).getScoreUser1() + " : ");
             // Append second User
-            buildString.append(history.get(i).getScoreUser2() + " " + history.get(i).getNickname2() + "\n");
+            buildString.append(history.get(i).getScoreUser2()
+                    + " " + history.get(i).getNickname2() + "\n");
         }
 
         setText("Games Played: " + Render.user1.getNumOfGamesPlayed() + "\n"

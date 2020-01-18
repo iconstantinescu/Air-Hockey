@@ -20,7 +20,7 @@ import objects.GateAlignedState;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
-
+import org.lwjgl.util.vector.Vector2f;
 
 
 /**
@@ -31,6 +31,8 @@ public class RenderGame implements RenderStrategy {
     private transient Skin nicknameSkin;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
+    private transient Vector2f pusher1Reset;
+    private transient Vector2f pusher2Reset;
     private transient Puck puck;
     private transient ScoreBoard scoreBoard;
     private transient Texture img;
@@ -45,6 +47,7 @@ public class RenderGame implements RenderStrategy {
             Gdx.audio.newMusic(Gdx.files.internal("media/hit.wav"));
     private static final Music goalSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
+    public static boolean resetPushers;
 
     /**
      * Constructor for the Renderer.
@@ -52,20 +55,34 @@ public class RenderGame implements RenderStrategy {
     public RenderGame() {
         nicknameSkin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
 
+        pusher1Reset = new Vector2f();
+        pusher2Reset = new Vector2f();
+
+        // Set pusher 1 and 2 reset positions
+        pusher1Reset.x = Gdx.graphics.getWidth() / 4f;
+        pusher1Reset.y = Gdx.graphics.getHeight() / 2f;
+        pusher2Reset.x = Gdx.graphics.getWidth() * (3f / 4f);
+        pusher2Reset.y = Gdx.graphics.getHeight() / 2f;
+
+
+
         // Set pusher 1 and 2 positions
-        pusher1 = new Pusher(300, 100, 40);
-        pusher2 = new Pusher(800, 360, 40);
+        pusher1 = new Pusher(pusher1Reset.x, pusher1Reset.y, 40);
+        pusher2 = new Pusher(pusher2Reset.x, pusher2Reset.y, 40);
 
         // Set the field sprite
         img = new Texture("media/field.png");
         sprite = new Sprite(img);
         sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
+        float rand = (Math.random() < 0.5) ? 1f : -1f;
+
         // Set the objects sprites
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         scoreBoard = new ScoreBoard();
-        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0,
+        puck = new Puck(Gdx.graphics.getWidth() / 2
+                + 100 * rand, Gdx.graphics.getHeight() / 2, 15, 0, 0,
                 scoreBoard);
 
         // Initiate the Background Sound
@@ -101,6 +118,8 @@ public class RenderGame implements RenderStrategy {
             updatePuck();
             drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
         }
+
+        checkPushersReset();
 
         // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
         updatePusher(pusher1, true);
@@ -161,6 +180,19 @@ public class RenderGame implements RenderStrategy {
                     scoreBoard.getPlayer1Score(),
                     scoreBoard.getPlayer2Score());
 
+        }
+    }
+
+    /**
+     * Method that checks if the pusher positions need to be reset.
+     */
+    public void checkPushersReset() {
+        if (resetPushers) {
+            pusher1.setposX(pusher1Reset.x);
+            pusher1.setposY(pusher1Reset.y);
+            pusher2.setposX(pusher2Reset.x);
+            pusher2.setposY(pusher2Reset.y);
+            resetPushers = !resetPushers;
         }
     }
 
