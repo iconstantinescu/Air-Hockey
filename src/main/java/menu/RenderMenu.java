@@ -128,7 +128,7 @@ public class RenderMenu implements RenderStrategy {
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
                 scoreBoard);
 
-        history = Render.userDao.getGameHistory(Render.user1.getUserID());
+        history = Render.userDao.getGameHistory(Render.user1.getUserID(),5);
 
         stage.addActor(nickname);
         stage.addActor(nicknameButton);
@@ -196,7 +196,7 @@ public class RenderMenu implements RenderStrategy {
 
         Render.user1.setNickname(nicknameInput);
         Render.userDao.updateUser(Render.user1);
-        history = Render.userDao.getGameHistory(Render.user1.getUserID());
+        history = Render.userDao.getGameHistory(Render.user1.getUserID(), 5);
         leaderboard = Render.leaderboardDao.getLeaderboard(10);
     }
 

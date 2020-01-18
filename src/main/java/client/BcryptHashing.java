@@ -17,7 +17,7 @@ public class BcryptHashing {
      * @param passwordPlaintext password in plain text
      * @return hashed password as a String
      */
-    public static String hashPassword(String passwordPlaintext) {
+    public static String hashPasswordWithGeneratedSalt(String passwordPlaintext) {
         salt = BCrypt.gensalt();
         return BCrypt.hashpw(passwordPlaintext, salt);
     }
@@ -29,7 +29,7 @@ public class BcryptHashing {
      * @param salt the salt that will be used for hashing
      * @return hashed password as a String
      */
-    public static String hashPasswordWithSalt(String passwordPlaintext, String salt) {
+    public static String hashPasswordWithGivenSalt(String passwordPlaintext, String salt) {
         return BCrypt.hashpw(passwordPlaintext, salt);
     }
 

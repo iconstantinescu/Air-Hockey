@@ -27,14 +27,11 @@ public class UserRegistrationMySqlTest {
     private transient PreparedStatement mockPS;
     @Mock
     private transient ResultSet mockResultSet;
-    @Mock
-    private transient ConnectionFactory connectionFactory;
 
     @BeforeEach
     void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
@@ -52,7 +49,7 @@ public class UserRegistrationMySqlTest {
     @Test
     public void testSqlException() throws SQLException {
 
-        Mockito.when(connectionFactory.createConnection(anyString()))
+        Mockito.when(mockConnection.prepareStatement(anyString()))
                 .thenThrow(new SQLException());
 
         registrationMySql.createNewUser("user", "pwd", "john");

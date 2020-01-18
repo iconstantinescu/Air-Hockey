@@ -35,7 +35,6 @@ public class LeaderboardDaoMySqlTest {
     void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
@@ -66,7 +65,7 @@ public class LeaderboardDaoMySqlTest {
     @Test
     void testExceptions() throws SQLException {
 
-        Mockito.when(connectionFactory.createConnection(anyString()))
+        Mockito.when(mockConnection.prepareStatement(anyString()))
                 .thenThrow(new SQLException());
         Assertions.assertEquals(-1, leaderboardDaoMySql.getLeaderboardPosition(1));
         Assertions.assertEquals(new Leaderboard(10), leaderboardDaoMySql.getLeaderboard(10));

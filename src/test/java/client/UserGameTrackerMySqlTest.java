@@ -29,8 +29,6 @@ public class UserGameTrackerMySqlTest {
     private transient PreparedStatement mockPS;
     @Mock
     private transient ResultSet mockResultSet;
-    @Mock
-    private transient ConnectionFactory connectionFactory;
 
     private transient User testUser;
 
@@ -44,7 +42,6 @@ public class UserGameTrackerMySqlTest {
 
         testUser = new User(1, "john",  100, 2, 3);
 
-        Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
@@ -60,12 +57,12 @@ public class UserGameTrackerMySqlTest {
     @Test
     public void testSqlExceptions() throws SQLException {
 
-        Mockito.when(connectionFactory.createConnection(anyString()))
+        Mockito.when(mockConnection.prepareStatement(anyString()))
                 .thenThrow(new SQLException());
 
         assertFalse(userGameTrackerMySql.saveGame(1,2,5,4));
         assertFalse(userGameTrackerMySql.updateUserStats(testUser));
-        assertEquals(new ArrayList<>(), userGameTrackerMySql.getGameHistory(1));
+        assertEquals(new ArrayList<>(), userGameTrackerMySql.getGameHistory(1, 5));
 
     }
 
@@ -98,7 +95,7 @@ public class UserGameTrackerMySqlTest {
                 .thenReturn("john").thenReturn("robert");
 
 
-        List<GameDetails> resultList = userGameTrackerMySql.getGameHistory(1);
+        List<GameDetails> resultList = userGameTrackerMySql.getGameHistory(1, 5);
         assertEquals(gameList, resultList);
     }
 }
