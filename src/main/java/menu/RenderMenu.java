@@ -6,7 +6,6 @@ import client.GameDetails;
 import client.Leaderboard;
 
 import client.LeaderboardEntry;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +19,6 @@ import game.RenderStrategy;
 import objects.Puck;
 import objects.ScoreBoard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -268,11 +266,11 @@ public class RenderMenu implements RenderStrategy {
 
 //        ArrayList<GameDetails> history = Render.user1.getGameHistory();
 
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 5 && i < history.size(); i++) {
             // Append first User
             buildString.append(history.get(i).getNickname1() + " " + history.get(i).getScoreUser1() + " : ");
             // Append second User
-            buildString.append(history.get(i).getScoreUser1() + " " + history.get(i).getNickname2() + "\n");
+            buildString.append(history.get(i).getScoreUser2() + " " + history.get(i).getNickname2() + "\n");
         }
 
         setText("Games Played: " + Render.user1.getNumOfGamesPlayed() + "\n"

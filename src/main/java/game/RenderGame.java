@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import objects.GateAlignedState;
 import objects.Puck;
 import objects.Pusher;
@@ -27,6 +28,7 @@ import objects.ScoreBoard;
  */
 public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
+    private transient Skin nicknameSkin;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
     private transient Puck puck;
@@ -48,6 +50,8 @@ public class RenderGame implements RenderStrategy {
      * Constructor for the Renderer.
      */
     public RenderGame() {
+        nicknameSkin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
+
         // Set pusher 1 and 2 positions
         pusher1 = new Pusher(300, 100, 40);
         pusher2 = new Pusher(800, 360, 40);
