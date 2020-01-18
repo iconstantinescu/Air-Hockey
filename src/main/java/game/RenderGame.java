@@ -2,7 +2,6 @@ package game;
 
 import static com.badlogic.gdx.Input.Keys.ENTER;
 
-import client.ConnectionFactory;
 import client.Leaderboard;
 import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
@@ -32,7 +31,6 @@ public class RenderGame implements RenderStrategy {
     private transient Texture img;
     private transient Sprite sprite;
     private transient SpriteBatch batch;
-    private transient ConnectionFactory connectionFactory;
     private static final Music backSound =
             Gdx.audio.newMusic(Gdx.files.internal("media/song.wav"));
     private transient boolean matchUploaded;
@@ -65,9 +63,6 @@ public class RenderGame implements RenderStrategy {
         // Initiate the Background Sound
         backSound.setLooping(true);
         backSound.play();
-
-
-        connectionFactory = new ConnectionFactory();
 
         matchUploaded = false;
 

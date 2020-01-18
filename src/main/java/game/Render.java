@@ -56,6 +56,7 @@ public class Render extends ApplicationAdapter {
             this.leaderboardDao = new LeaderboardDaoMySql(sqlConnection);
         } catch (SQLException e) {
             System.out.println("Something went wrong when connecting to the database");
+            dispose(); //application will close if we cannot connect
         }
 
         renderStrategy = new RenderLogin();
