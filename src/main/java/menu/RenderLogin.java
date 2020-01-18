@@ -186,7 +186,8 @@ public class RenderLogin implements RenderStrategy {
             if (Render.user1.getUserID() == 0) {
                 Render.user1 = resultUser;
                 Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
-            } else if (Render.user2.getUserID() == 0) {
+            } else if (Render.user2.getUserID() == 0
+                    && !(Render.user1.getUserID() == resultUser.getUserID())) {
                 Render.user2 = resultUser;
                 Render.secondAuthentication = true;
                 Render.changeGameStrategy(Render.ApplicationStrategy.GAME);

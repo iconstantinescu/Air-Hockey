@@ -75,12 +75,12 @@ public class RenderGame implements RenderStrategy {
         sprite = new Sprite(img);
         sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
-        float rand = (Math.random() < 0.5) ? 1f : -1f;
 
         // Set the objects sprites
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         scoreBoard = new ScoreBoard();
+        float rand = (Math.random() < 0.5) ? 1f : -1f;
         puck = new Puck(Gdx.graphics.getWidth() / 2
                 + 100 * rand, Gdx.graphics.getHeight() / 2, 15, 0, 0,
                 scoreBoard);
