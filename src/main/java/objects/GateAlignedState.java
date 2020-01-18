@@ -1,7 +1,5 @@
 package objects;
 
-import game.RenderGame;
-
 /**
  * This class implements the behaviour of the Puck when is is
  * inside the Gate Range.
@@ -33,14 +31,12 @@ public class GateAlignedState implements PuckState {
         if (puck.getposX() + puck.getRadius() < 0) {
             puck.resetPuck(screenWidth / 2 - offset, screenHeight / 2 + 8);
             scoreBoard.pointP2();
-            RenderGame.resetPushers = true;
             playGoalSound = true;
         }
 
         // Add point to first player if puck goes past the right gate
         if (puck.getposX() - puck.getRadius() >= screenWidth) {
             puck.resetPuck(screenWidth / 2 + offset, screenHeight / 2 + 8);
-            RenderGame.resetPushers = true;
             scoreBoard.pointP1();
             playGoalSound = true;
         }

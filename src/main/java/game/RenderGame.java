@@ -187,12 +187,12 @@ public class RenderGame implements RenderStrategy {
      * Method that checks if the pusher positions need to be reset.
      */
     public void checkPushersReset() {
-        if (resetPushers) {
+        if (Pusher.resetPusher) {
             pusher1.setposX(pusher1Reset.x);
             pusher1.setposY(pusher1Reset.y);
             pusher2.setposX(pusher2Reset.x);
             pusher2.setposY(pusher2Reset.y);
-            resetPushers = !resetPushers;
+            Pusher.resetPusher = !Pusher.resetPusher;
         }
     }
 

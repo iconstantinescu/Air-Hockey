@@ -2,6 +2,8 @@ package objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import game.RenderGame;
+import game.RenderStrategy;
 import org.junit.jupiter.api.Test;
 
 class GateAlignedStateTest {
