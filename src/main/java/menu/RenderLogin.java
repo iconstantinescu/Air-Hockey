@@ -155,6 +155,7 @@ public class RenderLogin implements RenderStrategy {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+
     }
 
     /**

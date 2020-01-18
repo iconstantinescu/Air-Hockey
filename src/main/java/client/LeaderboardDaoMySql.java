@@ -1,11 +1,14 @@
 package client;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LeaderboardDaoMySql extends DatabaseControllerMySql implements LeaderboardDao {
 
-    public LeaderboardDaoMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public LeaderboardDaoMySql(Connection conn) {
+        super(conn);
     }
 
     /**
@@ -19,14 +22,13 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "select nickname, points from user_data"
                     + " order by points desc, nickname asc "
                     + "limit ?";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, size);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 LeaderboardEntry leaderboardEntry = new LeaderboardEntry(
@@ -36,8 +38,6 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
         return leaderboard;
     }
@@ -46,7 +46,6 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
     public int getLeaderboardPosition(int userId) {
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "select rnk "
                     + "from (select user_id,"
                     + "      (select count(distinct points) "
@@ -55,11 +54,11 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
                     + "     ) as rank_table"
                     + "where user_id= ?";
 
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 return rs.getInt(1);
@@ -67,8 +66,6 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
         return -1;
     }

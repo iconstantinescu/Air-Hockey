@@ -1,5 +1,6 @@
 package client;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class UserDaoMySql implements UserDao {
@@ -12,10 +13,10 @@ public class UserDaoMySql implements UserDao {
      * The constructor that initializes the class fields with
      * the corresponding interface implementations.
      */
-    public UserDaoMySql() {
-        this.userAuthentication = new UserAuthenticationMySql(new ConnectionFactory());
-        this.userRegistration = new UserRegistrationMySql(new ConnectionFactory());
-        this.userGameTracker = new UserGameTrackerMySql(new ConnectionFactory());
+    public UserDaoMySql(Connection conn) {
+        this.userAuthentication = new UserAuthenticationMySql(conn);
+        this.userRegistration = new UserRegistrationMySql(conn);
+        this.userGameTracker = new UserGameTrackerMySql(conn);
     }
 
     @Override

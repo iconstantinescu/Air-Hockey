@@ -1,5 +1,8 @@
 package client;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -8,8 +11,8 @@ import java.sql.SQLException;
 public class UserAuthenticationMySql extends DatabaseControllerMySql
         implements  UserAuthentication {
 
-    public UserAuthenticationMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public UserAuthenticationMySql(Connection conn) {
+        super(conn);
     }
 
     /**
@@ -23,11 +26,11 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
 
             String query = "select salt from user_data"
                     + " where username = ?";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setString(1, username);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             rs.next();
 
             return rs.getString("salt");
@@ -50,8 +53,6 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
-
             //This should be after the connection creation
             //and before this method's preparedStatement initialization
             String salt = getSalt(username);
@@ -61,14 +62,14 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
                     + " where username = ? and password = ?";
 
 
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
-            String hashedPwd = BcryptHashing.hashPasswordWithSalt(password, salt);
+            String hashedPwd = BcryptHashing.hashPasswordWithGivenSalt(password, salt);
 
             ps.setString(1, username);
             ps.setString(2, hashedPwd);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 User user = new User();
@@ -82,8 +83,6 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
 
         return null;

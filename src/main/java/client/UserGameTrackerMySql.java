@@ -1,8 +1,6 @@
 package client;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +12,10 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
     /**
      * Constructor of the class.
-     * @param connectionFactory the connectionFactory object that facilitates
-     *                          the creation of a new database connection
+     * @param conn the connection object that connects to the database
      */
-    public UserGameTrackerMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public UserGameTrackerMySql(Connection conn) {
+        super(conn);
     }
 
 
@@ -31,10 +28,9 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "update user_data set nickname=?, points=?, games_won=?, games_lost=?"
                     + " where user_id = ?";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setString(1, user.getNickname());
             ps.setLong(2, user.getPoints());
@@ -47,8 +43,6 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
 
         return false;
@@ -65,11 +59,10 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "insert into game (user_id_1, user_id_2, "
                         + "score_user_1, score_user_2, game_timestamp)"
                         + " values (?,?,?,?,?)";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId1);
             ps.setInt(2, userId2);
@@ -82,9 +75,8 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
+
         return false;
     }
 
@@ -95,18 +87,15 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
-
             String query = "select * from game"
                     + " where user_id_1 = ? or user_id_2 = ?";
 
-
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
             ps.setInt(2, userId);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
@@ -122,10 +111,7 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
-
         return gamesList;
     }
 
@@ -142,19 +128,19 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
                     + " where user_id = ?";
 
 
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
 
-            ResultSet newRs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            if (newRs.next()) {
-                String nickname = newRs.getString("nickname");
-                newRs.close();
+            if (rs.next()) {
+                String nickname = rs.getString("nickname");
+                rs.close();
                 return nickname;
             }
 
-            newRs.close();
+            rs.close();
 
         } catch (SQLException e) {
             System.out.println(e.toString());

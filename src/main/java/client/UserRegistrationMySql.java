@@ -1,5 +1,6 @@
 package client;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -8,8 +9,8 @@ import java.sql.SQLException;
  */
 public class UserRegistrationMySql extends DatabaseControllerMySql implements UserRegistration {
 
-    public UserRegistrationMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public UserRegistrationMySql(Connection conn) {
+        super(conn);
     }
 
     /**
@@ -25,14 +26,12 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
         boolean created = false;
         try {
 
-            conn = connectionFactory.createConnection(URL);
-
             String query = "insert into user_data (username, password, salt, nickname)"
                     + "values (?,?,?,?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
 
-            String hashedPwd = BcryptHashing.hashPassword(password);
+            String hashedPwd = BcryptHashing.hashPasswordWithGeneratedSalt(password);
             String salt = BcryptHashing.getSalt();
 
             preparedStatement.setString(1, username);
@@ -46,10 +45,7 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
 
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } finally {
-            closeConnections();
         }
-
 
         return created;
     }

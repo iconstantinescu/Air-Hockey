@@ -20,6 +20,7 @@ import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
+import java.sql.SQLException;
 
 
 /**
@@ -332,5 +333,6 @@ public class RenderGame implements RenderStrategy {
         batch.dispose();
         img.dispose();
         shape.dispose();
+
     }
 }

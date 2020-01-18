@@ -43,7 +43,7 @@ public class UserAuthenticationMySqlTest {
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
 
         pwd = "pwd";
-        BcryptHashing.hashPassword(pwd);
+        BcryptHashing.hashPasswordWithGeneratedSalt(pwd);
         salt = BcryptHashing.getSalt();
         username = "user";
     }
