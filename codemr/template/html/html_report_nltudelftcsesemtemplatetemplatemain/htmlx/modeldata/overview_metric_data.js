@@ -1,1 +1,0 @@
-var CodeMR_ProjectMetrics = {"Project Name":"template working set: {nl.tudelft.cse.sem.template.template.main}", "Number of Highly Problematic Classes":0, "Number of Entities":24, "Number of Problematic Classes":1, "Class Lines of Code":881, "Number of External Packages":15, "Number of Packages":5, "Number of External Entities":43}
