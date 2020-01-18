@@ -13,8 +13,8 @@ public class BcryptHashingTest {
     public void testHashPassword() {
 
         BcryptHashing bcryptHashing = new BcryptHashing();
-        String hashedPassword = BcryptHashing.hashPassword("pwd");
+        String hashedPassword = BcryptHashing.hashPasswordWithGeneratedSalt("pwd");
         String salt = BcryptHashing.getSalt();
-        assertEquals(hashedPassword, BcryptHashing.hashPasswordWithSalt("pwd", salt));
+        assertEquals(hashedPassword, BcryptHashing.hashPasswordWithGivenSalt("pwd", salt));
     }
 }

@@ -7,6 +7,8 @@ import client.User;
 import client.UserDao;
 import client.UserDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import menu.RenderLogin;
 import menu.RenderMenu;
 
@@ -21,6 +23,7 @@ public class Render extends ApplicationAdapter {
     public static UserDao userDao;
     public static LeaderboardDao leaderboardDao;
     public static boolean secondAuthentication;
+    public static Connection sqlConnection;
 
     /**
      *  An enumeration of the possible render strategies of the application.
@@ -40,13 +43,25 @@ public class Render extends ApplicationAdapter {
     @Override
     public void create() {
         // Initialize the login as the first login.
+
         this.user1 = new User();
         this.user2 = new User();
-        this.userDao = new UserDaoMySql();
-        this.leaderboardDao = new LeaderboardDaoMySql(new ConnectionFactory());
+
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        try {
+
+            //this connection will be reused for all queries
+            sqlConnection = connectionFactory.createConnection();
+            this.userDao = new UserDaoMySql(sqlConnection);
+            this.leaderboardDao = new LeaderboardDaoMySql(sqlConnection);
+        } catch (SQLException e) {
+            System.out.println("Something went wrong when connecting to the database");
+            dispose(); //application will close if we cannot connect
+        }
 
         renderStrategy = new RenderLogin();
         this.secondAuthentication = false;
+
     }
 
     /**
@@ -90,6 +105,14 @@ public class Render extends ApplicationAdapter {
     public void dispose() {
         if (renderStrategy != null) {
             renderStrategy.dispose();
+
+            try {
+                sqlConnection.close();
+            } catch (SQLException e) {
+                System.out.println("Could not close the connection");
+                dispose(); //try again
+            }
+
         }
     }
 

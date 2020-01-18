@@ -25,8 +25,6 @@ public class UserAuthenticationMySqlTest {
     private transient PreparedStatement mockPS;
     @Mock
     private transient ResultSet mockResultSet;
-    @Mock
-    private transient ConnectionFactory connectionFactory;
 
     private transient String username;
     private transient String pwd;
@@ -36,14 +34,13 @@ public class UserAuthenticationMySqlTest {
     void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        Mockito.when(connectionFactory.createConnection(anyString())).thenReturn(mockConnection);
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
         Mockito.when(mockConnection.isClosed()).thenReturn(true);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
 
         pwd = "pwd";
-        BcryptHashing.hashPassword(pwd);
+        BcryptHashing.hashPasswordWithGeneratedSalt(pwd);
         salt = BcryptHashing.getSalt();
         username = "user";
     }

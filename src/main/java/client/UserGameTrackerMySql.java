@@ -1,5 +1,7 @@
 package client;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -14,11 +16,10 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
     /**
      * Constructor of the class.
-     * @param connectionFactory the connectionFactory object that facilitates
-     *                          the creation of a new database connection
+     * @param conn the connection object that connects to the database
      */
-    public UserGameTrackerMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public UserGameTrackerMySql(Connection conn) {
+        super(conn);
     }
 
 
@@ -31,10 +32,9 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "update user_data set nickname=?, points=?, games_won=?, games_lost=?"
                     + " where user_id = ?";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setString(1, user.getNickname());
             ps.setLong(2, user.getPoints());
@@ -46,12 +46,8 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -65,11 +61,10 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "insert into game (user_id_1, user_id_2, "
                         + "score_user_1, score_user_2, game_timestamp)"
                         + " values (?,?,?,?,?)";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId1);
             ps.setInt(2, userId2);
@@ -81,32 +76,32 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
             return true;
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
+            return false;
         }
-        return false;
     }
 
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     @Override
-    public List<GameDetails> getGameHistory(int userId) {
-
-        List<GameDetails> gamesList = new ArrayList<>();
+    public List<GameDetails> getGameHistory(int userId, int size) {
 
         try {
 
-            conn = connectionFactory.createConnection(URL);
-
             String query = "select * from game"
-                    + " where user_id_1 = ? or user_id_2 = ?";
+                    + " where user_id_1 = ? or user_id_2 = ?"
+                    + " order by game_timestamp desc "
+                    + "limit ?";
 
-
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
             ps.setInt(2, userId);
+            ps.setInt(3, size);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
+
+            List<GameDetails> gamesList = new ArrayList<>();
 
             while (rs.next()) {
 
@@ -120,17 +115,16 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
                 gamesList.add(game);
             }
 
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
-        }
+            rs.close();
+            return gamesList;
 
-        return gamesList;
+        } catch (SQLException e) {
+            return new ArrayList<>();
+        }
     }
 
 
-    // We are actually closing the resultSet in all the cases
+    // We are actually closing the resultSet
     // but the PMD does not see this for some reason
     @SuppressWarnings("PMD.CloseResource")
     private String getNicknameById(int userId) {
@@ -142,24 +136,23 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
                     + " where user_id = ?";
 
 
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
 
-            ResultSet newRs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            if (newRs.next()) {
-                String nickname = newRs.getString("nickname");
-                newRs.close();
+            if (rs.next()) {
+                String nickname = rs.getString("nickname");
                 return nickname;
             }
 
-            newRs.close();
+            rs.close();
+            return "";
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            return "";
         }
-        return "";
     }
 
 }

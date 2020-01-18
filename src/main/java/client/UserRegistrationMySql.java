@@ -1,5 +1,6 @@
 package client;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -8,8 +9,8 @@ import java.sql.SQLException;
  */
 public class UserRegistrationMySql extends DatabaseControllerMySql implements UserRegistration {
 
-    public UserRegistrationMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public UserRegistrationMySql(Connection conn) {
+        super(conn);
     }
 
     /**
@@ -19,20 +20,16 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
      * @param nickname name displayed in game
      * @return true if the new user was created successfully or false otherwise
      */
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public boolean createNewUser(String username, String password, String nickname) {
 
-        boolean created = false;
         try {
-
-            conn = connectionFactory.createConnection(URL);
 
             String query = "insert into user_data (username, password, salt, nickname)"
                     + "values (?,?,?,?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
 
-            String hashedPwd = BcryptHashing.hashPassword(password);
+            String hashedPwd = BcryptHashing.hashPasswordWithGeneratedSalt(password);
             String salt = BcryptHashing.getSalt();
 
             preparedStatement.setString(1, username);
@@ -42,16 +39,12 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
 
             preparedStatement.execute();
 
-            created = true;
+            return true;
 
         } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
+            return false;
         }
 
-
-        return created;
     }
 
 }

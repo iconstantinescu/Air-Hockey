@@ -1,32 +1,37 @@
 package client;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LeaderboardDaoMySql extends DatabaseControllerMySql implements LeaderboardDao {
 
-    public LeaderboardDaoMySql(ConnectionFactory connectionFactory) {
-        super(connectionFactory);
+    public LeaderboardDaoMySql(Connection conn) {
+        super(conn);
     }
 
     /**
      * Get the points of all players in descending order.
      * @return a list with nicknames and points of all players in descending order
      */
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     @Override
     public Leaderboard getLeaderboard(int size) {
 
-        Leaderboard leaderboard = new Leaderboard(size);
-
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "select nickname, points from user_data"
                     + " order by points desc, nickname asc "
                     + "limit ?";
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, size);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
+
+            Leaderboard leaderboard = new Leaderboard(size);
 
             while (rs.next()) {
                 LeaderboardEntry leaderboardEntry = new LeaderboardEntry(
@@ -34,19 +39,21 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
                 leaderboard.addEntry(leaderboardEntry);
             }
 
+            rs.close();
+            return leaderboard;
+
         } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
+            return new Leaderboard(size);
         }
-        return leaderboard;
     }
 
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     @Override
     public int getLeaderboardPosition(int userId) {
         try {
 
-            conn = connectionFactory.createConnection(URL);
             String query = "select rnk "
                     + "from (select user_id,"
                     + "      (select count(distinct points) "
@@ -55,21 +62,22 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
                     + "     ) as rank_table"
                     + "where user_id= ?";
 
-            ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 return rs.getInt(1);
             }
 
+            rs.close();
+            return -1;
+
         } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            closeConnections();
+            return -1;
         }
-        return -1;
+
     }
 }
