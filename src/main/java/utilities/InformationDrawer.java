@@ -1,4 +1,4 @@
-package objects;
+package utilities;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -18,9 +18,6 @@ public class InformationDrawer {
         batch = new SpriteBatch();
     }
 
-    public void drawListOfItems() {
-
-    }
 
     /**
      * Draw text on the screen.

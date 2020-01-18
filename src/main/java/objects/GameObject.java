@@ -1,6 +1,6 @@
 package objects;
 
-public class GameObject {
+public abstract class GameObject {
 
     private float posX;
 
