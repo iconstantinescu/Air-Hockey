@@ -12,6 +12,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.Render;
 import game.RenderGame;
 import game.RenderStrategy;
@@ -26,6 +34,9 @@ import java.util.List;
  * Here the menu screen, all buttons and button actions are created and set.
  */
 public class RenderMenu implements RenderStrategy {
+    private transient Skin skin;
+    private transient Stage stage;
+    private transient TextField nickname;
     private transient SpriteBatch homeBatch;
     private transient SpriteBatch playBatch;
     private transient SpriteBatch scoresBatch;
@@ -51,6 +62,7 @@ public class RenderMenu implements RenderStrategy {
     private static final int offSetX = 150;
     private static final int offSetY = 110;
     private transient List<GameDetails> history;
+    private transient TextButton nicknameButton;
 
     /**
      * This is the renderer for the menu.
@@ -59,6 +71,31 @@ public class RenderMenu implements RenderStrategy {
      * Assign the button variables and set the location of the field.
      */
     public RenderMenu() {
+        skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
+        stage = new Stage(new ScreenViewport());
+
+        float nicknameX = 30, nicknameY = Gdx.graphics.getHeight() - 80;
+        nickname = new TextField("", skin);
+        nickname.setPosition(nicknameX, nicknameY);
+        nickname.setHeight(40);
+        nickname.setWidth(200);
+
+        nicknameButton = new TextButton("ChangeNickname", skin, "default");
+        nicknameButton.setWidth(200);
+        nicknameButton.setHeight(40);
+
+        // register button position under password and username fields on right side
+        nicknameButton.setPosition(nicknameX, nicknameY - nickname.getHeight() - 10);
+
+        nicknameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                nicknameChange();
+//                error.setText("Login failed, try again");
+//                error.setColor(100, 0,0,1);
+            }
+        });
+
         homeBatch = new SpriteBatch();
         playBatch = new SpriteBatch();
         scoresBatch = new SpriteBatch();
@@ -92,6 +129,10 @@ public class RenderMenu implements RenderStrategy {
                 scoreBoard);
 
         history = Render.userDao.getGameHistory(Render.user1.getUserID());
+
+        stage.addActor(nickname);
+        stage.addActor(nicknameButton);
+        Gdx.input.setInputProcessor(stage);
     }
 
     /**
@@ -117,6 +158,7 @@ public class RenderMenu implements RenderStrategy {
 
         if (inRange(scoresSprite) && Gdx.input.justTouched()) {
             showScores = !showScores;
+            leaderboard = Render.leaderboardDao.getLeaderboard(10);
         }
         if (showScores) {
             setText(leaderboardString, Gdx.graphics.getWidth() / 2 + offSetX,
@@ -138,6 +180,24 @@ public class RenderMenu implements RenderStrategy {
         if (inRange(quitSprite) && Gdx.input.justTouched()) {
             exit(0);
         }
+
+
+    }
+
+    /**
+     * Function for changing the nickname of the player in the database.
+     */
+    public void nicknameChange() {
+        String nicknameInput = nickname.getText();
+
+        if (nicknameInput.equals("")) {
+            return;
+        }
+
+        Render.user1.setNickname(nicknameInput);
+        Render.userDao.updateUser(Render.user1);
+        history = Render.userDao.getGameHistory(Render.user1.getUserID());
+        leaderboard = Render.leaderboardDao.getLeaderboard(10);
     }
 
     /**
@@ -262,7 +322,6 @@ public class RenderMenu implements RenderStrategy {
     public void drawDetails(float posX, float posY) {
         StringBuilder buildString = new StringBuilder("Game History:\n");
 
-//        ArrayList<GameDetails> history = Render.user1.getGameHistory();
 
         for(int i = 0; i < 5 && i < history.size(); i++) {
             // Append first User
@@ -276,6 +335,8 @@ public class RenderMenu implements RenderStrategy {
                 + "Games Won: " + Render.user1.getNumOfWonGames() + "\n"
                 + "Points: " + Render.user1.getPoints() + "\n"
                 + buildString.toString(), posX, posY);
+
+        stage.draw();
     }
 
 }

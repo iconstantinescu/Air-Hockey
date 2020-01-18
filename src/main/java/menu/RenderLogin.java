@@ -33,7 +33,7 @@ public class RenderLogin implements RenderStrategy {
     transient Label playerLoginText;
     transient Label error;
     transient Skin skin;
-    private Texture background;
+    private transient Texture background;
 
     transient String nameInput;
     transient String passInput;
