@@ -20,9 +20,6 @@ import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
 
-import java.sql.SQLException;
-
-
 /**
  * The specific Main renderer inheriting from the general Renderer.
  */

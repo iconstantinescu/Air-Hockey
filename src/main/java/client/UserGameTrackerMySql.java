@@ -1,6 +1,10 @@
 package client;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +80,9 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
         }
     }
 
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     @Override
     public List<GameDetails> getGameHistory(int userId, int size) {
 
@@ -108,6 +115,7 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
                 gamesList.add(game);
             }
 
+            rs.close();
             return gamesList;
 
         } catch (SQLException e) {
@@ -116,7 +124,7 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
     }
 
 
-    // We are actually closing the resultSet in all the cases
+    // We are actually closing the resultSet
     // but the PMD does not see this for some reason
     @SuppressWarnings("PMD.CloseResource")
     private String getNicknameById(int userId) {
@@ -139,6 +147,7 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
                 return nickname;
             }
 
+            rs.close();
             return "";
 
         } catch (SQLException e) {

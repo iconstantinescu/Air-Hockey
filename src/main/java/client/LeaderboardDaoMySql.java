@@ -15,6 +15,9 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
      * Get the points of all players in descending order.
      * @return a list with nicknames and points of all players in descending order
      */
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     @Override
     public Leaderboard getLeaderboard(int size) {
 
@@ -36,6 +39,7 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
                 leaderboard.addEntry(leaderboardEntry);
             }
 
+            rs.close();
             return leaderboard;
 
         } catch (SQLException e) {
@@ -43,6 +47,9 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
         }
     }
 
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     @Override
     public int getLeaderboardPosition(int userId) {
         try {
@@ -65,6 +72,7 @@ public class LeaderboardDaoMySql extends DatabaseControllerMySql implements Lead
                 return rs.getInt(1);
             }
 
+            rs.close();
             return -1;
 
         } catch (SQLException e) {

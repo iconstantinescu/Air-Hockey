@@ -7,11 +7,10 @@ import client.User;
 import client.UserDao;
 import client.UserDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
-import menu.RenderLogin;
-import menu.RenderMenu;
-
 import java.sql.Connection;
 import java.sql.SQLException;
+import menu.RenderLogin;
+import menu.RenderMenu;
 
 /**
  * The render method is the one passed to the Game class such

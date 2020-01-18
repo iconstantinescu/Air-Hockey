@@ -20,7 +20,6 @@ public class UserRegistrationMySql extends DatabaseControllerMySql implements Us
      * @param nickname name displayed in game
      * @return true if the new user was created successfully or false otherwise
      */
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public boolean createNewUser(String username, String password, String nickname) {
 
         try {

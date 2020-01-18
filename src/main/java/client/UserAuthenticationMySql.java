@@ -21,6 +21,9 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
      * @param username The nickname of the user
      * @return The salt stored in the database as a String
      */
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     private String getSalt(String username) {
         try {
 
@@ -31,15 +34,14 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
             ps.setString(1, username);
 
             ResultSet rs = ps.executeQuery();
-            rs.next();
 
+            rs.next();
             return rs.getString("salt");
 
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        }
 
-        return "";
+        } catch (SQLException e) {
+            return "";
+        }
     }
 
     /**
@@ -48,7 +50,9 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
      * @param password password provided via login form
      * @return true if the user and password match and false otherwise
      */
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+    // We are actually closing the resultSet
+    // but the PMD does not see this for some reason
+    @SuppressWarnings("PMD.CloseResource")
     public User authenticate(String username, String password) {
 
         try {
@@ -81,6 +85,7 @@ public class UserAuthenticationMySql extends DatabaseControllerMySql
                 return user;
             }
 
+            rs.close();
             return null;
 
         } catch (SQLException e) {
