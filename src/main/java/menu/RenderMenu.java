@@ -2,9 +2,11 @@ package menu;
 
 import static java.lang.System.exit;
 
+import client.GameDetails;
 import client.Leaderboard;
 
 import client.LeaderboardEntry;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +19,9 @@ import game.RenderStrategy;
 
 import objects.Puck;
 import objects.ScoreBoard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The specific renderer of the Main Menu.
@@ -47,6 +52,7 @@ public class RenderMenu implements RenderStrategy {
     private transient RenderGame renderGame = new RenderGame();
     private static final int offSetX = 150;
     private static final int offSetY = 110;
+    private transient List<GameDetails> history;
 
     /**
      * This is the renderer for the menu.
@@ -86,6 +92,8 @@ public class RenderMenu implements RenderStrategy {
         scoreBoard = new ScoreBoard();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
                 scoreBoard);
+
+        history = Render.userDao.getGameHistory(Render.user1.getUserID());
     }
 
     /**
@@ -256,10 +264,22 @@ public class RenderMenu implements RenderStrategy {
      * @param posY The Y coordinate on the screen.
      */
     public void drawDetails(float posX, float posY) {
+        StringBuilder buildString = new StringBuilder("Game History:\n");
+
+//        ArrayList<GameDetails> history = Render.user1.getGameHistory();
+
+        for(int i = 0; i < 5; i++) {
+            // Append first User
+            buildString.append(history.get(i).getNickname1() + " " + history.get(i).getScoreUser1() + " : ");
+            // Append second User
+            buildString.append(history.get(i).getScoreUser1() + " " + history.get(i).getNickname2() + "\n");
+        }
+
         setText("Games Played: " + Render.user1.getNumOfGamesPlayed() + "\n"
                 + "Games Lost: " + Render.user1.getNumOfLostGames() + "\n"
                 + "Games Won: " + Render.user1.getNumOfWonGames() + "\n"
-                + "Points: " + Render.user1.getPoints(), posX, posY);
+                + "Points: " + Render.user1.getPoints() + "\n"
+                + buildString.toString(), posX, posY);
     }
 
 }
