@@ -14,18 +14,23 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import objects.GateAlignedState;
 import objects.Puck;
 import objects.Pusher;
 import objects.ScoreBoard;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  * The specific Main renderer inheriting from the general Renderer.
  */
 public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
+    private transient Skin nicknameSkin;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
+    private transient Vector2f pusher1Reset;
+    private transient Vector2f pusher2Reset;
     private transient Puck puck;
     private transient ScoreBoard scoreBoard;
     private transient Texture img;
@@ -44,20 +49,36 @@ public class RenderGame implements RenderStrategy {
      * Constructor for the Renderer.
      */
     public RenderGame() {
+        nicknameSkin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
+
+        pusher1Reset = new Vector2f();
+        pusher2Reset = new Vector2f();
+
+        // Set pusher 1 and 2 reset positions
+        pusher1Reset.x = Gdx.graphics.getWidth() / 4f;
+        pusher1Reset.y = Gdx.graphics.getHeight() / 2f;
+        pusher2Reset.x = Gdx.graphics.getWidth() * (3f / 4f);
+        pusher2Reset.y = Gdx.graphics.getHeight() / 2f;
+
+
+
         // Set pusher 1 and 2 positions
-        pusher1 = new Pusher(300, 100, 40);
-        pusher2 = new Pusher(800, 360, 40);
+        pusher1 = new Pusher(pusher1Reset.x, pusher1Reset.y, 40);
+        pusher2 = new Pusher(pusher2Reset.x, pusher2Reset.y, 40);
 
         // Set the field sprite
         img = new Texture("media/field.png");
         sprite = new Sprite(img);
         sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
+
         // Set the objects sprites
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         scoreBoard = new ScoreBoard();
-        puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 0, 0,
+        float rand = (Math.random() < 0.5) ? 1f : -1f;
+        puck = new Puck(Gdx.graphics.getWidth() / 2
+                + 100 * rand, Gdx.graphics.getHeight() / 2, 15, 0, 0,
                 scoreBoard);
 
         // Initiate the Background Sound
@@ -79,7 +100,7 @@ public class RenderGame implements RenderStrategy {
         // DRAW THE PUCK OR GAME OVER
         if (scoreBoard.isGameOver()) {
             drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
-                    Gdx.graphics.getHeight() - 100);
+                    Gdx.graphics.getHeight() - 100, 4);
             // DRAW TOP SCORES
             uploadMatch();
             drawTopScores(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
@@ -90,6 +111,8 @@ public class RenderGame implements RenderStrategy {
             updatePuck();
             drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
         }
+
+        checkPushersReset();
 
         // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
         updatePusher(pusher1, true);
@@ -114,9 +137,11 @@ public class RenderGame implements RenderStrategy {
         // RENDER THE SCORE
         drawText(scoreBoard.getPlayer1Score() + " : "
                         + scoreBoard.getPlayer2Score(), (Gdx.graphics.getWidth() / 2) - 50,
-                Gdx.graphics.getHeight() - 20);
+                Gdx.graphics.getHeight() - 20, 4);
 
         drawWallsAndGates();
+        drawText("Player 1", 80, Gdx.graphics.getHeight() - 20,2);
+        drawText("Player 2", Gdx.graphics.getWidth() - 180, Gdx.graphics.getHeight() - 20, 2);
     }
 
     /**
@@ -131,9 +156,13 @@ public class RenderGame implements RenderStrategy {
             // ADD POINTS TO WINNER
             if (scoreBoard.getWinner()) {
                 Render.user1.addPoints(addPoints);
+                Render.user1.addWonGame();
+                Render.user2.addLostGame();
                 Render.userDao.updateUser(Render.user1);
             } else {
                 Render.user2.addPoints(addPoints);
+                Render.user2.addWonGame();
+                Render.user1.addLostGame();
                 Render.userDao.updateUser(Render.user2);
             }
 
@@ -144,6 +173,19 @@ public class RenderGame implements RenderStrategy {
                     scoreBoard.getPlayer1Score(),
                     scoreBoard.getPlayer2Score());
 
+        }
+    }
+
+    /**
+     * Method that checks if the pusher positions need to be reset.
+     */
+    public void checkPushersReset() {
+        if (Pusher.resetPusher) {
+            pusher1.setposX(pusher1Reset.x);
+            pusher1.setposY(pusher1Reset.y);
+            pusher2.setposX(pusher2Reset.x);
+            pusher2.setposY(pusher2Reset.y);
+            Pusher.resetPusher = !Pusher.resetPusher;
         }
     }
 
@@ -174,15 +216,14 @@ public class RenderGame implements RenderStrategy {
             for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
                 drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
-                        posX, posY);
+                        posX, posY, 4);
 
                 posY -= 50;
                 i++;
             }
         }
 
-
-        drawText("Press ENTER to go back to menu", posX - 250, posY - 100);
+        drawText("Press ENTER to go back to menu", posX - 250, posY - 100, 4);
     }
 
     /**
@@ -308,11 +349,11 @@ public class RenderGame implements RenderStrategy {
      * @param posX The x coordinate of the text
      * @param posY The y coordinate of the text
      */
-    public void drawText(String str, float posX, float posY) {
+    public void drawText(String str, float posX, float posY, int fontScale) {
         BitmapFont font = new BitmapFont();
         batch.begin();
         font.setColor(0,0,0,1);
-        font.getData().setScale(4);
+        font.getData().setScale(fontScale);
         font.draw(batch, str, posX,
                 posY);
         batch.end();

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.graphics.GL20;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -32,6 +33,7 @@ public class RenderLogin implements RenderStrategy {
     transient Label playerLoginText;
     transient Label error;
     transient Skin skin;
+    private transient Texture background;
 
     transient String nameInput;
     transient String passInput;
@@ -41,7 +43,7 @@ public class RenderLogin implements RenderStrategy {
      */
     public RenderLogin() {
 
-
+        background = new Texture("media/background.jpg");
 
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
@@ -145,6 +147,11 @@ public class RenderLogin implements RenderStrategy {
     public void run() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.getBatch().end();
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -180,7 +187,8 @@ public class RenderLogin implements RenderStrategy {
             if (Render.user1.getUserID() == 0) {
                 Render.user1 = resultUser;
                 Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
-            } else if (Render.user2.getUserID() == 0) {
+            } else if (Render.user2.getUserID() == 0
+                    && !(Render.user1.getUserID() == resultUser.getUserID())) {
                 Render.user2 = resultUser;
                 Render.secondAuthentication = true;
                 Render.changeGameStrategy(Render.ApplicationStrategy.GAME);

@@ -1,5 +1,8 @@
 package objects;
 
+import game.RenderGame;
+import game.RenderStrategy;
+
 /**
  * Class implementing the behaviour of the Puck.
  */
@@ -128,6 +131,7 @@ public class Puck {
         this.deltaY = 0;
         this.posX = newX;
         this.posY = newY;
+        Pusher.resetPusher = true;
     }
 
     /**

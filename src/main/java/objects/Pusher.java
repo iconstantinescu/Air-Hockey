@@ -7,6 +7,8 @@ import utilities.MathUtils;
  */
 public class Pusher {
 
+    public static boolean resetPusher;
+
     private transient float posX;
 
     private transient float posY;
