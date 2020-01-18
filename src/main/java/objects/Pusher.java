@@ -9,8 +9,6 @@ public class Pusher extends GameObject {
 
     public static boolean resetPusher;
 
-    private float radius;
-
     public static boolean playHitSound = false;
 
     /**
@@ -21,16 +19,7 @@ public class Pusher extends GameObject {
      * @param radius radius of puck
      */
     public Pusher(float posX, float posY, float radius) {
-        super(posX, posY);
-        this.radius = radius;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
+        super(posX, posY, radius);
     }
 
     /**
@@ -68,32 +57,32 @@ public class Pusher extends GameObject {
         }
 
         // Restrict Down if necessary
-        if (getPosX() - radius < 0) {
+        if (getPosX() - getRadius() < 0) {
             restricts[2] = true;
         }
 
         // Restrict Up if necessary
-        if (getPosY() + radius >= screenHeigth) {
+        if (getPosY() + getRadius() >= screenHeigth) {
             restricts[0] = true;
         }
 
         // Check for which player you should restrict the movement
         if (playerId) {
             // Restrict Left if necessary
-            if (getPosX() - radius <= 0) {
+            if (getPosX() - getRadius() <= 0) {
                 restricts[1] = true;
             }
             // Restrict Right if necessary
-            if (getPosY() + radius >= screenWidth / 2) {
+            if (getPosX() + getRadius() >= screenWidth / 2) {
                 restricts[3] = true;
             }
         } else {
             // Restrict Left if necessary
-            if (getPosX() - radius <= screenWidth / 2) {
+            if (getPosX() - getRadius() <= screenWidth / 2) {
                 restricts[1] = true;
             }
             // Restrict Right if necessary
-            if (getPosX() + radius >= screenWidth) {
+            if (getPosX() + getRadius() >= screenWidth) {
                 restricts[3] = true;
             }
         }

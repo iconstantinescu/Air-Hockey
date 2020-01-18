@@ -3,15 +3,13 @@ package objects;
 /**
  * Class implementing the behaviour of the Puck.
  */
-public class Puck extends GameObject{
+public class Puck extends GameObject {
 
     private transient PuckState puckState;
 
     private transient PuckState menuState;
 
     private transient ScoreBoard scoreBoard;
-
-    private float radius;
 
     private float deltaX;
 
@@ -28,8 +26,7 @@ public class Puck extends GameObject{
      */
     public Puck(float posX, float posY, float radius, float deltaX,
                 float deltaY, ScoreBoard scoreBoard) {
-        super(posX, posY);
-        this.radius = radius;
+        super(posX, posY, radius);
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.scoreBoard = scoreBoard;
@@ -47,14 +44,6 @@ public class Puck extends GameObject{
 
     public void setPuckState(PuckState puckState) {
         this.puckState = puckState;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
-    public float getRadius() {
-        return radius;
     }
 
     public float getDeltaX() {

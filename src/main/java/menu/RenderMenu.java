@@ -25,6 +25,7 @@ import game.RenderGame;
 import game.RenderStrategy;
 import java.util.List;
 
+import objects.ObjectDrawer;
 import objects.Puck;
 import objects.ScoreBoard;
 
@@ -64,6 +65,7 @@ public class RenderMenu implements RenderStrategy {
     private static final int offSetY = 110;
     private transient List<GameDetails> history;
     private transient TextButton nicknameButton;
+    private transient ObjectDrawer objectDrawer;
 
     /**
      * This is the renderer for the menu.
@@ -130,6 +132,8 @@ public class RenderMenu implements RenderStrategy {
 
         history = Render.userDao.getGameHistory(Render.user1.getUserID(),5);
 
+        objectDrawer = new ObjectDrawer();
+
         stage.addActor(nickname);
         stage.addActor(nicknameButton);
         Gdx.input.setInputProcessor(stage);
@@ -150,7 +154,7 @@ public class RenderMenu implements RenderStrategy {
         setButton(quitSprite, quitBatch);
 
         updatePuckMenu();
-        renderGame.drawGameObject(-1, puck.getPosX(), puck.getPosY(), puck.getRadius());
+        objectDrawer.drawGameObject(puck);
 
         if (leaderboardString == null) {
             leaderboardString = drawLeaderboard();
