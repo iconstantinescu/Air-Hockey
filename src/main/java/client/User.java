@@ -72,6 +72,10 @@ public class User {
         return gameHistory;
     }
 
+    public void setGameHistory(ArrayList<GameDetails> gameHistory) {
+        this.gameHistory = gameHistory;
+    }
+
     public void addGame(GameDetails newGame) {
         this.gameHistory.add(newGame);
     }

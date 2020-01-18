@@ -1,21 +1,25 @@
 package client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class UserTest {
 
     private transient User testUser;
+    private transient User otherUser;
     private transient ArrayList<GameDetails> testGameList;
     private transient Timestamp timestamp;
 
     @BeforeEach
     void setUp() {
         testUser = new User(1, "john", 100, 1, 2);
+        otherUser = new User(testUser.getUserID(),
+                testUser.getNickname(), testUser.getPoints(),
+                testUser.getNumOfLostGames(), testUser.getNumOfWonGames());
         testGameList = new ArrayList<>();
         timestamp = new Timestamp(System.currentTimeMillis());
     }
@@ -64,7 +68,6 @@ public class UserTest {
 
     @Test
     void getGameHistory() {
-
         assertEquals(testGameList, testUser.getGameHistory());
     }
 
@@ -108,4 +111,68 @@ public class UserTest {
     void getNumOfGamesPlayed() {
         assertEquals(3, testUser.getNumOfGamesPlayed());
     }
+
+    @Test
+    void equalsSame() {
+        assertTrue(testUser.equals(testUser));
+    }
+
+    @Test
+    void equalsOther() {
+        assertTrue(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsOther() {
+        User otherUser = new User();
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsNull() {
+        assertFalse(testUser.equals(null));
+    }
+
+    @Test
+    void notEqualsString() {
+        assertFalse(testUser.equals("String"));
+    }
+
+    @Test
+    void notEqualsNickname() {
+        otherUser.setNickname("nickname");
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsGameHistory() {
+        GameDetails newGame = new GameDetails("a", "b",
+                5, 0, new Timestamp(System.currentTimeMillis()));
+        ArrayList<GameDetails> games = new ArrayList<>();
+        games.add(newGame);
+        otherUser.setGameHistory(games);
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsId() {
+        otherUser.setUserId(2);
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsPoints() {
+        otherUser.addPoints(10);
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsGamesWonLost() {
+        otherUser.addWonGame();
+        assertFalse(testUser.equals(otherUser));
+        otherUser.addLostGame();
+        assertFalse(testUser.equals(otherUser));
+    }
+
+
 }

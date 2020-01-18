@@ -1,11 +1,13 @@
 package client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class LeaderboardEntryTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class LeaderboardEntryTest {
 
     private transient LeaderboardEntry testLeaderboardEntry;
     private transient String nickname;
@@ -46,5 +48,38 @@ public class LeaderboardEntryTest {
         LeaderboardEntry emptyEntry = new LeaderboardEntry();
         assertEquals("", emptyEntry.getNickname());
         assertEquals(0, emptyEntry.getPoints());
+    }
+
+    @Test
+    void equalsSame() {
+        assertTrue(testLeaderboardEntry.equals(testLeaderboardEntry));
+    }
+
+    @Test
+    void equalsOther() {
+        LeaderboardEntry otherEntry = new LeaderboardEntry(nickname, points);
+        assertTrue(testLeaderboardEntry.equals(otherEntry));
+    }
+
+    @Test
+    void notEqualsOther() {
+        LeaderboardEntry otherEntry = new LeaderboardEntry();
+        assertFalse(testLeaderboardEntry.equals(otherEntry));
+    }
+
+    @Test
+    void notEqualsNull() {
+        assertFalse(testLeaderboardEntry.equals(null));
+    }
+
+    @Test
+    void notEqualsString() {
+        assertFalse(testLeaderboardEntry.equals("String"));
+    }
+
+    @Test
+    void notEqualsNickname() {
+        LeaderboardEntry otherEntry = new LeaderboardEntry("otherName", points);
+        assertFalse(testLeaderboardEntry.equals(otherEntry));
     }
 }

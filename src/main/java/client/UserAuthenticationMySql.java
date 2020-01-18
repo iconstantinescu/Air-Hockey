@@ -1,5 +1,7 @@
 package client;
 
+import utilities.BcryptHashing;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

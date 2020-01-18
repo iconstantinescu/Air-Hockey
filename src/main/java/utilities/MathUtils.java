@@ -1,8 +1,5 @@
 package utilities;
 
-import objects.Puck;
-import objects.Pusher;
-
 /**
  * Class containing some helper methods for
  * Linear Algebra and Geometry calculations.

@@ -1,13 +1,14 @@
 package client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.sql.Timestamp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class GameDetailsTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+class GameDetailsTest {
 
     private transient GameDetails testGame;
     private transient Timestamp timestamp;
@@ -93,5 +94,53 @@ public class GameDetailsTest {
         assertEquals(0, emptyGame.getScoreUser1());
         assertEquals(0, emptyGame.getScoreUser2());
         assertEquals(new Timestamp(0), emptyGame.getTimestamp());
+    }
+
+    @Test
+    void equalsSame() {
+        assertTrue(testGame.equals(testGame));
+    }
+
+    @Test
+    void equalsOther() {
+        GameDetails otherGame = new GameDetails(nickname1, nickname2, score1, score2, timestamp);
+        assertTrue(testGame.equals(otherGame));
+    }
+
+    @Test
+    void notEqualsOther() {
+        GameDetails otherGame = new GameDetails();
+        assertFalse(testGame.equals(otherGame));
+    }
+
+    @Test
+    void notEqualsNull() {
+        assertFalse(testGame.equals(null));
+    }
+
+    @Test
+    void notEqualsString() {
+        assertFalse(testGame.equals("String"));
+    }
+
+    @Test
+    void notEqualsNickname() {
+        GameDetails otherGame = new GameDetails(nickname1, "otherName", score1, score2, timestamp);
+        assertFalse(testGame.equals(otherGame));
+        otherGame.setNickname1("otherName");
+        assertFalse(testGame.equals(otherGame));
+    }
+
+    @Test
+    void notEqualsScore() {
+        GameDetails otherGame = new GameDetails(nickname1, nickname2, score1, 0, timestamp);
+        assertFalse(testGame.equals(otherGame));
+    }
+
+    @Test
+    void notEqualsTimestamp() {
+        GameDetails otherGame = new GameDetails(nickname1, nickname2, score1, score2,
+                new Timestamp(0));
+        assertFalse(testGame.equals(otherGame));
     }
 }
