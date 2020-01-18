@@ -1,7 +1,10 @@
 package game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import objects.GameObject;
+import objects.Wall;
 
 /**
  * The class containing the main which is calling the rendering methods.
@@ -21,6 +24,8 @@ public class Main {
         config.title = "Air Hockey";
 
         new LwjglApplication(new Render(), config);
+
+
 
     }
 

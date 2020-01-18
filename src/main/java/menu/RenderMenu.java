@@ -150,7 +150,7 @@ public class RenderMenu implements RenderStrategy {
         setButton(quitSprite, quitBatch);
 
         updatePuckMenu();
-        renderGame.drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
+        renderGame.drawGameObject(-1, puck.getPosX(), puck.getPosY(), puck.getRadius());
 
         if (leaderboardString == null) {
             leaderboardString = drawLeaderboard();

@@ -26,7 +26,6 @@ import org.lwjgl.util.vector.Vector2f;
  */
 public class RenderGame implements RenderStrategy {
     private transient ShapeRenderer shape;
-    private transient Skin nicknameSkin;
     private transient Pusher pusher1;
     private transient Pusher pusher2;
     private transient Vector2f pusher1Reset;
@@ -49,7 +48,6 @@ public class RenderGame implements RenderStrategy {
      * Constructor for the Renderer.
      */
     public RenderGame() {
-        nicknameSkin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
 
         pusher1Reset = new Vector2f();
         pusher2Reset = new Vector2f();
@@ -109,7 +107,7 @@ public class RenderGame implements RenderStrategy {
         } else {
             // CALCULATE THE POSITIONS OF THE PUCK
             updatePuck();
-            drawGameObject(-1, puck.getposX(), puck.getposY(), puck.getRadius());
+            drawGameObject(-1, puck.getPosX(), puck.getPosY(), puck.getRadius());
         }
 
         checkPushersReset();
@@ -120,9 +118,9 @@ public class RenderGame implements RenderStrategy {
         updatePusher(pusher2, false);
 
         // DRAW PUSHER 1
-        drawGameObject(0, pusher1.getposX(), pusher1.getposY(), pusher1.getRadius());
+        drawGameObject(0, pusher1.getPosX(), pusher1.getPosY(), pusher1.getRadius());
         // DRAW PUSHER 2
-        drawGameObject(0, pusher2.getposX(), pusher2.getposY(), pusher2.getRadius());
+        drawGameObject(0, pusher2.getPosX(), pusher2.getPosY(), pusher2.getRadius());
 
         // PLAY SOUNDS
         if (GateAlignedState.playGoalSound) {
@@ -181,10 +179,10 @@ public class RenderGame implements RenderStrategy {
      */
     public void checkPushersReset() {
         if (Pusher.resetPusher) {
-            pusher1.setposX(pusher1Reset.x);
-            pusher1.setposY(pusher1Reset.y);
-            pusher2.setposX(pusher2Reset.x);
-            pusher2.setposY(pusher2Reset.y);
+            pusher1.setPosX(pusher1Reset.x);
+            pusher1.setPosY(pusher1Reset.y);
+            pusher2.setPosX(pusher2Reset.x);
+            pusher2.setPosY(pusher2Reset.y);
             Pusher.resetPusher = !Pusher.resetPusher;
         }
     }
@@ -263,16 +261,16 @@ public class RenderGame implements RenderStrategy {
                 Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.input.isKeyPressed(keyCodes[0]) && !restricts[0]) {
-            pusher.setposY(pusher.getposY() + 6);
+            pusher.setPosY(pusher.getPosY() + 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[1]) && !restricts[2]) {
-            pusher.setposY(pusher.getposY() - 6);
+            pusher.setPosY(pusher.getPosY() - 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[2]) && !restricts[1]) {
-            pusher.setposX(pusher.getposX() - 6);
+            pusher.setPosX(pusher.getPosX() - 6);
         }
         if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
-            pusher.setposX(pusher.getposX() + 6);
+            pusher.setPosX(pusher.getPosX() + 6);
         }
     }
 

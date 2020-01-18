@@ -15,7 +15,7 @@ public class OutOfGatesState implements PuckState {
      */
     @Override
     public void executeBehavior(Puck puck, float screenWidth, float screenHeight) {
-        preventOut(puck, puck.getDeltaX() + puck.getposX(), puck.getDeltaY() + puck.getposY(),
+        preventOut(puck, puck.getDeltaX() + puck.getPosX(), puck.getDeltaY() + puck.getPosY(),
                 screenWidth, screenHeight);
     }
 
