@@ -50,6 +50,8 @@ public class Render extends ApplicationAdapter {
 
         ConnectionFactory connectionFactory = new ConnectionFactory();
         try {
+
+            //this connection will be reused for all queries
             sqlConnection = connectionFactory.createConnection();
             this.userDao = new UserDaoMySql(sqlConnection);
             this.leaderboardDao = new LeaderboardDaoMySql(sqlConnection);

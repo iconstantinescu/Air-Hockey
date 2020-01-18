@@ -40,8 +40,8 @@ public class UserDaoMySql implements UserDao {
     }
 
     @Override
-    public List<GameDetails> getGameHistory(int userId) {
-        return userGameTracker.getGameHistory(userId);
+    public List<GameDetails> getGameHistory(int userId, int size) {
+        return userGameTracker.getGameHistory(userId, size);
     }
 
 }

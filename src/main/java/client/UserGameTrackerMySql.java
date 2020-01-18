@@ -81,19 +81,22 @@ public class UserGameTrackerMySql extends DatabaseControllerMySql implements Use
     }
 
     @Override
-    public List<GameDetails> getGameHistory(int userId) {
+    public List<GameDetails> getGameHistory(int userId, int size) {
 
         List<GameDetails> gamesList = new ArrayList<>();
 
         try {
 
             String query = "select * from game"
-                    + " where user_id_1 = ? or user_id_2 = ?";
+                    + " where user_id_1 = ? or user_id_2 = ?"
+                    + " order by game_timestamp desc "
+                    + "limit ?";
 
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId);
             ps.setInt(2, userId);
+            ps.setInt(3, size);
 
             ResultSet rs = ps.executeQuery();
 
