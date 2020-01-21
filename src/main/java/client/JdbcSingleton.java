@@ -10,8 +10,11 @@ import java.sql.SQLException;
  * in order to improve testability (this allows us to mock this object and call the method)
  *
  */
-public class ConnectionFactory {
+public class JdbcSingleton {
 
+
+    private transient Connection conn;
+    private static JdbcSingleton instance;
     /**
      * This is the URL that is used to access the database used for our application.
      * The URL contains the user and password
@@ -24,13 +27,29 @@ public class ConnectionFactory {
             + "&password=ZL3Al54DKc66"
             + "&serverTimezone=UCT";
 
+
+    private JdbcSingleton() throws SQLException {
+        conn = DriverManager.getConnection(URL);
+    }
+
+    public static JdbcSingleton getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new JdbcSingleton();
+        }
+        return instance;
+    }
+
     /**
      * Use the DriverManager to create a new connection.
      * @return New Connection
      * @throws SQLException An SQl Error can occur while trying to initialize the connection.
      */
-    public Connection createConnection() throws SQLException {
-        return DriverManager.getConnection(URL);
+    public Connection getConnection() {
+        return conn;
+    }
+
+    public void closeConnection() throws SQLException {
+        conn.close();
     }
 
 }

@@ -9,9 +9,9 @@ import utilities.BcryptHashing;
 /**
  * Class that contains the methods required to register a new user in the database.
  */
-public class UserRegistrationMySql extends DatabaseControllerMySql implements UserRegistration {
+public class UserRegistrationMySqlAbstract extends AbstractDatabase implements UserRegistration {
 
-    public UserRegistrationMySql(Connection conn) {
+    public UserRegistrationMySqlAbstract(Connection conn) {
         super(conn);
     }
 

@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 class LeaderboardDaoMySqlTest {
 
     @InjectMocks
-    transient LeaderboardDaoMySql leaderboardDaoMySql;
+    transient LeaderboardDaoMySqlAbstract leaderboardDaoMySql;
 
     @Mock
     transient Connection mockConnection;

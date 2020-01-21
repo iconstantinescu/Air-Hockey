@@ -1,13 +1,8 @@
 package game;
 
-import client.ConnectionFactory;
-import client.LeaderboardDao;
-import client.LeaderboardDaoMySql;
-import client.User;
-import client.UserDao;
-import client.UserDaoMySql;
+import client.*;
+import client.LeaderboardDaoMySqlAbstract;
 import com.badlogic.gdx.ApplicationAdapter;
-import java.sql.Connection;
 import java.sql.SQLException;
 import menu.RenderLogin;
 import menu.RenderMenu;
@@ -23,7 +18,7 @@ public class Render extends ApplicationAdapter {
     public static UserDao userDao;
     public static LeaderboardDao leaderboardDao;
     public static boolean secondAuthentication;
-    public static Connection sqlConnection;
+    public static JdbcSingleton jdbcSingleton;
 
     /**
      *  An enumeration of the possible render strategies of the application.
@@ -47,13 +42,12 @@ public class Render extends ApplicationAdapter {
         this.user1 = new User();
         this.user2 = new User();
 
-        ConnectionFactory connectionFactory = new ConnectionFactory();
         try {
 
-            //this connection will be reused for all queries
-            sqlConnection = connectionFactory.createConnection();
-            this.userDao = new UserDaoMySql(sqlConnection);
-            this.leaderboardDao = new LeaderboardDaoMySql(sqlConnection);
+            JdbcSingleton jdbcSingleton = JdbcSingleton.getInstance();
+
+            this.userDao = new UserDaoMySql(jdbcSingleton.getConnection());
+            this.leaderboardDao = new LeaderboardDaoMySqlAbstract(jdbcSingleton.getConnection());
         } catch (SQLException e) {
             System.out.println("Something went wrong when connecting to the database");
             dispose(); //application will close if we cannot connect
@@ -107,7 +101,7 @@ public class Render extends ApplicationAdapter {
             renderStrategy.dispose();
 
             try {
-                sqlConnection.close();
+                jdbcSingleton.closeConnection();
             } catch (SQLException e) {
                 System.out.println("Could not close the connection");
                 dispose(); //try again

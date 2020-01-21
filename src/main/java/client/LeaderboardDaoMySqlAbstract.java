@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LeaderboardDaoMySql extends DatabaseControllerMySql implements LeaderboardDao {
+public class LeaderboardDaoMySqlAbstract extends AbstractDatabase implements LeaderboardDao {
 
-    public LeaderboardDaoMySql(Connection conn) {
+    public LeaderboardDaoMySqlAbstract(Connection conn) {
         super(conn);
     }
 

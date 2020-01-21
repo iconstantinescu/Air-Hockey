@@ -14,9 +14,9 @@ public class UserDaoMySql implements UserDao {
      * the corresponding interface implementations.
      */
     public UserDaoMySql(Connection conn) {
-        this.userAuthentication = new UserAuthenticationMySql(conn);
-        this.userRegistration = new UserRegistrationMySql(conn);
-        this.userGameTracker = new UserGameTrackerMySql(conn);
+        this.userAuthentication = new UserAuthenticationMySqlAbstract(conn);
+        this.userRegistration = new UserRegistrationMySqlAbstract(conn);
+        this.userGameTracker = new UserGameTrackerMySqlAbstract(conn);
     }
 
     @Override
