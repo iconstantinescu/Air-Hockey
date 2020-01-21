@@ -1,7 +1,11 @@
 package game;
 
-import client.*;
+import client.JdbcSingleton;
+import client.LeaderboardDao;
 import client.LeaderboardDaoMySql;
+import client.User;
+import client.UserDao;
+import client.UserDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
 import java.sql.SQLException;
 import menu.RenderLogin;
@@ -44,6 +48,7 @@ public class Render extends ApplicationAdapter {
 
         try {
 
+            // class that creates the jdbc connection that will be reused
             JdbcSingleton jdbcSingleton = JdbcSingleton.getInstance();
 
             this.userDao = new UserDaoMySql(jdbcSingleton.getConnection());

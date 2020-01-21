@@ -5,10 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Factory class used to create new jdbc connections given the url path to a database.
- * The purpose of this class is to encapsulate the static DriverManager.getConnection method
- * in order to improve testability (this allows us to mock this object and call the method)
- *
+ * Singleton class used to create the jdbc connection given the url path to a database.
+ * The class can be created just once.
+ * <p>
+ * Example usage:
+ * JdbcSingleton jdbcSingleton = JdbcSingleton.getInstance();
+ * Connection conn = jdbcSingleton.getConnection();
+ * </p>
  */
 public class JdbcSingleton {
 
@@ -28,10 +31,19 @@ public class JdbcSingleton {
             + "&serverTimezone=UCT";
 
 
+    /**
+     * The private constructor does not allow the class to be instantiated.
+     * @throws SQLException if could not create the connection with the database
+     */
     private JdbcSingleton() throws SQLException {
         conn = DriverManager.getConnection(URL);
     }
 
+    /**
+     * Global point of access for the JdbcSingleton class.
+     * @return the unique JdbcSingleton object
+     * @throws SQLException if could not create the connection
+     */
     public static JdbcSingleton getInstance() throws SQLException {
         if (instance == null) {
             instance = new JdbcSingleton();
@@ -48,6 +60,12 @@ public class JdbcSingleton {
         return conn;
     }
 
+
+    /**
+     * Close the connection
+     * Should be called when closing the application.
+     * @throws SQLException if the connection could not be closed
+     */
     public void closeConnection() throws SQLException {
         conn.close();
     }
