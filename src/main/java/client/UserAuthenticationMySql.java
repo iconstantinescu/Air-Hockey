@@ -10,7 +10,7 @@ import utilities.BcryptHashing;
 /**
  * Class that contains the methods required to authenticate the user with the database.
  */
-public class UserAuthenticationMySql extends DatabaseControllerMySql
+public class UserAuthenticationMySql extends AbstractDatabaseInteraction
         implements  UserAuthentication {
 
     public UserAuthenticationMySql(Connection conn) {
