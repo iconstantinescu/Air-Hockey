@@ -1,13 +1,9 @@
 package menu;
 
-
-
 import client.GameDetails;
 import client.Leaderboard;
-
 import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;

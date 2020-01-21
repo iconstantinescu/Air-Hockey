@@ -1,5 +1,7 @@
 package menu;
 
+import static java.lang.System.exit;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
-
-import static java.lang.System.exit;
 
 public class MenuButtons {
     private transient SpriteBatch homeBatch;
@@ -31,6 +31,10 @@ public class MenuButtons {
     private static final int offSetX = 150;
     private static final int offSetY = 110;
 
+    /**
+     * The constructor of the MenuButtons which initializes all the
+     * sprtes of the menu buttons.
+     */
     public MenuButtons() {
         homeBatch = new SpriteBatch();
         playBatch = new SpriteBatch();
@@ -81,6 +85,9 @@ public class MenuButtons {
         batch.end();
     }
 
+    /**
+     * Method for drawing all the buttons.
+     */
     public void setButtons() {
         setHomeScreen(homeSprite, homeBatch);
         setButton(playSprite, playBatch);
@@ -89,6 +96,10 @@ public class MenuButtons {
         setButton(quitSprite, quitBatch);
     }
 
+    /**
+     * Method checking the hovering of the mouse on the Menu buttons.
+     * @param renderMenu The renderMenu strategy used.
+     */
     public void buttonsHover(RenderMenu renderMenu) {
         if (inRange(scoresSprite) && Gdx.input.justTouched()) {
             showScores = !showScores;
@@ -164,6 +175,9 @@ public class MenuButtons {
         homeBatch.end();
     }
 
+    /**
+     * The method that disposes of all the sprite batches.
+     */
     public void dispose() {
         homeBatch.dispose();
         playBatch.dispose();

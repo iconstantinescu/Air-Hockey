@@ -3,8 +3,9 @@ package game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
-
-import objects.*;
+import objects.GateAlignedState;
+import objects.Match;
+import objects.Pusher;
 import utilities.InformationDrawer;
 import utilities.ObjectDrawer;
 
@@ -64,7 +65,8 @@ public class RenderGame implements RenderStrategy {
 
         objectDrawer.drawWallsAndGates();
 
-        informationDrawer.drawInformation(match.scoreBoard.getPlayer1Score(), match.scoreBoard.getPlayer2Score());
+        informationDrawer.drawInformation(match.scoreBoard.getPlayer1Score(),
+                match.scoreBoard.getPlayer2Score());
     }
 
 

@@ -28,6 +28,7 @@ public class ScoreBoard {
         this.player1Score = player1Score;
         this.player2Score = player2Score;
     }
+
     /**
      * Score board constructor.
      * @param player1Score score of player 1
@@ -122,7 +123,8 @@ public class ScoreBoard {
      * @param posY The y coordinate of the first score
      */
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void drawTopScores(int size, float posX, float posY, float screenWidth, float screenHeight) {
+    public void drawTopScores(int size, float posX, float posY,
+                              float screenWidth, float screenHeight) {
         if (leaderboard == null) {
             leaderboard = Render.leaderboardDao.getLeaderboard(size);
         }

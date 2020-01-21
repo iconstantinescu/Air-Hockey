@@ -1,12 +1,11 @@
 package utilities;
 
+import static com.badlogic.gdx.Input.Keys.ENTER;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.Render;
-
-import static com.badlogic.gdx.Input.Keys.ENTER;
-
 
 /**
  * InformationDrawer is a drawer mainly used for drawing general information on
@@ -29,10 +28,15 @@ public class InformationDrawer {
     public void waitForEnter() {
         if (Gdx.input.isKeyJustPressed(ENTER)) {
             Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
-//            backSound.dispose();
+            //            backSound.dispose();
         }
     }
 
+    /**
+     * Draw Information about the current state of the game (Score).
+     * @param score1 Score of player 1
+     * @param score2 Score of player 2
+     */
     public void drawInformation(int score1, int score2) {
         // RENDER THE SCORE
         drawText(score1 + " : "

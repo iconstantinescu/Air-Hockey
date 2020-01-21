@@ -44,8 +44,10 @@ public class ObjectDrawer {
     public void drawBackground() {
         batch.begin();
         batch.draw(backgroundSprite, backgroundSprite.getX() - backgroundSprite.getWidth() / 2,
-                backgroundSprite.getY() - backgroundSprite.getHeight() / 2, backgroundSprite.getWidth(),
-                backgroundSprite.getHeight(), backgroundSprite.getWidth(), backgroundSprite.getHeight(), backgroundSprite.getScaleX(),
+                backgroundSprite.getY() - backgroundSprite.getHeight() / 2,
+                backgroundSprite.getWidth(),
+                backgroundSprite.getHeight(), backgroundSprite.getWidth(),
+                backgroundSprite.getHeight(), backgroundSprite.getScaleX(),
                 backgroundSprite.getScaleY(), backgroundSprite.getRotation());
         batch.end();
     }

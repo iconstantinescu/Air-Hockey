@@ -13,6 +13,12 @@ public abstract class GameObject {
 
     private float radius;
 
+    /**
+     * The main constructor of a Game object, setting its main information.
+     * @param posX The x coordinate on the screen.
+     * @param posY The y coordinate on the screen.
+     * @param radius The radius of the object.
+     */
     public GameObject(float posX, float posY, float radius) {
         this.posX = posX;
         this.posY = posY;

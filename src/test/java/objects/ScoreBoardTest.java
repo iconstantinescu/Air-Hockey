@@ -1,7 +1,20 @@
 package objects;
 
-import client.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+
+import client.Leaderboard;
+import client.LeaderboardDaoMySql;
+import client.LeaderboardEntry;
+import client.User;
+import client.UserDaoMySql;
 import game.Render;
+import java.sql.Connection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -9,10 +22,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import utilities.InformationDrawer;
-
-import java.sql.Connection;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Matchers.*;
 
 
 class ScoreBoardTest {

@@ -15,6 +15,7 @@ class OutOfGatesStateTest {
     private transient ShapeRenderer shapeRenderer;
     @Mock
     private transient ScoreBoard scoreBoard;
+
     @Test
     void preventOutLeftCorner() {
         puck = new Puck(2,2,10,-1, 1, scoreBoard, shapeRenderer);
