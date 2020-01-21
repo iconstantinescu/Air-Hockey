@@ -1,18 +1,17 @@
-package client;
+package utilities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-
-public class BcryptHashingTest {
+class BcryptHashingTest {
 
 
     @Test
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void testHashPassword() {
+    void testHashPassword() {
 
-        BcryptHashing bcryptHashing = new BcryptHashing();
+        BcryptHashing bcryptHashing = new BcryptHashing(); //required for test coverage
         String hashedPassword = BcryptHashing.hashPasswordWithGeneratedSalt("pwd");
         String salt = BcryptHashing.getSalt();
         assertEquals(hashedPassword, BcryptHashing.hashPasswordWithGivenSalt("pwd", salt));

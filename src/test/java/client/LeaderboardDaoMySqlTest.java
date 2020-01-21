@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public class LeaderboardDaoMySqlTest {
+class LeaderboardDaoMySqlTest {
 
     @InjectMocks
     transient LeaderboardDaoMySql leaderboardDaoMySql;
@@ -27,8 +27,6 @@ public class LeaderboardDaoMySqlTest {
     transient PreparedStatement mockPS;
     @Mock
     transient ResultSet mockResultSet;
-    @Mock
-    transient ConnectionFactory connectionFactory;
 
 
     @BeforeEach
@@ -59,6 +57,14 @@ public class LeaderboardDaoMySqlTest {
         int position = 10;
         Mockito.when(mockResultSet.getInt(anyInt())).thenReturn(position);
         Assertions.assertEquals(position, leaderboardDaoMySql.getLeaderboardPosition(1));
+
+    }
+
+    @Test
+    void getLeaderboardPositionWrongId() throws SQLException {
+
+        Mockito.when(mockResultSet.next()).thenReturn(false);
+        Assertions.assertEquals(-1, leaderboardDaoMySql.getLeaderboardPosition(1));
 
     }
 

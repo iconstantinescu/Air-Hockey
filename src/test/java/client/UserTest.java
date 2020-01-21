@@ -1,23 +1,25 @@
 package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+class UserTest {
 
     private transient User testUser;
-    private transient ArrayList<GameDetails> testGameList;
-    private transient Timestamp timestamp;
+    private transient User otherUser;
 
     @BeforeEach
     void setUp() {
         testUser = new User(1, "john", 100, 1, 2);
-        testGameList = new ArrayList<>();
-        timestamp = new Timestamp(System.currentTimeMillis());
+        otherUser = new User(testUser.getUserID(),
+                testUser.getNickname(), testUser.getPoints(),
+                testUser.getNumOfLostGames(), testUser.getNumOfWonGames());
     }
 
     @Test
@@ -25,11 +27,9 @@ public class UserTest {
         User emptyUser = new User();
         assertEquals(0, emptyUser.getUserID());
         assertEquals(0, emptyUser.getPoints());
-        assertEquals(0, emptyUser.getNumOfGamesPlayed());
         assertEquals(0, emptyUser.getNumOfLostGames());
         assertEquals(0, emptyUser.getNumOfWonGames());
         assertEquals("", emptyUser.getNickname());
-        assertEquals(new ArrayList<>(), emptyUser.getGameHistory());
 
     }
 
@@ -63,49 +63,69 @@ public class UserTest {
     }
 
     @Test
-    void getGameHistory() {
-
-        assertEquals(testGameList, testUser.getGameHistory());
-    }
-
-    @Test
-    void addGame() {
-        GameDetails newGame = new GameDetails("john", "robert",
-                5, 2, timestamp);
-
-        testUser.addGame(newGame);
-        testGameList.add(newGame);
-        assertEquals(testGameList, testUser.getGameHistory());
-    }
-
-    @Test
     void getNumOfLostGames() {
-        testUser.addLostGame();
+        testUser.addNumOfLostGames(1);
         assertEquals(2, testUser.getNumOfLostGames());
     }
 
     @Test
-    void setNumOfLostGames() {
-        testUser.setNumOfLostGames(10);
-        assertEquals(10, testUser.getNumOfLostGames());
-    }
-
-    @Test
     void getNumOfWonGames() {
-        testUser.addWonGame();
-        testUser.addWonGame();
+        testUser.addNumOfWonGames(2);
         assertEquals(4, testUser.getNumOfWonGames());
     }
 
     @Test
-    void setNumOfWonGames() {
-        testUser.setNumOfWonGames(10);
-        assertEquals(10, testUser.getNumOfWonGames());
+    void equalsSame() {
+        assertTrue(testUser.equals(testUser));
     }
-
 
     @Test
-    void getNumOfGamesPlayed() {
-        assertEquals(3, testUser.getNumOfGamesPlayed());
+    void equalsOther() {
+        assertTrue(testUser.equals(otherUser));
     }
+
+    @Test
+    void notEqualsOther() {
+        User otherUser = new User();
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    @SuppressWarnings("PMD.EqualsNull") // we need to call equals null for the test
+    void notEqualsNull() {
+        assertFalse(testUser.equals(null));
+    }
+
+    @Test
+    void notEqualsString() {
+        assertFalse(testUser.equals("String"));
+    }
+
+    @Test
+    void notEqualsNickname() {
+        otherUser.setNickname("nickname");
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsId() {
+        otherUser.setUserId(2);
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsPoints() {
+        otherUser.addPoints(10);
+        assertFalse(testUser.equals(otherUser));
+    }
+
+    @Test
+    void notEqualsGamesWonLost() {
+        otherUser.addNumOfWonGames(1);
+        assertFalse(testUser.equals(otherUser));
+        otherUser.addNumOfLostGames(1);
+        assertFalse(testUser.equals(otherUser));
+    }
+
+
 }

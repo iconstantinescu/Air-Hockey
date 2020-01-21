@@ -1,6 +1,7 @@
 package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Matchers.anyString;
 
 import java.sql.Connection;
@@ -14,11 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import utilities.BcryptHashing;
 
-public class UserAuthenticationMySqlTest {
+class UserAuthenticationMySqlTest {
 
     @InjectMocks
-    private transient UserAuthenticationMySql authenticationMySql;
+    private transient UserDaoMySql userDaoMySql;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -46,7 +48,7 @@ public class UserAuthenticationMySqlTest {
     }
 
     @Test
-    public void testAuthenticateOk() throws SQLException {
+    void testAuthenticateOk() throws SQLException {
 
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
 
@@ -57,20 +59,29 @@ public class UserAuthenticationMySqlTest {
         Mockito.when(mockResultSet.getInt("games_won")).thenReturn(3);
         Mockito.when(mockResultSet.getInt("games_lost")).thenReturn(2);
 
-        User authenticatedUser = authenticationMySql.authenticate(username, pwd);
+        User authenticatedUser = userDaoMySql.authenticate(username, pwd);
 
         User user =  new User(1, "name", 100L, 2, 3);
         assertEquals(user, authenticatedUser);
     }
 
     @Test
-    public void testAuthenticateFailed() throws SQLException {
+    void testAuthenticateFailed() throws SQLException {
 
         Mockito.when(mockResultSet.getString("salt")).thenReturn(salt);
         Mockito.when(mockResultSet.next()).thenReturn(false);
-        User authenticatedUser = authenticationMySql
+        User authenticatedUser = userDaoMySql
                 .authenticate(username, pwd);
-        assertEquals(null, authenticatedUser);
+        assertNull(authenticatedUser);
+    }
+
+    @Test
+    void testAuthenticateException() throws SQLException {
+
+
+        Mockito.when(mockConnection.prepareStatement(anyString()))
+                .thenThrow(new SQLException());
+        assertNull(userDaoMySql.authenticate(username, pwd));
     }
 
 }

@@ -1,6 +1,5 @@
 package client;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -13,7 +12,6 @@ public class User {
     private transient long points;
     private transient int gamesLost;
     private transient int gamesWon;
-    private transient ArrayList<GameDetails> gameHistory;
 
     /**
      * Constructor for client.User class.
@@ -29,7 +27,6 @@ public class User {
         this.nickname = nickname;
         this.gamesLost = gamesLost;
         this.gamesWon = gamesWon;
-        this.gameHistory = new ArrayList<>();
     }
 
     /**
@@ -41,7 +38,7 @@ public class User {
         this.nickname = "";
         this.gamesLost = 0;
         this.gamesWon = 0;
-        this.gameHistory = new ArrayList<>();
+
     }
 
     public int getUserID() {
@@ -68,42 +65,21 @@ public class User {
         this.points += newPoints;
     }
 
-    public ArrayList<GameDetails> getGameHistory() {
-        return gameHistory;
-    }
-
-    public void addGame(GameDetails newGame) {
-        this.gameHistory.add(newGame);
-    }
-
-    public void addLostGame() {
-        this.gamesLost++;
-    }
-
-    public void addWonGame() {
-        this.gamesWon++;
-    }
-
     public int getNumOfLostGames() {
         return  this.gamesLost;
     }
 
-    public void setNumOfLostGames(int gamesLost) {
-        this.gamesLost = gamesLost;
+    public void addNumOfLostGames(int gamesLost) {
+        this.gamesLost += gamesLost;
     }
 
     public int getNumOfWonGames() {
         return  this.gamesWon;
     }
 
-    public void setNumOfWonGames(int gamesWon) {
-        this.gamesWon = gamesWon;
+    public void addNumOfWonGames(int gamesWon) {
+        this.gamesWon += gamesWon;
     }
-
-    public int getNumOfGamesPlayed() {
-        return  this.gamesLost + this.gamesWon;
-    }
-
 
     //The hashCode is not needed for our application.
     //We just use the equals method.
@@ -121,8 +97,7 @@ public class User {
                 && points == user.points
                 && gamesLost == user.gamesLost
                 && gamesWon == user.gamesWon
-                && Objects.equals(nickname, user.nickname)
-                && Objects.equals(gameHistory, user.gameHistory);
+                && Objects.equals(nickname, user.nickname);
     }
 
 }
