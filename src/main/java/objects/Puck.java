@@ -1,11 +1,16 @@
 package objects;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 /**
  * Class implementing the behaviour of the Puck.
  */
 public class Puck extends GameObject {
 
     private transient PuckState puckState;
+
+    private transient ShapeRenderer shape;
 
     private transient PuckState menuState;
 
@@ -30,6 +35,7 @@ public class Puck extends GameObject {
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.scoreBoard = scoreBoard;
+        shape = new ShapeRenderer();
         menuState = new OutOfGatesState();
         changeStateTo(new GateAlignedState());
     }
@@ -72,6 +78,8 @@ public class Puck extends GameObject {
 
         setPosX(deltaX + getPosX());
         setPosY(deltaY + getPosY());
+
+
     }
 
     /**
@@ -124,6 +132,18 @@ public class Puck extends GameObject {
                 changeStateTo(new OutOfGatesState());
             }
         }
+    }
+
+    /**
+     * Function that renders a gameObject (which can be either the puck or the pusher.
+     */
+    public void drawGameObject() {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+
+        shape.setColor(Color.RED);
+
+        shape.circle(getPosX(), getPosY(), getRadius());
+        shape.end();
     }
 
 }

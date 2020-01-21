@@ -19,7 +19,6 @@ import game.Render;
 import game.RenderStrategy;
 import java.util.List;
 
-import objects.ObjectDrawer;
 import objects.Puck;
 import objects.ScoreBoard;
 
@@ -43,7 +42,6 @@ public class RenderMenu implements RenderStrategy {
 
     private transient List<GameDetails> history;
     private transient TextButton nicknameButton;
-    private transient ObjectDrawer objectDrawer;
 
     /**
      * This is the renderer for the menu.
@@ -83,8 +81,6 @@ public class RenderMenu implements RenderStrategy {
 
         history = Render.userDao.getGameHistory(Render.user1.getUserID(),5);
 
-        objectDrawer = new ObjectDrawer("media/home.png");
-
         menuButtons = new MenuButtons();
 
         stage.addActor(nickname);
@@ -103,7 +99,7 @@ public class RenderMenu implements RenderStrategy {
         menuButtons.setButtons();
 
         updatePuckMenu();
-        objectDrawer.drawGameObject(puck);
+        puck.drawGameObject();
 
         if (leaderboardString == null) {
             leaderboardString = drawLeaderboard();

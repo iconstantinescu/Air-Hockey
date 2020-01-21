@@ -1,9 +1,14 @@
 package utilities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import game.Render;
+import objects.ScoreBoard;
+
+import static com.badlogic.gdx.Input.Keys.ENTER;
 
 public class InformationDrawer {
 
@@ -18,6 +23,24 @@ public class InformationDrawer {
         batch = new SpriteBatch();
     }
 
+    /**
+     * Waits for Enter to be pressed to go back to the menu.
+     */
+    public void waitForEnter() {
+        if (Gdx.input.isKeyJustPressed(ENTER)) {
+            Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
+//            backSound.dispose();
+        }
+    }
+
+    public void drawInformation(int score1, int score2) {
+        // RENDER THE SCORE
+        drawText(score1 + " : "
+                        + score2, (Gdx.graphics.getWidth() / 2) - 50,
+                Gdx.graphics.getHeight() - 20, 4);
+        drawText("Player 1", 80, Gdx.graphics.getHeight() - 20, 2);
+        drawText("Player 2", Gdx.graphics.getWidth() - 180, Gdx.graphics.getHeight() - 20, 2);
+    }
 
     /**
      * Draw text on the screen.

@@ -1,45 +1,52 @@
 package objects;
 
 import com.badlogic.gdx.Gdx;
-import org.lwjgl.util.vector.Vector2f;
+import utilities.InformationDrawer;
 
 public class Match {
     private transient Pusher pusher1;
     private transient Pusher pusher2;
-    private transient Vector2f pusher1Reset;
-    private transient Vector2f pusher2Reset;
     private transient Puck puck;
-    private transient ScoreBoard scoreBoard;
+    public transient ScoreBoard scoreBoard;
+    private transient InformationDrawer informationDrawer;
+
 
     public Match() {
-        // Set pusher 1 and 2 reset positions
-        pusher1Reset = new Vector2f(Gdx.graphics.getWidth() / 4f,
-                Gdx.graphics.getHeight() / 2f);
-        pusher2Reset = new Vector2f(Gdx.graphics.getWidth() * (3f / 4f),
-                Gdx.graphics.getHeight() / 2f);
-
         // Set pusher 1 and 2 positions
-        pusher1 = new Pusher(pusher1Reset.x, pusher1Reset.y, 40);
-        pusher2 = new Pusher(pusher2Reset.x, pusher2Reset.y, 40);
+        pusher1 = new Pusher(Gdx.graphics.getWidth() / 4f,
+                Gdx.graphics.getHeight() / 2f, 40);
+        pusher2 = new Pusher(Gdx.graphics.getWidth() * (3f / 4f),
+                Gdx.graphics.getHeight() / 2f, 40);
 
         scoreBoard = new ScoreBoard();
         float rand = (Math.random() < 0.5) ? 1f : -1f;
         puck = new Puck(Gdx.graphics.getWidth() / 2
                 + 100 * rand, Gdx.graphics.getHeight() / 2, 15, 0, 0,
                 scoreBoard);
+
+        informationDrawer = new InformationDrawer();
+
     }
 
     public void updateMatch() {
-        updatePuck();
+        // DRAW THE PUCK OR GAME OVER
+        if (scoreBoard.isGameOver()) {
+            // DRAW TOP SCORES
+            scoreBoard.drawTopScores(5,
+                    Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
+            // GO BACK TO MENU IF ENTER IS PRESSED
+            informationDrawer.waitForEnter();
+        } else {
+            // CALCULATE THE POSITIONS OF THE PUCK
+            updatePuck();
 
-        checkPushersReset();
+            checkPushersReset();
 
-        // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
-        updatePusher(pusher1, true);
-        // CHANGE PUSHER2 POSITION ACCORDING TO KEYBOARD INPUT
-        updatePusher(pusher2, false);
-
-
+            // CHANGE PUSHER1 POSITION ACCORDING TO KEYBOARD INPUT
+            updatePusher(pusher1, true);
+            // CHANGE PUSHER2 POSITION ACCORDING TO KEYBOARD INPUT
+            updatePusher(pusher2, false);
+        }
     }
 
     /**
@@ -47,23 +54,17 @@ public class Match {
      */
     public void checkPushersReset() {
         if (Pusher.resetPusher) {
-            pusher1.setPosX(pusher1Reset.x);
-            pusher1.setPosY(pusher1Reset.y);
-            pusher2.setPosX(pusher2Reset.x);
-            pusher2.setPosY(pusher2Reset.y);
+            pusher1.setPosX(Gdx.graphics.getWidth() / 4f);
+            pusher1.setPosY(Gdx.graphics.getHeight() / 2f);
+            pusher2.setPosX(Gdx.graphics.getWidth() * (3f / 4f));
+            pusher2.setPosY(Gdx.graphics.getHeight() / 2f);
             Pusher.resetPusher = !Pusher.resetPusher;
         }
     }
 
-    /**
-     * Get the winner number (either 1 or 2).
-     */
-    public int winnerNumber() {
-        if (scoreBoard.getWinner()) {
-            return 1;
-        }
-        return 2;
-    }
+
+
+
 
     /**
      * Moves the pusher object according to the user input.
@@ -96,6 +97,8 @@ public class Match {
         if (Gdx.input.isKeyPressed(keyCodes[3]) && !restricts[3]) {
             pusher.setPosX(pusher.getPosX() + 6);
         }
+
+        pusher.drawGameObject();
     }
 
     /**
@@ -109,29 +112,10 @@ public class Match {
         pusher2.checkAndExecuteCollision(puck);
 
         puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        puck.drawGameObject();
     }
 
-    public Pusher getPusher1() {
-        return pusher1;
-    }
 
-    public Pusher getPusher2() {
-        return pusher2;
-    }
 
-    public Vector2f getPusher1Reset() {
-        return pusher1Reset;
-    }
 
-    public Vector2f getPusher2Reset() {
-        return pusher2Reset;
-    }
-
-    public Puck getPuck() {
-        return puck;
-    }
-
-    public ScoreBoard getScoreBoard() {
-        return scoreBoard;
-    }
 }

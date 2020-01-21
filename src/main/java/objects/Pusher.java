@@ -1,5 +1,7 @@
 package objects;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import utilities.MathUtils;
 
 /**
@@ -8,6 +10,7 @@ import utilities.MathUtils;
 public class Pusher extends GameObject {
 
     public static boolean resetPusher;
+    private transient ShapeRenderer shape;
 
     public static boolean playHitSound = false;
 
@@ -20,6 +23,7 @@ public class Pusher extends GameObject {
      */
     public Pusher(float posX, float posY, float radius) {
         super(posX, posY, radius);
+        this.shape = new ShapeRenderer();
     }
 
     /**
@@ -57,7 +61,7 @@ public class Pusher extends GameObject {
         }
 
         // Restrict Down if necessary
-        if (getPosX() - getRadius() < 0) {
+        if (getPosY() - getRadius() < 0) {
             restricts[2] = true;
         }
 
@@ -88,5 +92,17 @@ public class Pusher extends GameObject {
         }
 
         return restricts;
+    }
+
+    /**
+     * Function that renders a gameObject (which can be either the puck or the pusher.
+     */
+    public void drawGameObject() {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+
+        shape.setColor(Color.FIREBRICK);
+
+        shape.circle(getPosX(), getPosY(), getRadius());
+        shape.end();
     }
 }
