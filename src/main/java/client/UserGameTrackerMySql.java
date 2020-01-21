@@ -12,13 +12,13 @@ import java.util.List;
  * Class that contains the methods required to save and retrieve
  * user points and match details to/from the database.
  */
-public class UserGameTrackerMySqlAbstract extends AbstractDatabase implements UserGameTracker {
+public class UserGameTrackerMySql extends AbstractDatabaseInteraction implements UserGameTracker {
 
     /**
      * Constructor of the class.
      * @param conn the connection object that connects to the database
      */
-    public UserGameTrackerMySqlAbstract(Connection conn) {
+    public UserGameTrackerMySql(Connection conn) {
         super(conn);
     }
 

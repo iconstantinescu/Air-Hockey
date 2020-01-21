@@ -11,7 +11,7 @@ package client;
  * Any leaderboard related operations will be done through the LeaderboardDao.
  *</p>
  * Example usage for MySql implementation:
- * LeaderboardDao leaderboardDao = new LeaderboardDaoMySqlAbstract().
+ * LeaderboardDao leaderboardDao = new LeaderboardDaoMySql().
  */
 public interface LeaderboardDao {
 

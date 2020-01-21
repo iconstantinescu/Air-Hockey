@@ -1,7 +1,7 @@
 package game;
 
 import client.*;
-import client.LeaderboardDaoMySqlAbstract;
+import client.LeaderboardDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
 import java.sql.SQLException;
 import menu.RenderLogin;
@@ -47,7 +47,7 @@ public class Render extends ApplicationAdapter {
             JdbcSingleton jdbcSingleton = JdbcSingleton.getInstance();
 
             this.userDao = new UserDaoMySql(jdbcSingleton.getConnection());
-            this.leaderboardDao = new LeaderboardDaoMySqlAbstract(jdbcSingleton.getConnection());
+            this.leaderboardDao = new LeaderboardDaoMySql(jdbcSingleton.getConnection());
         } catch (SQLException e) {
             System.out.println("Something went wrong when connecting to the database");
             dispose(); //application will close if we cannot connect
