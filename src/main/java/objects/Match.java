@@ -1,8 +1,14 @@
 package objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import utilities.InformationDrawer;
 
+/**
+ * The Match class acts as a container for the Air Hockey game.
+ * Its main task is calling the underlying functions of the pushers
+ * and puck objects in order to make the game possible.
+ */
 public class Match {
     private transient Pusher pusher1;
     private transient Pusher pusher2;
@@ -10,30 +16,37 @@ public class Match {
     public transient ScoreBoard scoreBoard;
     private transient InformationDrawer informationDrawer;
 
-
+    /**
+     * The constructor of the Match class, which will create an Air Hockey match.
+     */
     public Match() {
         // Set pusher 1 and 2 positions
         pusher1 = new Pusher(Gdx.graphics.getWidth() / 4f,
-                Gdx.graphics.getHeight() / 2f, 40);
+                Gdx.graphics.getHeight() / 2f, 40, new ShapeRenderer());
         pusher2 = new Pusher(Gdx.graphics.getWidth() * (3f / 4f),
-                Gdx.graphics.getHeight() / 2f, 40);
+                Gdx.graphics.getHeight() / 2f, 40, new ShapeRenderer());
 
-        scoreBoard = new ScoreBoard();
+        scoreBoard = new ScoreBoard(0, 0, new InformationDrawer());
         float rand = (Math.random() < 0.5) ? 1f : -1f;
         puck = new Puck(Gdx.graphics.getWidth() / 2
                 + 100 * rand, Gdx.graphics.getHeight() / 2, 15, 0, 0,
-                scoreBoard);
+                scoreBoard, new ShapeRenderer());
 
         informationDrawer = new InformationDrawer();
 
     }
 
+    /**
+     * The main goal of this class is to update the state of evey object of the screen,
+     * and draw the top scores once the game ends.
+     */
     public void updateMatch() {
         // DRAW THE PUCK OR GAME OVER
         if (scoreBoard.isGameOver()) {
             // DRAW TOP SCORES
             scoreBoard.drawTopScores(5,
-                    Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150);
+                    Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() - 150,
+                    Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             // GO BACK TO MENU IF ENTER IS PRESSED
             informationDrawer.waitForEnter();
         } else {
@@ -61,10 +74,6 @@ public class Match {
             Pusher.resetPusher = !Pusher.resetPusher;
         }
     }
-
-
-
-
 
     /**
      * Moves the pusher object according to the user input.
@@ -114,8 +123,5 @@ public class Match {
         puck.translate(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         puck.drawGameObject();
     }
-
-
-
 
 }

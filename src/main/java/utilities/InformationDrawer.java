@@ -2,24 +2,24 @@ package utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.Render;
-import objects.ScoreBoard;
 
 import static com.badlogic.gdx.Input.Keys.ENTER;
 
+
+/**
+ * InformationDrawer is a drawer mainly used for drawing general information on
+ * the screen, which is mainly composed of text.
+ */
 public class InformationDrawer {
 
-    ShapeRenderer shape;
-    SpriteBatch batch;
+    private transient SpriteBatch batch;
 
     /**
      * A constructor for a simple ObjectDrawer, without any background image.
      */
     public InformationDrawer() {
-        shape = new ShapeRenderer();
         batch = new SpriteBatch();
     }
 

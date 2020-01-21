@@ -7,11 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * The ObjectDrawer is a drawer whose main goal is drawing the objects and
+ * the background of the game on the screen.
+ */
 public class ObjectDrawer {
 
-    ShapeRenderer shape;
-    SpriteBatch batch;
-    Sprite backgroundSprite;
+    private transient ShapeRenderer shape;
+    private transient SpriteBatch batch;
+    private transient Sprite backgroundSprite;
 
     /**
      * A constructor for a simple ObjectDrawer, without any background image.
@@ -23,6 +27,7 @@ public class ObjectDrawer {
 
     /**
      * A constructor for an ObjectDrawer which can also draw a background image.
+     * @param backgroundPath Path to the background image
      */
     public ObjectDrawer(String backgroundPath) {
         shape = new ShapeRenderer();

@@ -21,9 +21,9 @@ public class Pusher extends GameObject {
      * @param posY   y position
      * @param radius radius of puck
      */
-    public Pusher(float posX, float posY, float radius) {
+    public Pusher(float posX, float posY, float radius, ShapeRenderer shapeRenderer) {
         super(posX, posY, radius);
-        this.shape = new ShapeRenderer();
+        this.shape = shapeRenderer;
     }
 
     /**

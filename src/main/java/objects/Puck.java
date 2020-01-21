@@ -30,18 +30,14 @@ public class Puck extends GameObject {
      * @param deltaY y movement
      */
     public Puck(float posX, float posY, float radius, float deltaX,
-                float deltaY, ScoreBoard scoreBoard) {
+                float deltaY, ScoreBoard scoreBoard, ShapeRenderer shapeRenderer) {
         super(posX, posY, radius);
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.scoreBoard = scoreBoard;
-        shape = new ShapeRenderer();
+        shape = shapeRenderer;
         menuState = new OutOfGatesState();
         changeStateTo(new GateAlignedState());
-    }
-
-    public ScoreBoard getScoreBoard() {
-        return scoreBoard;
     }
 
     public PuckState getPuckState() {
@@ -146,4 +142,11 @@ public class Puck extends GameObject {
         shape.end();
     }
 
+    public void setShape(ShapeRenderer shape) {
+        this.shape = shape;
+    }
+
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
 }

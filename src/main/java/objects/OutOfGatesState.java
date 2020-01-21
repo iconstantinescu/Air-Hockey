@@ -2,7 +2,8 @@ package objects;
 
 /**
  * This class implements the behaviour of the Puck when it is
- * out of the Gate Range.
+ * out of the Gate Range, when the puck has to be restricted from going
+ * past the edges of the screen by inverting its movement speed variable.
  */
 public class OutOfGatesState implements PuckState {
 

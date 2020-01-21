@@ -20,7 +20,8 @@ import game.Render;
 import game.RenderStrategy;
 
 /**
- * The specific renderer of the Login.
+ * The specific renderer of the Login, during this loop the login can
+ * and sign up can be done.
  */
 public class RenderLogin implements RenderStrategy {
     transient TextField username;

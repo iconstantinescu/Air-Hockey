@@ -14,28 +14,29 @@ public class ScoreBoard {
     private transient int player1Score;
     private transient int player2Score;
     private transient InformationDrawer informationDrawer;
-    private transient Leaderboard leaderboard;
-    private transient boolean matchUploaded = false;
+
+    public transient Leaderboard leaderboard;
+    public transient boolean matchUploaded = false;
     private static final short endScore = 5;
 
-    /**
-     * Default constructor that initializes both scores to 0.
-     */
     public ScoreBoard() {
         this.player1Score = 0;
         this.player2Score = 0;
-        this.informationDrawer = new InformationDrawer();
     }
 
+    public ScoreBoard(int player1Score, int player2Score) {
+        this.player1Score = player1Score;
+        this.player2Score = player2Score;
+    }
     /**
      * Score board constructor.
      * @param player1Score score of player 1
      * @param player2Score score of player 2
      */
-    public ScoreBoard(int player1Score, int player2Score) {
+    public ScoreBoard(int player1Score, int player2Score, InformationDrawer informationDrawer) {
         this.player1Score = player1Score;
         this.player2Score = player2Score;
-        this.informationDrawer = new InformationDrawer();
+        this.informationDrawer = informationDrawer;
     }
 
     /**
@@ -67,7 +68,7 @@ public class ScoreBoard {
      */
     public void pointP1() {
         player1Score++;
-        if(player1Score == 5) {
+        if (player1Score == endScore) {
             matchUploaded = uploadMatch(matchUploaded);
         }
     }
@@ -77,7 +78,7 @@ public class ScoreBoard {
      */
     public void pointP2() {
         player2Score++;
-        if(player1Score == 5) {
+        if (player2Score == endScore) {
             matchUploaded = uploadMatch(matchUploaded);
         }
     }
@@ -121,26 +122,26 @@ public class ScoreBoard {
      * @param posY The y coordinate of the first score
      */
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public void drawTopScores(int size, float posX, float posY) {
+    public void drawTopScores(int size, float posX, float posY, float screenWidth, float screenHeight) {
         if (leaderboard == null) {
             leaderboard = Render.leaderboardDao.getLeaderboard(size);
         }
 
-        informationDrawer.drawText("Player " + winnerNumber() + " Won", (Gdx.graphics.getWidth() / 2) - 150,
-                Gdx.graphics.getHeight() - 100, 4);
+        informationDrawer.drawText("Player " + winnerNumber() + " Won", (screenWidth / 2) - 150,
+                screenHeight - 100, 4);
 
-        if (leaderboard != null) {
 
-            int i = 1;
-            for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
-                informationDrawer.drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
-                        posX, posY, 4);
+        int i = 1;
+        for (LeaderboardEntry entry : leaderboard.getLeaderboardList()) {
 
-                posY -= 50;
-                i++;
-            }
+            informationDrawer.drawText(i + ". " + entry.getNickname() + " " + entry.getPoints(),
+                    posX, posY, 4);
+
+            posY -= 50;
+            i++;
         }
+
 
         informationDrawer.drawText("Press ENTER to go back to menu", posX - 250, posY - 100, 4);
     }
@@ -154,4 +155,5 @@ public class ScoreBoard {
         }
         return 2;
     }
+
 }

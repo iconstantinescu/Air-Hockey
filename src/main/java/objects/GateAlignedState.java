@@ -2,7 +2,8 @@ package objects;
 
 /**
  * This class implements the behaviour of the Puck when is is
- * inside the Gate Range.
+ * inside the Gate Range, the puck will be able to go past the
+ * edge of the screen in this state, scoring a goal.
  */
 public class GateAlignedState implements PuckState {
 

@@ -9,7 +9,8 @@ import utilities.InformationDrawer;
 import utilities.ObjectDrawer;
 
 /**
- * The specific Main renderer inheriting from the general Renderer.
+ * The specific Main renderer inheriting from the general RenderStrategy,
+ * in here the game itself is going to be run on a loop.
  */
 public class RenderGame implements RenderStrategy {
     private transient ObjectDrawer objectDrawer;
@@ -25,7 +26,8 @@ public class RenderGame implements RenderStrategy {
             Gdx.audio.newMusic(Gdx.files.internal("media/airhorn.wav"));
 
     /**
-     * Constructor for the Renderer.
+     * Constructor for the RenderStrategy, creating the match and the necessary
+     * drawers.
      */
     public RenderGame() {
         match = new Match();

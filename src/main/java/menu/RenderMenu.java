@@ -8,6 +8,7 @@ import client.Leaderboard;
 import client.LeaderboardEntry;
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import objects.Puck;
 import objects.ScoreBoard;
-
+import utilities.InformationDrawer;
 
 
 /**
@@ -35,7 +36,6 @@ public class RenderMenu implements RenderStrategy {
     private transient MenuButtons menuButtons;
 
     private transient Puck puck;
-    private transient ScoreBoard scoreBoard;
     protected transient Leaderboard leaderboard;
     protected transient String leaderboardString;
 
@@ -53,10 +53,8 @@ public class RenderMenu implements RenderStrategy {
         skin = new Skin(Gdx.files.internal("assets/ui/skin/uiskin.json"));
         stage = new Stage(new ScreenViewport());
 
-        float nicknameX = 30;
-        float nicknameY = Gdx.graphics.getHeight() - 80;
         nickname = new TextField("", skin);
-        nickname.setPosition(nicknameX, nicknameY);
+        nickname.setPosition(30, Gdx.graphics.getHeight() - 80);
         nickname.setHeight(40);
         nickname.setWidth(200);
 
@@ -65,7 +63,7 @@ public class RenderMenu implements RenderStrategy {
         nicknameButton.setHeight(40);
 
         // register button position under password and username fields on right side
-        nicknameButton.setPosition(nicknameX, nicknameY - nickname.getHeight() - 10);
+        nicknameButton.setPosition(30, (Gdx.graphics.getHeight() - 80) - nickname.getHeight() - 10);
 
         nicknameButton.addListener(new ClickListener() {
             @Override
@@ -74,10 +72,8 @@ public class RenderMenu implements RenderStrategy {
             }
         });
 
-
-        scoreBoard = new ScoreBoard();
         puck = new Puck(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 15, 4, 4,
-                scoreBoard);
+                new ScoreBoard(0,0), new ShapeRenderer());
 
         history = Render.userDao.getGameHistory(Render.user1.getUserID(),5);
 
@@ -137,8 +133,6 @@ public class RenderMenu implements RenderStrategy {
     public void dispose() {
         menuButtons.dispose();
     }
-
-
 
     /**
      * Method for Drawing the Top 10 Scores.
