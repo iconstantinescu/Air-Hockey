@@ -13,8 +13,6 @@ class UserTest {
 
     private transient User testUser;
     private transient User otherUser;
-    private transient ArrayList<GameDetails> testGameList;
-    private transient Timestamp timestamp;
 
     @BeforeEach
     void setUp() {
@@ -22,8 +20,6 @@ class UserTest {
         otherUser = new User(testUser.getUserID(),
                 testUser.getNickname(), testUser.getPoints(),
                 testUser.getNumOfLostGames(), testUser.getNumOfWonGames());
-        testGameList = new ArrayList<>();
-        timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     @Test
@@ -34,7 +30,6 @@ class UserTest {
         assertEquals(0, emptyUser.getNumOfLostGames());
         assertEquals(0, emptyUser.getNumOfWonGames());
         assertEquals("", emptyUser.getNickname());
-        assertEquals(new ArrayList<>(), emptyUser.getGameHistory());
 
     }
 
@@ -65,11 +60,6 @@ class UserTest {
     void addPoints() {
         testUser.addPoints(100);
         assertEquals(200, testUser.getPoints());
-    }
-
-    @Test
-    void getGameHistory() {
-        assertEquals(testGameList, testUser.getGameHistory());
     }
 
     @Test
@@ -114,16 +104,6 @@ class UserTest {
     @Test
     void notEqualsNickname() {
         otherUser.setNickname("nickname");
-        assertFalse(testUser.equals(otherUser));
-    }
-
-    @Test
-    void notEqualsGameHistory() {
-        GameDetails newGame = new GameDetails("a", "b",
-                5, 0, new Timestamp(System.currentTimeMillis()));
-        ArrayList<GameDetails> games = new ArrayList<>();
-        games.add(newGame);
-        otherUser.setGameHistory(games);
         assertFalse(testUser.equals(otherUser));
     }
 

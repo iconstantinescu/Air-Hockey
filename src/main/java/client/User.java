@@ -1,6 +1,5 @@
 package client;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -13,7 +12,6 @@ public class User {
     private transient long points;
     private transient int gamesLost;
     private transient int gamesWon;
-    private transient ArrayList<GameDetails> gameHistory;
 
     /**
      * Constructor for client.User class.
@@ -29,7 +27,6 @@ public class User {
         this.nickname = nickname;
         this.gamesLost = gamesLost;
         this.gamesWon = gamesWon;
-        this.gameHistory = new ArrayList<>();
     }
 
     /**
@@ -41,7 +38,7 @@ public class User {
         this.nickname = "";
         this.gamesLost = 0;
         this.gamesWon = 0;
-        this.gameHistory = new ArrayList<>();
+
     }
 
     public int getUserID() {
@@ -66,14 +63,6 @@ public class User {
 
     public void addPoints(long newPoints) {
         this.points += newPoints;
-    }
-
-    public ArrayList<GameDetails> getGameHistory() {
-        return gameHistory;
-    }
-
-    public void setGameHistory(ArrayList<GameDetails> gameHistory) {
-        this.gameHistory = gameHistory;
     }
 
     public int getNumOfLostGames() {
@@ -108,8 +97,7 @@ public class User {
                 && points == user.points
                 && gamesLost == user.gamesLost
                 && gamesWon == user.gamesWon
-                && Objects.equals(nickname, user.nickname)
-                && Objects.equals(gameHistory, user.gameHistory);
+                && Objects.equals(nickname, user.nickname);
     }
 
 }
