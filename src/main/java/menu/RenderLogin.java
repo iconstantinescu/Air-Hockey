@@ -124,7 +124,8 @@ public class RenderLogin implements RenderStrategy {
                     error.setText("Your account has been registered, please login");
                     error.setColor(0, 100,0,1);
                 } else {
-                    error.setText("There has been a problem, try another username,\n also length has to be bigger than 3 characters");
+                    error.setText("There has been a problem, try another username,"
+                            + "\n also length has to be bigger than 3 characters");
                     error.setColor(100, 0,0,1);
                 }
 
