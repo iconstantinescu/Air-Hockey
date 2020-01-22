@@ -20,9 +20,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-public class UserGameTrackerMySqlTest {
+class UserGameTrackerMySqlTest {
     @InjectMocks
-    private transient UserGameTrackerMySql userGameTrackerMySql;
+    private transient UserDaoMySql userDaoMySql;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -37,7 +37,7 @@ public class UserGameTrackerMySqlTest {
      * @throws SQLException Exception for SQL errors
      */
     @BeforeEach
-    public void setUp() throws SQLException {
+    void setUp() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
         testUser = new User(1, "john",  100, 2, 3);
@@ -48,35 +48,43 @@ public class UserGameTrackerMySqlTest {
     }
 
     @Test
-    public void testSaveGame() {
+    void testSaveGame() {
 
-        assertTrue(userGameTrackerMySql.saveGame(1,2,5,4));
+        assertTrue(userDaoMySql.saveGame(1,2,5,4));
 
     }
 
     @Test
-    public void testSqlExceptions() throws SQLException {
+    void testSqlExceptions() throws SQLException {
 
         Mockito.when(mockConnection.prepareStatement(anyString()))
                 .thenThrow(new SQLException());
 
-        assertFalse(userGameTrackerMySql.saveGame(1,2,5,4));
-        assertFalse(userGameTrackerMySql.updateUserStats(testUser));
-        assertEquals(new ArrayList<>(), userGameTrackerMySql.getGameHistory(1, 5));
+        assertFalse(userDaoMySql.saveGame(1,2,5,4));
+        assertFalse(userDaoMySql.updateUser(testUser));
+        assertEquals(new ArrayList<>(), userDaoMySql.getGameHistory(1, 5));
 
     }
 
     @Test
-    void updateUserStats() {
+    void testSqlExceptionGetNickname() throws SQLException {
+        Mockito.when(mockResultSet.getString("nickname"))
+                .thenThrow(new SQLException());
 
-        assertTrue(userGameTrackerMySql.updateUserStats(testUser));
+        assertEquals("", userDaoMySql
+                .getGameHistory(1, 5).get(0).getNickname1());
+    }
+
+    @Test
+    void updateUserStats() {
+        assertTrue(userDaoMySql.updateUser(testUser));
     }
 
     @Test
     @SuppressWarnings("PMD.CloseResource")
     void getGameHistory() throws SQLException {
 
-        Long time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         List<GameDetails> gameList = new ArrayList<>();
         gameList.add(new GameDetails("john", "robert", 5, 3,
                 new Timestamp(time)));
@@ -95,7 +103,9 @@ public class UserGameTrackerMySqlTest {
                 .thenReturn("john").thenReturn("robert");
 
 
-        List<GameDetails> resultList = userGameTrackerMySql.getGameHistory(1, 5);
+        List<GameDetails> resultList = userDaoMySql.getGameHistory(1, 5);
         assertEquals(gameList, resultList);
     }
+
+
 }

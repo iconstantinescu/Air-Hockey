@@ -1,6 +1,6 @@
 package client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.anyString;
 
 import java.sql.Connection;
@@ -16,11 +16,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
-public class UserRegistrationMySqlTest {
+class UserRegistrationMySqlTest {
 
 
     @InjectMocks
-    private transient UserRegistrationMySql registrationMySql;
+    private transient UserDaoMySql userDaoMySql;
     @Mock
     private transient Connection mockConnection;
     @Mock
@@ -38,21 +38,21 @@ public class UserRegistrationMySqlTest {
     }
 
     @Test
-    public void testCreateNewUser() {
+    void testCreateNewUser() {
 
-        boolean created = registrationMySql
+        boolean created = userDaoMySql
                 .createNewUser("user", "pwd", "john");
-        assertEquals(true, created);
+        assertTrue(created);
     }
 
 
     @Test
-    public void testSqlException() throws SQLException {
+    void testSqlException() throws SQLException {
 
         Mockito.when(mockConnection.prepareStatement(anyString()))
                 .thenThrow(new SQLException());
 
-        registrationMySql.createNewUser("user", "pwd", "john");
+        userDaoMySql.createNewUser("user", "pwd", "john");
     }
 
 

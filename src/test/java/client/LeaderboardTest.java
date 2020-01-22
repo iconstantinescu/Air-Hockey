@@ -2,6 +2,7 @@ package client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class LeaderboardTest {
+class LeaderboardTest {
 
     private transient Leaderboard testLeaderboard;
     private transient List<LeaderboardEntry> leaderboardList;
@@ -108,4 +109,39 @@ public class LeaderboardTest {
         assertEquals(new ArrayList<>(), newLeaderboard.getLeaderboardList());
         assertEquals(0, newLeaderboard.getCurrentSize());
     }
+
+    @Test
+    void equalsSame() {
+        assertTrue(testLeaderboard.equals(testLeaderboard));
+    }
+
+    @Test
+    void equalsOther() {
+        Leaderboard otherLeaderboard = new Leaderboard(leaderboardList, sizeLimit);
+        assertTrue(testLeaderboard.equals(otherLeaderboard));
+    }
+
+    @Test
+    void notEqualsOther() {
+        Leaderboard otherLeaderboard = new Leaderboard(0);
+        assertFalse(testLeaderboard.equals(otherLeaderboard));
+    }
+
+    @Test
+    @SuppressWarnings("PMD.EqualsNull") // we need explicitly to call equals null for the test
+    void notEqualsNull() {
+        assertFalse(testLeaderboard.equals(null));
+    }
+
+    @Test
+    void notEqualsString() {
+        assertFalse(testLeaderboard.equals("String"));
+    }
+
+    @Test
+    void notEqualsList() {
+        Leaderboard otherLeaderboard = new Leaderboard(new ArrayList<>(), sizeLimit);
+        assertFalse(testLeaderboard.equals(otherLeaderboard));
+    }
+
 }

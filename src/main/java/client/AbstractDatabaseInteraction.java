@@ -2,14 +2,14 @@ package client;
 
 import java.sql.Connection;
 
-abstract class DatabaseControllerMySql {
+abstract class AbstractDatabaseInteraction {
 
     /**
      * The connection object is injected in this class in order to improve testability.
      */
     protected transient Connection conn;
 
-    public DatabaseControllerMySql(Connection connection) {
+    public AbstractDatabaseInteraction(Connection connection) {
         this.conn = connection;
     }
 

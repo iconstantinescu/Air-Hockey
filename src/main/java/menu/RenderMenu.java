@@ -175,9 +175,13 @@ public class RenderMenu implements RenderStrategy {
                     + " " + history.get(i).getNickname2() + "\n");
         }
 
-        menuButtons.setText("Games Played: " + Render.user1.getNumOfGamesPlayed() + "\n"
-                + "Games Lost: " + Render.user1.getNumOfLostGames() + "\n"
-                + "Games Won: " + Render.user1.getNumOfWonGames() + "\n"
+        int won = Render.user1.getNumOfWonGames();
+        int lost = Render.user1.getNumOfLostGames();
+        int played = won + lost;
+
+        menuButtons.setText("Games Played: " + played + "\n"
+                + "Games Lost: " + lost + "\n"
+                + "Games Won: " + won + "\n"
                 + "Points: " + Render.user1.getPoints() + "\n"
                 + buildString.toString(), posX, posY);
 
