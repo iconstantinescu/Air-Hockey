@@ -98,15 +98,13 @@ public class ScoreBoard {
                 Render.user1.addPoints(addPoints);
                 Render.user1.addNumOfWonGames(1);
                 Render.user2.addNumOfLostGames(1);
-                Render.userDao.updateUser(Render.user1);
-                Render.userDao.updateUser(Render.user2);
             } else {
                 Render.user2.addPoints(addPoints);
                 Render.user2.addNumOfWonGames(1);
                 Render.user1.addNumOfLostGames(1);
-                Render.userDao.updateUser(Render.user1);
-                Render.userDao.updateUser(Render.user2);
             }
+            Render.userDao.updateUser(Render.user1);
+            Render.userDao.updateUser(Render.user2);
 
             // SAVE GAME INTO HISTORY
             return Render.userDao.saveGame(
@@ -118,6 +116,7 @@ public class ScoreBoard {
         }
         return true;
     }
+
 
     /**
      * Method for Drawing the Top 5 Scores.

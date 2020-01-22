@@ -18,8 +18,6 @@ import java.util.List;
 
 import objects.Puck;
 import objects.ScoreBoard;
-import utilities.InformationDrawer;
-
 
 /**
  * The specific renderer of the Main Menu.
