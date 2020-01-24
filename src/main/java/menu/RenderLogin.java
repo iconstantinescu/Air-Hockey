@@ -180,9 +180,6 @@ public class RenderLogin implements RenderStrategy {
         }
 
 
-        System.out.println("username: " + nameInput);
-        System.out.println("password: " + passInput);
-
         User resultUser = Render.userDao.authenticate(nameInput, passInput);
         if (resultUser != null) {
             System.out.println("user " + nameInput + " authenticated");
