@@ -1,0 +1,64 @@
+package utilities;
+
+import static com.badlogic.gdx.Input.Keys.ENTER;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import game.Render;
+
+/**
+ * InformationDrawer is a drawer mainly used for drawing general information on
+ * the screen, which is mainly composed of text.
+ */
+public class InformationDrawer {
+
+    private transient SpriteBatch batch;
+
+    /**
+     * A constructor for a simple ObjectDrawer, without any background image.
+     */
+    public InformationDrawer() {
+        batch = new SpriteBatch();
+    }
+
+    /**
+     * Waits for Enter to be pressed to go back to the menu.
+     */
+    public void waitForEnter() {
+        if (Gdx.input.isKeyJustPressed(ENTER)) {
+            Render.changeGameStrategy(Render.ApplicationStrategy.MENU);
+            //            backSound.dispose();
+        }
+    }
+
+    /**
+     * Draw Information about the current state of the game (Score).
+     * @param score1 Score of player 1
+     * @param score2 Score of player 2
+     */
+    public void drawInformation(int score1, int score2) {
+        // RENDER THE SCORE
+        drawText(score1 + " : "
+                        + score2, (Gdx.graphics.getWidth() / 2) - 50,
+                Gdx.graphics.getHeight() - 20, 4);
+        drawText("Player 1", 80, Gdx.graphics.getHeight() - 20, 2);
+        drawText("Player 2", Gdx.graphics.getWidth() - 180, Gdx.graphics.getHeight() - 20, 2);
+    }
+
+    /**
+     * Draw text on the screen.
+     * @param str Text to display on screen
+     * @param posX The x coordinate of the text
+     * @param posY The y coordinate of the text
+     */
+    public void drawText(String str, float posX, float posY, int fontScale) {
+        BitmapFont font = new BitmapFont();
+        batch.begin();
+        font.setColor(0,0,0,1);
+        font.getData().setScale(fontScale);
+        font.draw(batch, str, posX,
+                posY);
+        batch.end();
+    }
+}

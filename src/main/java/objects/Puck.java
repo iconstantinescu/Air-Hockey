@@ -1,24 +1,20 @@
 package objects;
 
-import game.RenderGame;
-import game.RenderStrategy;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Class implementing the behaviour of the Puck.
  */
-public class Puck {
+public class Puck extends GameObject {
 
     private transient PuckState puckState;
+
+    private transient ShapeRenderer shape;
 
     private transient PuckState menuState;
 
     private transient ScoreBoard scoreBoard;
-
-    private transient float posX;
-
-    private transient float posY;
-
-    private float radius;
 
     private float deltaX;
 
@@ -34,19 +30,14 @@ public class Puck {
      * @param deltaY y movement
      */
     public Puck(float posX, float posY, float radius, float deltaX,
-                float deltaY, ScoreBoard scoreBoard) {
-        this.posX = posX;
-        this.posY = posY;
-        this.radius = radius;
+                float deltaY, ScoreBoard scoreBoard, ShapeRenderer shapeRenderer) {
+        super(posX, posY, radius);
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.scoreBoard = scoreBoard;
+        shape = shapeRenderer;
         menuState = new OutOfGatesState();
         changeStateTo(new GateAlignedState());
-    }
-
-    public ScoreBoard getScoreBoard() {
-        return scoreBoard;
     }
 
     public PuckState getPuckState() {
@@ -55,30 +46,6 @@ public class Puck {
 
     public void setPuckState(PuckState puckState) {
         this.puckState = puckState;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
-    public float getposX() {
-        return posX;
-    }
-
-    public void setposX(float posX) {
-        this.posX = posX;
-    }
-
-    public float getposY() {
-        return posY;
-    }
-
-    public void setposY(float posY) {
-        this.posY = posY;
-    }
-
-    public float getRadius() {
-        return radius;
     }
 
     public float getDeltaX() {
@@ -105,8 +72,10 @@ public class Puck {
 
         puckState.executeBehavior(this, screenWidth, screenHeight);
 
-        setposX(deltaX + getposX());
-        setposY(deltaY + getposY());
+        setPosX(deltaX + getPosX());
+        setPosY(deltaY + getPosY());
+
+
     }
 
     /**
@@ -117,8 +86,8 @@ public class Puck {
     public void translateMenu(float screenWidth, float screenHeight) {
 
         menuState.executeBehavior(this, screenWidth, screenHeight);
-        setposX(deltaX + getposX());
-        setposY(deltaY + getposY());
+        setPosX(deltaX + getPosX());
+        setPosY(deltaY + getPosY());
     }
 
     /**
@@ -129,8 +98,8 @@ public class Puck {
     public void resetPuck(float newX, float newY) {
         this.deltaX = 0;
         this.deltaY = 0;
-        this.posX = newX;
-        this.posY = newY;
+        setPosX(newX);
+        setPosY(newY);
         Pusher.resetPusher = true;
     }
 
@@ -149,8 +118,8 @@ public class Puck {
      * @param screenHeight The height of the screen.
      */
     public void checkCurrentState(float screenHeight) {
-        if (getposY() >= screenHeight / 3
-                && getposY() <= (screenHeight / 3) * 2) {
+        if (getPosY() >= screenHeight / 3
+                && getPosY() <= (screenHeight / 3) * 2) {
             if (!(puckState instanceof GateAlignedState)) {
                 changeStateTo(new GateAlignedState());
             }
@@ -161,4 +130,23 @@ public class Puck {
         }
     }
 
+    /**
+     * Function that renders a gameObject (which can be either the puck or the pusher.
+     */
+    public void drawGameObject() {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+
+        shape.setColor(Color.RED);
+
+        shape.circle(getPosX(), getPosY(), getRadius());
+        shape.end();
+    }
+
+    public void setShape(ShapeRenderer shape) {
+        this.shape = shape;
+    }
+
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
 }

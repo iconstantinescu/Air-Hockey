@@ -4,53 +4,67 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import client.User;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 class PusherTest {
 
+    @InjectMocks
+    private transient Puck puck;
+    @InjectMocks
+    private transient Pusher pusher;
+    @Mock
+    private transient ScoreBoard scoreBoard;
+    @Mock
+    private transient ShapeRenderer shapeRenderer;
+
+
     @Test
     void getposX() {
-        Pusher pusher = new Pusher(10, 10, 10);
-        assertEquals(10, pusher.getposX());
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
+        assertEquals(10, pusher.getPosX());
     }
 
     @Test
     void setposX() {
-        Pusher pusher = new Pusher(10, 10, 10);
-        pusher.setposX(15);
-        assertEquals(15, pusher.getposX());
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
+        pusher.setPosX(15);
+        assertEquals(15, pusher.getPosX());
     }
 
     @Test
     void getposY() {
-        Pusher pusher = new Pusher(10, 10, 10);
-        assertEquals(10, pusher.getposY());
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
+        assertEquals(10, pusher.getPosY());
     }
 
     @Test
     void setposY() {
-        Pusher pusher = new Pusher(10, 10, 10);
-        pusher.setposY(15);
-        assertEquals(15, pusher.getposY());
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
+        pusher.setPosY(15);
+        assertEquals(15, pusher.getPosY());
     }
 
     @Test
     void getRadius() {
-        Pusher pusher = new Pusher(10, 10, 10);
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
         assertEquals(10, pusher.getRadius());
     }
 
     @Test
     void setRadius() {
-        Pusher pusher = new Pusher(10, 10, 10);
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
         pusher.setRadius(15);
         assertEquals(15, pusher.getRadius());
     }
 
     @Test
     void checkAndExecuteCollisionOverlap() {
-        Pusher pusher = new Pusher(10, 10, 10);
-        Puck puck = new Puck(10, 12, 2, 0, 0, new ScoreBoard());
+        pusher = new Pusher(10, 10, 10, shapeRenderer);
+        puck = new Puck(10, 12, 2, 0, 0, scoreBoard, shapeRenderer);
 
         assertTrue(pusher.checkAndExecuteCollision(puck));
         assertEquals(0, puck.getDeltaX());
@@ -59,8 +73,8 @@ class PusherTest {
 
     @Test
     void checkAndExecuteCollisionNoOverlap() {
-        Pusher pusher = new Pusher(300, 450, 10);
-        Puck puck = new Puck(10, 12, 2, 0, 0, new ScoreBoard());
+        pusher = new Pusher(300, 450, 10, shapeRenderer);
+        puck = new Puck(10, 12, 2, 0, 0, scoreBoard, shapeRenderer);
 
         assertFalse(pusher.checkAndExecuteCollision(puck));
         assertEquals(0, puck.getDeltaX());
@@ -70,7 +84,7 @@ class PusherTest {
 
     @Test
     void restrictMovementOnWallCornerLeft() {
-        Pusher pusher = new Pusher(-1, -1, 0);
+        pusher = new Pusher(-1, -1, 0, shapeRenderer);
 
         boolean[] some = new boolean[4];
         pusher.restrictMovementOnWall(true, some, 1280, 720);
@@ -81,7 +95,7 @@ class PusherTest {
 
     @Test
     void restrictMovementOnWallMiddleSecondPlayer() {
-        Pusher pusher = new Pusher(641, 1, 1);
+        pusher = new Pusher(641, 1, 1, shapeRenderer);
 
         boolean[] some = new boolean[4];
         pusher.restrictMovementOnWall(false, some, 1280, 720);
@@ -91,7 +105,7 @@ class PusherTest {
 
     @Test
     void restrictMovementOnWallRightSecondPlayer() {
-        Pusher pusher = new Pusher(1279, 1, 1);
+        pusher = new Pusher(1279, 1, 1, shapeRenderer);
 
         boolean[] some = new boolean[4];
         pusher.restrictMovementOnWall(false, some, 1280, 720);
@@ -101,7 +115,7 @@ class PusherTest {
 
     @Test
     void restrictMovementOnWallCornerRight() {
-        Pusher pusher = new Pusher(1281, 721, 0);
+        pusher = new Pusher(1281, 721, 0, shapeRenderer);
 
         boolean[] some = new boolean[4];
         pusher.restrictMovementOnWall(true, some, 1280, 720);
@@ -112,7 +126,7 @@ class PusherTest {
 
     @Test
     void restrictMovementOnWall() {
-        Pusher pusher = new Pusher(-1, -1, 0);
+        pusher = new Pusher(-1, -1, 0, shapeRenderer);
 
         boolean[] some = new boolean[4];
         pusher.restrictMovementOnWall(true, some, 1280, 720);

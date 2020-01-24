@@ -1,19 +1,16 @@
 package objects;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import utilities.MathUtils;
 
 /**
  * The class containing the behaviour of the pusher.
  */
-public class Pusher {
+public class Pusher extends GameObject {
 
     public static boolean resetPusher;
-
-    private transient float posX;
-
-    private transient float posY;
-
-    private float radius;
+    private transient ShapeRenderer shape;
 
     public static boolean playHitSound = false;
 
@@ -24,37 +21,10 @@ public class Pusher {
      * @param posY   y position
      * @param radius radius of puck
      */
-    public Pusher(float posX, float posY, float radius) {
-        this.posX = posX;
-        this.posY = posY;
-        this.radius = radius;
+    public Pusher(float posX, float posY, float radius, ShapeRenderer shapeRenderer) {
+        super(posX, posY, radius);
+        this.shape = shapeRenderer;
     }
-
-    public float getposX() {
-        return posX;
-    }
-
-    public void setposX(float posX) {
-        this.posX = posX;
-    }
-
-    public float getposY() {
-        return posY;
-    }
-
-    public void setposY(float posY) {
-        this.posY = posY;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
-
 
     /**
      * Function first checks if a collision occurs between the Puck and the Pusher,
@@ -63,12 +33,10 @@ public class Pusher {
      * @return Boolean showing whether a collision happened or not
      */
     public boolean checkAndExecuteCollision(Puck puck) {
-        if (MathUtils.checkRadius(this.getposX(), this.getposY(), this.getRadius(),
-                puck.getposX(), puck.getposY(), puck.getRadius())) {
-            double[] deltas = MathUtils.reflect(getposX(),
-                    getposY(), puck.getposX(), puck.getposY());
-            //puck.setDeltaX(-puck.getDeltaX());
-            //puck.setDeltaY(-puck.getDeltaY());
+        if (MathUtils.checkRadius(this.getPosX(), this.getPosY(), this.getRadius(),
+                puck.getPosX(), puck.getPosY(), puck.getRadius())) {
+            double[] deltas = MathUtils.reflect(getPosX(),
+                    getPosY(), puck.getPosX(), puck.getPosY());
             puck.setDeltaX((float) deltas[0] * 12f);
             puck.setDeltaY((float) deltas[1] * 12f);
             return true;
@@ -93,36 +61,48 @@ public class Pusher {
         }
 
         // Restrict Down if necessary
-        if (posY - radius < 0) {
+        if (getPosY() - getRadius() < 0) {
             restricts[2] = true;
         }
 
         // Restrict Up if necessary
-        if (posY + radius >= screenHeigth) {
+        if (getPosY() + getRadius() >= screenHeigth) {
             restricts[0] = true;
         }
 
         // Check for which player you should restrict the movement
         if (playerId) {
             // Restrict Left if necessary
-            if (posX - radius <= 0) {
+            if (getPosX() - getRadius() <= 0) {
                 restricts[1] = true;
             }
             // Restrict Right if necessary
-            if (posX + radius >= screenWidth / 2) {
+            if (getPosX() + getRadius() >= screenWidth / 2) {
                 restricts[3] = true;
             }
         } else {
             // Restrict Left if necessary
-            if (posX - radius <= screenWidth / 2) {
+            if (getPosX() - getRadius() <= screenWidth / 2) {
                 restricts[1] = true;
             }
             // Restrict Right if necessary
-            if (posX + radius >= screenWidth) {
+            if (getPosX() + getRadius() >= screenWidth) {
                 restricts[3] = true;
             }
         }
 
         return restricts;
+    }
+
+    /**
+     * Function that renders a gameObject (which can be either the puck or the pusher.
+     */
+    public void drawGameObject() {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+
+        shape.setColor(Color.FIREBRICK);
+
+        shape.circle(getPosX(), getPosY(), getRadius());
+        shape.end();
     }
 }

@@ -3,98 +3,107 @@ package objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.junit.jupiter.api.Test;
-
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 
 class PuckTest {
 
+    @InjectMocks
+    private transient Puck puck;
+    @Mock
+    private transient ScoreBoard scoreBoard;
+    @Mock
+    private transient ShapeRenderer shapeRenderer;
+
     @Test
     void getposX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
-        assertEquals(10, puck.getposX());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
+        assertEquals(10, puck.getPosX());
     }
 
     @Test
     void setposX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
-        puck.setposX(15);
-        assertEquals(15, puck.getposX());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
+        puck.setPosX(15);
+        assertEquals(15, puck.getPosX());
     }
 
     @Test
     void getposY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
-        assertEquals(10, puck.getposY());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
+        assertEquals(10, puck.getPosY());
     }
 
     @Test
     void setposY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
-        puck.setposY(15);
-        assertEquals(15, puck.getposY());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
+        puck.setPosY(15);
+        assertEquals(15, puck.getPosY());
     }
 
     @Test
     void getRadius() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
         assertEquals(10, puck.getRadius());
     }
 
     @Test
     void setRadius() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
         puck.setRadius(15);
         assertEquals(15, puck.getRadius());
     }
 
     @Test
     void getDeltaX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
         assertEquals(0, puck.getDeltaX());
     }
 
     @Test
     void setDeltaX() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
         puck.setDeltaX(15);
         assertEquals(15, puck.getDeltaX());
     }
 
     @Test
     void getDeltaY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
         assertEquals(0, puck.getDeltaY());
     }
 
     @Test
     void setDeltaY() {
-        Puck puck = new Puck(10, 10, 10, 0, 0, new ScoreBoard());
+        puck = new Puck(10, 10, 10, 0, 0, scoreBoard, shapeRenderer);
         puck.setDeltaY(15);
         assertEquals(15, puck.getDeltaY());
     }
 
     @Test
     void translate() {
-        Puck puck = new Puck(640, 360, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(640, 360, 5, 2, 2, scoreBoard, shapeRenderer);
         puck.translate(1280, 720);
-        assertEquals(puck.getposX(), 642);
-        assertEquals(puck.getposY(), 362);
+        assertEquals(puck.getPosX(), 642);
+        assertEquals(puck.getPosY(), 362);
 
     }
 
     @Test
     void translateOutOfGateRange() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
         puck.translate(1280, 720);
-        assertEquals(puck.getposX(), 1202);
-        assertEquals(puck.getposY(), 602);
+        assertEquals(puck.getPosX(), 1202);
+        assertEquals(puck.getPosY(), 602);
 
     }
 
     @Test
     void checkInGateRangeTrue() {
-        Puck puck = new Puck(640, 360, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(640, 360, 5, 2, 2, scoreBoard, shapeRenderer);
         puck.checkCurrentState(720);
 
         assertTrue(puck.getPuckState() instanceof GateAlignedState);
@@ -102,7 +111,7 @@ class PuckTest {
 
     @Test
     void checkInGateRangeFalse() {
-        Puck puck = new Puck(5, 5, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(5, 5, 5, 2, 2, scoreBoard, shapeRenderer);
         puck.checkCurrentState(720);
 
         assertTrue(puck.getPuckState() instanceof OutOfGatesState);
@@ -110,7 +119,7 @@ class PuckTest {
 
     @Test
     void checkInGateRangeFalseAbove() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
         puck.checkCurrentState(720);
 
         assertTrue(puck.getPuckState() instanceof OutOfGatesState);
@@ -119,17 +128,17 @@ class PuckTest {
 
     @Test
     void translateMenu() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
 
         puck.translateMenu(1920, 1080);
 
-        assertEquals(1202, puck.getposX());
-        assertEquals(602, puck.getposY());
+        assertEquals(1202, puck.getPosX());
+        assertEquals(602, puck.getPosY());
     }
 
     @Test
     void setPuckState() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
 
         puck.setPuckState(new OutOfGatesState());
 
@@ -138,7 +147,7 @@ class PuckTest {
 
     @Test
     void outToOutState() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
 
         puck.setPuckState(new OutOfGatesState());
 
@@ -149,7 +158,7 @@ class PuckTest {
 
     @Test
     void gateToGateState() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
 
         puck.setPuckState(new GateAlignedState());
 
@@ -160,7 +169,7 @@ class PuckTest {
 
     @Test
     void checkCurrentStateOutState() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
 
         puck.checkCurrentState(700);
 
@@ -169,7 +178,7 @@ class PuckTest {
 
     @Test
     void checkCurrentStateGateState() {
-        Puck puck = new Puck(1200, 600, 5, 2, 2, new ScoreBoard());
+        puck = new Puck(1200, 600, 5, 2, 2, scoreBoard, shapeRenderer);
 
         puck.checkCurrentState(1200);
 

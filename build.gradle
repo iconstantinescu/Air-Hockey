@@ -80,10 +80,13 @@ jacocoTestCoverageVerification {
 }
 
 jacocoTestReport {
-
+    // The following classes that have been ignored are either interfacing with the GUI
+    // or OpenGL/LibGDX functions that do not count towards a meaningful test coverage
+    // report for the overall design of the application.
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['game/**', 'menu/**'])
+            fileTree(dir: it, exclude: ['game/**', 'menu/**', 'utilities/ObjectDrawer.class', 'objects/Match.class', 'utilities/InformationDrawer.class',
+            ])
         })
     }
 }

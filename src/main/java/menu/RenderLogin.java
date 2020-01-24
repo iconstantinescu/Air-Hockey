@@ -20,7 +20,8 @@ import game.Render;
 import game.RenderStrategy;
 
 /**
- * The specific renderer of the Login.
+ * The specific renderer of the Login, during this loop the login can
+ * and sign up can be done.
  */
 public class RenderLogin implements RenderStrategy {
     transient TextField username;
@@ -120,10 +121,11 @@ public class RenderLogin implements RenderStrategy {
             public void clicked(InputEvent event, float x, float y) {
                 boolean registered = registerClicked();
                 if (registered) {
-                    error.setText("your account has been registered, please login");
+                    error.setText("Your account has been registered, please login");
                     error.setColor(0, 100,0,1);
                 } else {
-                    error.setText("There has been a problem, try another username");
+                    error.setText("There has been a problem, try another username,"
+                            + "\n also length has to be bigger than 3 characters");
                     error.setColor(100, 0,0,1);
                 }
 
@@ -203,6 +205,10 @@ public class RenderLogin implements RenderStrategy {
     public boolean registerClicked() {
         passInput = password.getText();
         nameInput = username.getText();
+
+        if (passInput.length() < 3 || nameInput.length() < 3) {
+            return false;
+        }
         return Render.userDao.createNewUser(nameInput, passInput, nameInput);
     }
 
