@@ -7,6 +7,8 @@ import client.User;
 import client.UserDao;
 import client.UserDaoMySql;
 import com.badlogic.gdx.ApplicationAdapter;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 import menu.RenderLogin;
 import menu.RenderMenu;
@@ -22,7 +24,7 @@ public class Render extends ApplicationAdapter {
     public static UserDao userDao;
     public static LeaderboardDao leaderboardDao;
     public static boolean secondAuthentication;
-    public static JdbcSingleton jdbcSingleton;
+    private transient Connection connection;
 
     /**
      *  An enumeration of the possible render strategies of the application.
@@ -50,9 +52,9 @@ public class Render extends ApplicationAdapter {
 
             // class that creates the jdbc connection that will be reused
             JdbcSingleton jdbcSingleton = JdbcSingleton.getInstance();
-
-            this.userDao = new UserDaoMySql(jdbcSingleton.getConnection());
-            this.leaderboardDao = new LeaderboardDaoMySql(jdbcSingleton.getConnection());
+            connection = jdbcSingleton.getConnection();
+            this.userDao = new UserDaoMySql(connection);
+            this.leaderboardDao = new LeaderboardDaoMySql(connection);
         } catch (SQLException e) {
             System.out.println("Something went wrong when connecting to the database");
             dispose(); //application will close if we cannot connect
@@ -106,7 +108,7 @@ public class Render extends ApplicationAdapter {
             renderStrategy.dispose();
 
             try {
-                jdbcSingleton.closeConnection();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println("Could not close the connection");
                 dispose(); //try again

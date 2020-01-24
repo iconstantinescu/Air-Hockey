@@ -5,6 +5,7 @@ import java.util.Objects;
 
 /**
  * Class that contains the details of a single match between two players.
+ * The objects will be passed to a query method to save game details in a database.
  */
 public class GameDetails {
 
@@ -20,13 +21,12 @@ public class GameDetails {
     private transient int scoreUser1;
     private transient int scoreUser2;
 
-
     private transient Timestamp timestamp;
 
     /**
      * Constructor for client.GameDetails class.
-     * @param nickname1 username of first player
-     * @param nickname2 username of second player
+     * @param nickname1 nickname of first player
+     * @param nickname2 nickname of second player
      * @param scoreUser1 score of the first player
      * @param scoreUser2 score of the second player
      * @param timestamp timestamp of the game

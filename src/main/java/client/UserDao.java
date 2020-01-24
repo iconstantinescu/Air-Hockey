@@ -2,6 +2,9 @@ package client;
 
 import java.util.List;
 
+/**
+ * Interface for methods that consume the User object.
+ */
 public interface UserDao {
 
     User authenticate(String username, String password);

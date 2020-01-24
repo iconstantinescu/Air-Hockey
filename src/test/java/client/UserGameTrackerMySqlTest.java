@@ -44,6 +44,7 @@ class UserGameTrackerMySqlTest {
 
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
         Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
+        Mockito.when(mockPS.execute()).thenReturn(true);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
     }
 

@@ -34,6 +34,15 @@ class LeaderboardTest {
     }
 
     @Test
+    void sizeLimitConstructorBoundary() {
+        testLeaderboard = new Leaderboard(leaderboardList, leaderboardList.size());
+
+        assertEquals(leaderboardList, testLeaderboard.getLeaderboardList());
+        assertEquals(leaderboardList.size(), testLeaderboard.getCurrentSize());
+
+    }
+
+    @Test
     void getLeaderboardList() {
         assertEquals(leaderboardList, testLeaderboard.getLeaderboardList());
     }
@@ -43,6 +52,7 @@ class LeaderboardTest {
         List<LeaderboardEntry> newList = new ArrayList<>();
         newList.add(new LeaderboardEntry("darwin", 100));
         testLeaderboard.setLeaderboardList(newList);
+        testLeaderboard.setSizeLimit(1);
         assertEquals(newList, testLeaderboard.getLeaderboardList());
     }
 

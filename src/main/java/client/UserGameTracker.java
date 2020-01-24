@@ -2,6 +2,9 @@ package client;
 
 import java.util.List;
 
+/**
+ * Interface for methods that consume the GameDetails object.
+ */
 public interface UserGameTracker {
 
     boolean updateUserStats(User user);

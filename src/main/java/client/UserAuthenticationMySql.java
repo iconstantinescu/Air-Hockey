@@ -9,6 +9,7 @@ import utilities.BcryptHashing;
 
 /**
  * Class that contains the methods required to authenticate the user with the database.
+ * MySql implementation of the UserAuthentication Interface.
  */
 public class UserAuthenticationMySql extends AbstractDatabaseInteraction
         implements  UserAuthentication {
@@ -20,7 +21,7 @@ public class UserAuthenticationMySql extends AbstractDatabaseInteraction
     /**
      * Get the salt used for the specific user.
      * The salt is a string added to the hash password to improve security.
-     * @param username The nickname of the user
+     * @param username The username of the user
      * @return The salt stored in the database as a String
      */
     // We are actually closing the resultSet
@@ -31,15 +32,13 @@ public class UserAuthenticationMySql extends AbstractDatabaseInteraction
 
             String query = "select salt from user_data"
                     + " where username = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
 
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, username);
 
             ResultSet rs = ps.executeQuery();
-
             rs.next();
             return rs.getString("salt");
-
 
         } catch (SQLException e) {
             return "";
@@ -49,7 +48,7 @@ public class UserAuthenticationMySql extends AbstractDatabaseInteraction
     /**
      * Method that checks if the given username and password match with the ones in the database.
      * @param username username provided via login form
-     * @param password password provided via login form
+     * @param password plain password provided via login form
      * @return true if the user and password match and false otherwise
      */
     // We are actually closing the resultSet

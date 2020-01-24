@@ -1,5 +1,16 @@
 import com.github.spotbugs.SpotBugsTask
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    configurations.maybeCreate("pitest")
+    dependencies {
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.5'
+        pitest 'org.pitest:pitest-junit5-plugin:0.10'
+    }
+}
+
 plugins {
     id 'java'
 //    id 'eclipse' // optional (to generate Eclipse project files)
@@ -16,12 +27,14 @@ plugins {
 
     // FindBugs / SpotBugs
     id "com.github.spotbugs" version "2.0.1"
+    
 }
 
 group 'nl.tudelft.cse.sem.template'
 version '1.0-SNAPSHOT'
 
 apply plugin:'java'
+apply plugin: "info.solidsoft.pitest"
 
 project.ext.lwjglVersion = "3.2.3"
 project.ext.lwjglNatives = "natives-linux"
@@ -47,6 +60,7 @@ test {
 
 
 dependencies {
+
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
@@ -59,7 +73,6 @@ dependencies {
 	compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 	compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 	compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-
 }
 
 jacocoTestCoverageVerification {
@@ -109,6 +122,12 @@ spotbugs {
     excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
 }
 
+pitest {
+    pitestVersion = "1.4.9"
+    testPlugin = "junit5"
+    targetClasses = ['client.*', 'utilities.*', 'objects.*']  // by default "${project.group}.*"
+}
+
 tasks.withType(SpotBugsTask) {
     reports.xml.enabled = false
     reports.html.enabled = true
@@ -117,3 +136,4 @@ tasks.withType(SpotBugsTask) {
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
+

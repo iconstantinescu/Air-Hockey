@@ -2,6 +2,9 @@ package client;
 
 import java.util.Objects;
 
+/**
+ * Represents an entry in the Leaderboard object.
+ */
 public class LeaderboardEntry {
 
     private String nickname;
