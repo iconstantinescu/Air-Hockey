@@ -10,3 +10,22 @@
 ## How to use the provided tools
 1. In Intellij go to the Gradle menu on top-right and double click the "check" button (from the "verification" drop-down) in order to run Jacoco, Spotbugs, PMD, Checkstyle and the tests.
 2. If you want to check the code coverage double click on the "JacocoTestReport" button (from the "verification" drop-down).
+
+## Sources and references
+Background sound: https://freesound.org/people/djgriffin/sounds/172561/
+
+Hit sound: https://freesound.org/people/LG/sounds/30232/
+
+Goal sound: https://freesound.org/people/santino_c/sounds/170825/
+
+LibGdx tutorial: https://www.gamefromscratch.com/page/LibGDX-Tutorial-series.aspx
+
+Background Login image: https://ccsearch.creativecommons.org/photos/f235954e-76e5-4a8f-bc8b-2823aa91ea6e
+
+Background Board image: https://www.pngwave.com/png-clip-art-ngsiw
+
+LibGdx Library Documentation: https://libgdx.badlogicgames.com/documentation/
+
+LibGdx Menu Skin: https://github.com/libgdx/libgdx/wiki/Skin
+
+
