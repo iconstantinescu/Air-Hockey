@@ -54,6 +54,7 @@ public class JdbcSingleton {
     }
 
     /**
+     * Return the connection with the database that was created.
      * @return The Connection object that was already created.
      */
     public Connection getConnection() {
