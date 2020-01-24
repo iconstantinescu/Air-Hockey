@@ -1,6 +1,5 @@
 import com.github.spotbugs.SpotBugsTask
 
-
 buildscript {
     repositories {
         mavenCentral()
@@ -28,9 +27,7 @@ plugins {
 
     // FindBugs / SpotBugs
     id "com.github.spotbugs" version "2.0.1"
-
-    // Mutation testing
-    //id 'info.solidsoft.pitest' version '1.4.6'
+    
 }
 
 group 'nl.tudelft.cse.sem.template'
