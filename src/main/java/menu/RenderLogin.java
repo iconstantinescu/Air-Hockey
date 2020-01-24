@@ -209,22 +209,6 @@ public class RenderLogin implements RenderStrategy {
         return Render.userDao.createNewUser(nameInput, passInput, nameInput);
     }
 
-    /**
-     * Getter for password.
-     * @return inputted password.
-     */
-    public String getPassword() {
-        return passInput;
-    }
-
-    /**
-     * Getter for username.
-     * @return inputted username.
-     */
-    public String getUsername() {
-        return nameInput;
-    }
-
 
 }
 
