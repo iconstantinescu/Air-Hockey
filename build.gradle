@@ -128,7 +128,7 @@ spotbugs {
 pitest {
     pitestVersion = "1.4.9"
     testPlugin = "junit5"
-    targetClasses = ['menu.*']  // by default "${project.group}.*"
+    targetClasses = ['client.*', 'utilities.*', 'objects.*']  // by default "${project.group}.*"
 }
 
 tasks.withType(SpotBugsTask) {
