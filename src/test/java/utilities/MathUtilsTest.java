@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 class MathUtilsTest {
 
-    private static MathUtils math = new MathUtils();
-
     @Test
     void euclideanDistance() {
 
@@ -20,10 +18,10 @@ class MathUtilsTest {
 
     @Test
     void reflect() {
-        double[] reflection = MathUtils.reflect(0, 0, 0, 1);
+        double[] reflection = MathUtils.reflect(1, 2, 5, 5);
 
-        assertEquals(0, reflection[0]);
-        assertEquals(1, reflection[1]);
+        assertEquals(0.8, reflection[0]);
+        assertEquals(0.6, reflection[1]);
 
     }
 
@@ -39,5 +37,14 @@ class MathUtilsTest {
         boolean overLapping = MathUtils.checkRadius(0, 0, 10, 30, 30, 10);
 
         assertFalse(overLapping);
+    }
+
+    @Test
+    void checkRadiusOverlappingBoundary() {
+
+        // radius1 + radius2 = euclideanDistance
+        boolean overLapping = MathUtils.checkRadius(0, 0, 0, 5, 0, 5);
+
+        assertTrue(overLapping);
     }
 }
