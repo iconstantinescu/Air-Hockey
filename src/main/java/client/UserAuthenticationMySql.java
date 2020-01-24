@@ -53,7 +53,7 @@ public class UserAuthenticationMySql extends AbstractDatabaseInteraction
      */
     // We are actually closing the resultSet
     // but the PMD does not see this for some reason
-    @SuppressWarnings("PMD.CloseResource")
+    @SuppressWarnings({"PMD.CloseResource","PMD.DataflowAnomalyAnalysis"})
     public User authenticate(String username, String password) {
 
         try {
@@ -68,6 +68,10 @@ public class UserAuthenticationMySql extends AbstractDatabaseInteraction
 
 
             PreparedStatement ps = conn.prepareStatement(query);
+
+            if (salt.equals("")) {
+                return null;
+            }
 
             String hashedPwd = BcryptHashing.hashPasswordWithGivenSalt(password, salt);
 
