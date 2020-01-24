@@ -44,8 +44,8 @@ public class UserGameTrackerMySql extends AbstractDatabaseInteraction implements
             ps.setInt(4, user.getNumOfLostGames());
             ps.setInt(5, user.getUserID());
 
-            return ps.execute();
-
+            ps.execute();
+            return true;
 
         } catch (SQLException e) {
             return false;
@@ -75,7 +75,8 @@ public class UserGameTrackerMySql extends AbstractDatabaseInteraction implements
             ps.setInt(4, score2);
             ps.setLong(5, System.currentTimeMillis());
 
-            return ps.execute();
+            ps.execute();
+            return true;
 
         } catch (SQLException e) {
             return false;
