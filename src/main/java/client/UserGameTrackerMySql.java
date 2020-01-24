@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Class that contains the methods required to save and retrieve
  * user points and match details to/from the database.
+ * MySql implementation of the UserGameTracker interface.
  */
 public class UserGameTrackerMySql extends AbstractDatabaseInteraction implements UserGameTracker {
 
@@ -34,6 +35,7 @@ public class UserGameTrackerMySql extends AbstractDatabaseInteraction implements
 
             String query = "update user_data set nickname=?, points=?, games_won=?, games_lost=?"
                     + " where user_id = ?";
+
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setString(1, user.getNickname());
@@ -64,6 +66,7 @@ public class UserGameTrackerMySql extends AbstractDatabaseInteraction implements
             String query = "insert into game (user_id_1, user_id_2, "
                         + "score_user_1, score_user_2, game_timestamp)"
                         + " values (?,?,?,?,?)";
+
             PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, userId1);

@@ -18,6 +18,7 @@ public class JdbcSingleton {
 
     private transient Connection conn;
     private static JdbcSingleton instance;
+
     /**
      * This is the URL that is used to access the database used for our application.
      * The URL contains the user and password
@@ -33,6 +34,7 @@ public class JdbcSingleton {
 
     /**
      * The private constructor does not allow the class to be instantiated.
+     * It will also create a new database connection with jdbc DriverManager.
      * @throws SQLException if could not create the connection with the database
      */
     private JdbcSingleton() throws SQLException {
@@ -52,9 +54,7 @@ public class JdbcSingleton {
     }
 
     /**
-     * Use the DriverManager to create a new connection.
-     * @return New Connection
-     * @throws SQLException An SQl Error can occur while trying to initialize the connection.
+     * @return The Connection object that was already created.
      */
     public Connection getConnection() {
         return conn;

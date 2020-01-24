@@ -3,7 +3,7 @@ package client;
 import java.util.Objects;
 
 /**
- * Class that encapsulates user details in a user object.
+ * Class that encapsulates user details from database in a user object.
  */
 public class User {
 

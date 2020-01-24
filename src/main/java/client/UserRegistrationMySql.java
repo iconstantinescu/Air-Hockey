@@ -8,6 +8,7 @@ import utilities.BcryptHashing;
 
 /**
  * Class that contains the methods required to register a new user in the database.
+ * MySql implementation of the UserRegistration interface.
  */
 public class UserRegistrationMySql extends AbstractDatabaseInteraction implements UserRegistration {
 

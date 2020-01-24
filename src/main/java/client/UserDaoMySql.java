@@ -3,6 +3,9 @@ package client;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * MySql implementation of the UserDao interface.
+ */
 public class UserDaoMySql implements UserDao {
 
     private transient UserGameTracker userGameTracker;

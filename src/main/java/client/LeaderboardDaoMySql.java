@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The MySql implementation of the LeaderboardDao interface.
+ */
 public class LeaderboardDaoMySql extends AbstractDatabaseInteraction implements LeaderboardDao {
 
     public LeaderboardDaoMySql(Connection conn) {
@@ -47,6 +50,11 @@ public class LeaderboardDaoMySql extends AbstractDatabaseInteraction implements 
         }
     }
 
+    /**
+     * Get the global leaderboard position given a userId.
+     * @param userId the id of the user
+     * @return the leaderboard position as INT
+     */
     // We are actually closing the resultSet
     // but the PMD does not see this for some reason
     @SuppressWarnings("PMD.CloseResource")
