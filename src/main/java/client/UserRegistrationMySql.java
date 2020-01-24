@@ -39,9 +39,9 @@ public class UserRegistrationMySql extends AbstractDatabaseInteraction implement
             preparedStatement.setString(3, salt);
             preparedStatement.setString(4, nickname);
 
-            preparedStatement.execute();
+            System.out.println( preparedStatement.getFetchSize());
 
-            return true;
+            return preparedStatement.execute();
 
         } catch (SQLException e) {
             return false;

@@ -60,14 +60,4 @@ public class JdbcSingleton {
         return conn;
     }
 
-
-    /**
-     * Close the connection
-     * Should be called when closing the application.
-     * @throws SQLException if the connection could not be closed
-     */
-    public void closeConnection() throws SQLException {
-        conn.close();
-    }
-
 }

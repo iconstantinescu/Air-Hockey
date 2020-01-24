@@ -1,5 +1,6 @@
 package client;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.anyString;
 
@@ -33,7 +34,7 @@ class UserRegistrationMySqlTest {
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(mockConnection.prepareStatement(anyString())).thenReturn(mockPS);
-        Mockito.when(mockPS.executeQuery()).thenReturn(mockResultSet);
+        Mockito.when(mockPS.execute()).thenReturn(true);
         Mockito.when(mockResultSet.next()).thenReturn(true).thenReturn(false);
     }
 
@@ -43,6 +44,15 @@ class UserRegistrationMySqlTest {
         boolean created = userDaoMySql
                 .createNewUser("user", "pwd", "john");
         assertTrue(created);
+    }
+
+    @Test
+    void testCreateNewUserFail() throws SQLException {
+
+        Mockito.when(mockPS.execute()).thenReturn(false);
+        boolean created = userDaoMySql
+                .createNewUser("user", "pwd", "john");
+        assertFalse(created);
     }
 
 
