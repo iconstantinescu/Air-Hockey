@@ -2,7 +2,6 @@ package objects;
 
 import client.Leaderboard;
 import client.LeaderboardEntry;
-import com.badlogic.gdx.Gdx;
 import game.Render;
 import utilities.InformationDrawer;
 

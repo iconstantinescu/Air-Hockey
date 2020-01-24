@@ -180,9 +180,6 @@ public class RenderLogin implements RenderStrategy {
         }
 
 
-        System.out.println("username: " + nameInput);
-        System.out.println("password: " + passInput);
-
         User resultUser = Render.userDao.authenticate(nameInput, passInput);
         if (resultUser != null) {
             System.out.println("user " + nameInput + " authenticated");
@@ -210,22 +207,6 @@ public class RenderLogin implements RenderStrategy {
             return false;
         }
         return Render.userDao.createNewUser(nameInput, passInput, nameInput);
-    }
-
-    /**
-     * Getter for password.
-     * @return inputted password.
-     */
-    public String getPassword() {
-        return passInput;
-    }
-
-    /**
-     * Getter for username.
-     * @return inputted username.
-     */
-    public String getUsername() {
-        return nameInput;
     }
 
 
