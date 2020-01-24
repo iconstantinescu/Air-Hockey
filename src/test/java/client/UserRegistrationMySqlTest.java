@@ -47,16 +47,6 @@ class UserRegistrationMySqlTest {
     }
 
     @Test
-    void testCreateNewUserFail() throws SQLException {
-
-        Mockito.when(mockPS.execute()).thenReturn(false);
-        boolean created = userDaoMySql
-                .createNewUser("user", "pwd", "john");
-        assertFalse(created);
-    }
-
-
-    @Test
     void testSqlException() throws SQLException {
 
         Mockito.when(mockConnection.prepareStatement(anyString()))
